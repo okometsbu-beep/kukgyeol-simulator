@@ -1,0 +1,20 @@
+{
+  "name": "국결 생존기",
+  "short_name": "국결 생존기",
+  "description": "국제연애부터 결혼 후 10년까지 선택하는 현실 기반 시뮬레이션",
+  "lang": "ko-KR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#100d16",
+  "theme_color": "#17131f",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

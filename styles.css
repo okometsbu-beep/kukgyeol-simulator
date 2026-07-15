@@ -1,0 +1,242 @@
+:root {
+  color-scheme: dark;
+  --background: #100d16;
+  --foreground: #f7f2fb;
+  --card: #1b1724;
+  --card-foreground: #f7f2fb;
+  --muted: #2a2435;
+  --muted-foreground: #b9adca;
+  --border: #3c334b;
+  --viz-series-1: #75d7b1;
+  --viz-series-2: #ff758f;
+  --viz-series-4: #f6bd60;
+  --accent: #9b7bff;
+  --accent-strong: #b7a1ff;
+  --shadow: 0 18px 55px rgb(0 0 0 / 28%);
+  font-family: Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+html { min-width: 320px; background: var(--background); }
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  color: var(--foreground);
+  background:
+    radial-gradient(circle at 15% -10%, rgb(155 123 255 / 22%), transparent 34rem),
+    radial-gradient(circle at 95% 15%, rgb(117 215 177 / 10%), transparent 28rem),
+    var(--background);
+}
+
+button,
+input,
+select { font: inherit; }
+
+button { color: inherit; }
+
+.skip-link {
+  position: fixed;
+  z-index: 999;
+  top: .5rem;
+  left: .5rem;
+  transform: translateY(-150%);
+  padding: .65rem .8rem;
+  border-radius: .6rem;
+  color: #15101d;
+  background: var(--accent-strong);
+}
+
+.skip-link:focus { transform: translateY(0); }
+
+.text-small { font-size: .84rem; line-height: 1.48; }
+
+.btn {
+  min-height: 44px;
+  padding: .72rem .82rem;
+  border: 1px solid var(--border);
+  border-radius: .72rem;
+  color: var(--foreground);
+  background: linear-gradient(180deg, rgb(255 255 255 / 4%), transparent), var(--card);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 5%) inset;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+
+.btn:hover { border-color: color-mix(in srgb, var(--accent) 65%, var(--border)); }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 3px solid rgb(155 123 255 / 42%); outline-offset: 2px; }
+.btn:disabled { cursor: not-allowed; opacity: .42; }
+
+.btn-primary {
+  border-color: transparent;
+  color: #15101d;
+  background: linear-gradient(135deg, var(--accent-strong), #7ce0bb);
+  font-weight: 800;
+}
+
+.btn-ghost { background: transparent; }
+
+.form-label { display: block; color: var(--muted-foreground); font-size: .78rem; }
+
+.form-control,
+.form-select {
+  width: 100%;
+  min-height: 44px;
+  margin-top: .28rem;
+  padding: .58rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: .62rem;
+  color: var(--foreground);
+  background: #15111d;
+}
+
+.form-control:focus,
+.form-select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.viz-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 1.65rem;
+  padding: .18rem .5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  background: rgb(255 255 255 / 3%);
+  font-size: .72rem;
+  line-height: 1.2;
+}
+
+html body #kg-life-game {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+}
+
+html body #kg-life-game .kg-panel { box-shadow: var(--shadow); }
+
+html body #kg-life-game .kg-choice-card[aria-pressed="true"],
+html body #kg-life-game .kg-candidate[aria-pressed="true"],
+html body #kg-life-game .kg-action[aria-pressed="true"],
+html body #kg-life-game .kg-match-card[aria-pressed="true"] {
+  border-color: var(--accent-strong);
+  outline-color: var(--accent-strong);
+  background: linear-gradient(180deg, rgb(155 123 255 / 15%), rgb(117 215 177 / 5%)), var(--card);
+}
+
+html body #kg-life-game .kg-photo {
+  background-color: #241d2e;
+  background-repeat: no-repeat;
+}
+
+html body #kg-life-game .kg-portrait { box-shadow: 0 0 0 1px rgb(255 255 255 / 6%) inset; }
+
+@media (max-width: 620px) {
+  body {
+    padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+  }
+
+  html body #kg-life-game { font-size: 15px; }
+
+  html body #kg-life-game .kg-topbar {
+    position: sticky;
+    z-index: 20;
+    top: 0;
+    margin: 0 -8px;
+    padding: .62rem .72rem;
+    border: 1px solid var(--border);
+    border-top: 0;
+    border-radius: 0 0 .85rem .85rem;
+    background: rgb(16 13 22 / 94%);
+    box-shadow: 0 12px 30px rgb(0 0 0 / 30%);
+    backdrop-filter: blur(14px);
+  }
+
+  html body #kg-life-game .kg-topbar > div:first-child { flex: 1 1 11rem; }
+  html body #kg-life-game .kg-topbar .kg-kicker { font-size: .7rem; }
+  html body #kg-life-game .kg-topbar .kg-title { font-size: 1rem; }
+  html body #kg-life-game .kg-topbar > div:first-child > .kg-muted { display: none; }
+  html body #kg-life-game .kg-controls { flex: 0 1 auto; width: auto; }
+  html body #kg-life-game .kg-controls .form-label { display: none; }
+  html body #kg-life-game .kg-controls .btn { min-height: 38px; padding: .52rem .65rem; }
+
+  html body #kg-life-game .kg-panel { padding: .68rem; border-radius: .72rem; box-shadow: 0 10px 28px rgb(0 0 0 / 22%); }
+  html body #kg-life-game .kg-section { margin-top: .68rem; }
+  html body #kg-life-game .kg-alert { margin-top: .6rem; padding: .6rem .7rem; font-size: .82rem; line-height: 1.45; }
+
+  html body #kg-life-game .kg-progress { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .25rem; margin-top: .6rem; }
+  html body #kg-life-game .kg-progress-group { padding: .42rem .38rem; }
+  html body #kg-life-game .kg-progress-group .text-small { font-size: .68rem; }
+
+  html body #kg-life-game .kg-player-grid,
+  html body #kg-life-game .kg-country-grid,
+  html body #kg-life-game .kg-candidate-grid,
+  html body #kg-life-game .kg-match-grid,
+  html body #kg-life-game .kg-action-grid,
+  html body #kg-life-game .kg-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .48rem;
+  }
+
+  html body #kg-life-game .kg-route-grid,
+  html body #kg-life-game .kg-data-grid { grid-template-columns: 1fr; }
+
+  html body #kg-life-game .kg-player-card .kg-portrait,
+  html body #kg-life-game .kg-candidate .kg-portrait,
+  html body #kg-life-game .kg-match-card .kg-portrait {
+    aspect-ratio: 4 / 5;
+    max-height: none;
+  }
+
+  html body #kg-life-game .kg-player-card,
+  html body #kg-life-game .kg-candidate,
+  html body #kg-life-game .kg-match-card,
+  html body #kg-life-game .kg-action { padding: .52rem; }
+
+  html body #kg-life-game .kg-card-head { gap: .25rem; }
+  html body #kg-life-game .kg-card-head strong { font-size: .88rem; }
+  html body #kg-life-game .kg-card-head .viz-badge { max-width: 100%; }
+  html body #kg-life-game .kg-tags { gap: .2rem; }
+  html body #kg-life-game .kg-reason { padding: .36rem; font-size: .72rem; line-height: 1.4; }
+
+  html body #kg-life-game .kg-board { grid-template-columns: 1fr; gap: .65rem; }
+  html body #kg-life-game .kg-side { display: grid; grid-template-columns: 1fr; gap: .55rem; }
+  html body #kg-life-game .kg-side .kg-panel + .kg-panel { margin-top: 0; }
+
+  html body #kg-life-game .kg-choice-line {
+    position: sticky;
+    z-index: 10;
+    bottom: max(0px, env(safe-area-inset-bottom));
+    margin: .7rem -.18rem -.18rem;
+    padding: .62rem;
+    border: 1px solid var(--border);
+    border-radius: .72rem;
+    background: rgb(27 23 36 / 94%);
+    box-shadow: 0 -12px 28px rgb(0 0 0 / 28%);
+    backdrop-filter: blur(12px);
+  }
+
+  html body #kg-life-game .kg-choice-line > div,
+  html body #kg-life-game .kg-choice-line > span { flex: 1 1 9rem; font-size: .78rem; }
+  html body #kg-life-game .kg-choice-line .btn { flex: 1 0 8.5rem; }
+
+  html body #kg-life-game .kg-axis-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html body #kg-life-game details.kg-panel { font-size: .82rem; }
+}
+
+@media (max-width: 370px) {
+  html body #kg-life-game .kg-player-grid,
+  html body #kg-life-game .kg-country-grid,
+  html body #kg-life-game .kg-candidate-grid,
+  html body #kg-life-game .kg-match-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
