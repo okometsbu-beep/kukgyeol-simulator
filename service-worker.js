@@ -1,4 +1,4 @@
-const CACHE_NAME = "kukgyeol-v2";
+const CACHE_NAME = "kukgyeol-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -8,7 +8,10 @@ const APP_SHELL = [
   "./assets/men.webp",
   "./assets/women-a.webp",
   "./assets/women-b.webp",
-  "./assets/women-legacy.webp"
+  "./assets/women-legacy.webp",
+  "./assets/cutscenes/video-call.webp",
+  "./assets/cutscenes/broker-suspicion.webp",
+  "./assets/cutscenes/nightlife-secret.webp"
 ];
 
 self.addEventListener("install", event => {

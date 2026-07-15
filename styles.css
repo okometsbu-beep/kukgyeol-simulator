@@ -137,6 +137,25 @@ html body #kg-life-game .kg-photo {
 
 html body #kg-life-game .kg-portrait { box-shadow: 0 0 0 1px rgb(255 255 255 / 6%) inset; }
 
+html body #kg-life-game .kg-dialogue-scene {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(18rem, 1.1fr);
+  gap: 1rem;
+  overflow: hidden;
+  border-color: rgb(183 161 255 / 55%);
+}
+
+html body #kg-life-game .kg-dialogue-scene[hidden] { display: none; }
+html body #kg-life-game .kg-dialogue-body { display: flex; flex-direction: column; gap: .7rem; justify-content: center; }
+html body #kg-life-game .kg-cutscene { width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: .8rem; object-fit: cover; object-position: center; background: #15111d; }
+html body #kg-life-game .kg-speech { padding: .85rem 1rem; border-radius: 1rem 1rem 1rem .25rem; background: rgb(155 123 255 / 15%); font-size: 1.05rem; line-height: 1.65; }
+html body #kg-life-game .kg-dialogue-options { display: grid; gap: .5rem; }
+html body #kg-life-game .kg-dialogue-choice { min-height: 48px; text-align: left; line-height: 1.45; }
+html body #kg-life-game .kg-dialogue-answer { padding: .75rem; border-left: 3px solid var(--viz-series-1); border-radius: .45rem; background: rgb(117 215 177 / 9%); line-height: 1.55; }
+html body #kg-life-game .kg-conflict-panel .kg-cutscene { max-height: 360px; margin: 0 0 .85rem; }
+html body #kg-life-game .kg-danger-meter { display: grid; gap: .3rem; margin-top: .45rem; }
+html body #kg-life-game .kg-danger-meter .kg-meter > span { background: linear-gradient(90deg, #f6bd60, #ff5575); }
+
 @media (max-width: 620px) {
   body {
     padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
@@ -167,6 +186,9 @@ html body #kg-life-game .kg-portrait { box-shadow: 0 0 0 1px rgb(255 255 255 / 6
   html body #kg-life-game .kg-controls .btn { min-height: 38px; padding: .52rem .65rem; }
 
   html body #kg-life-game .kg-panel { padding: .68rem; border-radius: .72rem; box-shadow: 0 10px 28px rgb(0 0 0 / 22%); }
+  html body #kg-life-game .kg-dialogue-scene { grid-template-columns: 1fr; gap: .72rem; }
+  html body #kg-life-game .kg-dialogue-scene .kg-cutscene { max-height: 42vh; }
+  html body #kg-life-game .kg-speech { font-size: .98rem; }
   html body #kg-life-game .kg-section { margin-top: .68rem; }
   html body #kg-life-game .kg-alert { margin-top: .6rem; padding: .6rem .7rem; font-size: .82rem; line-height: 1.45; }
 

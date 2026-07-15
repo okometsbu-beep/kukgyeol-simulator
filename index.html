@@ -185,7 +185,7 @@
 
   <header class="kg-topbar">
     <div>
-      <div class="kg-kicker text-small">국결 생존기 v0.9 · 기억하는 부부</div>
+      <div class="kg-kicker text-small">국결 생존기 v1.0 · 사랑과 위기</div>
       <strong class="kg-title" id="kg-phase-title">출발 조건 정하기</strong>
       <div class="text-small kg-muted">같은 종류의 선택지는 한눈에 비교합니다. 비용은 10만원 단위이며, 현실 자료와 게임용 가정을 구분해 표시합니다.</div>
     </div>
@@ -244,6 +244,17 @@
         <div class="kg-candidate-grid" id="kg-candidate-grid"></div>
       </section>
 
+      <section class="kg-panel kg-section kg-dialogue-scene" id="kg-dialogue-section" hidden aria-labelledby="kg-dialogue-title">
+        <img class="kg-cutscene" id="kg-dialogue-image" src="./assets/cutscenes/video-call.webp" alt="늦은 밤 영상통화 장면">
+        <div class="kg-dialogue-body">
+          <span class="viz-badge">둘만의 대화</span>
+          <strong id="kg-dialogue-title">상대의 질문</strong>
+          <div class="kg-speech" id="kg-dialogue-text"></div>
+          <div class="kg-dialogue-options" id="kg-dialogue-options"></div>
+          <div class="kg-dialogue-answer text-small" id="kg-dialogue-answer" hidden></div>
+        </div>
+      </section>
+
       <section class="kg-panel kg-section" id="kg-action-section" aria-labelledby="kg-action-title">
         <div class="kg-phase-head">
           <div><strong id="kg-action-title">이번 차례에 할 일</strong><div class="text-small kg-muted" id="kg-action-help">종류를 고르면 같은 종류의 행동이 한꺼번에 보입니다.</div></div>
@@ -263,6 +274,7 @@
         <div id="kg-woman-result" class="kg-result-card kg-woman-phase"></div>
         <div id="kg-household-result" class="kg-result-card" hidden></div>
         <div id="kg-conflict-panel" class="kg-result-card kg-conflict-panel" hidden>
+          <img class="kg-cutscene" id="kg-event-cutscene" alt="돌발 사건 장면" hidden>
           <strong id="kg-conflict-title">부부싸움</strong>
           <div class="text-small" id="kg-conflict-text" style="margin-top:.25rem"></div>
           <div class="kg-conflict-options" id="kg-conflict-options"></div>
@@ -427,12 +439,14 @@
     community:["relationship","family","culture","second"]
   };
   const intents = [
-    {id:"genuine",label:"진지한 동반자 찾기",weight:52,fraud:false},
-    {id:"pragmatic",label:"사랑과 생활 조건을 함께 봄",weight:21,fraud:false},
+    {id:"genuine",label:"진지한 동반자 찾기",weight:44,fraud:false},
+    {id:"pragmatic",label:"사랑과 생활 조건을 함께 봄",weight:20,fraud:false},
     {id:"family",label:"본국 가족 지원이 매우 중요함",weight:12,fraud:false},
-    {id:"migration",label:"한국 정착이 관계보다 조금 앞섬",weight:7,fraud:false},
-    {id:"fraud",label:"금전 목적의 조직적 기만",weight:8,fraud:true}
+    {id:"migration",label:"한국 정착이 관계보다 조금 앞섬",weight:8,fraud:false},
+    {id:"fraud",label:"금전 목적의 조직적 기만",weight:11,fraud:true},
+    {id:"collusion",label:"업체·제3자와 공모한 금전 기만",weight:5,fraud:true,collusion:true}
   ];
+  const workSecrets = [{id:"none",label:"숨긴 야간 일이 없음",weight:64},{id:"nightlifeNeed",label:"빚 때문에 노래방 야간 일을 숨김",weight:13},{id:"nightlifeChoice",label:"본인이 선택한 유흥업소 일을 숨김",weight:9},{id:"brokerJob",label:"업체가 연결한 수상한 야간 일을 숨김",weight:8},{id:"doubleLife",label:"다른 관계와 돈벌이를 함께 숨김",weight:6}];
   const childWishes = [{id:"yes",weight:30},{id:"later",weight:28},{id:"maybe",weight:25},{id:"no",weight:17}];
   const fertilityFactors = [{value:.55,label:"낮음",weight:10},{value:.75,label:"다소 낮음",weight:18},{value:.92,label:"보통 아래",weight:24},{value:1,label:"보통",weight:30},{value:1.12,label:"보통 위",weight:14},{value:1.22,label:"높음",weight:4}];
   const incomePotentials = [{value:80,label:"6개월 약 800만원",weight:20},{value:100,label:"6개월 약 1,000만원",weight:30},{value:120,label:"6개월 약 1,200만원",weight:28},{value:150,label:"6개월 약 1,500만원",weight:16},{value:180,label:"6개월 약 1,800만원",weight:6}];
@@ -507,6 +521,24 @@
     life:[{id:"relationship",label:"부부 관계"},{id:"money",label:"돈과 살림"},{id:"child",label:"아이 계획"},{id:"pressure",label:"강하게 확인하기"}]
   };
 
+  const courtshipDialogues = [
+    {q:"솔직히 말해 줘요. 왜 나한테 계속 연락해요?",options:[{tactic:"warm",label:"당신이 웃을 때 마음이 놓여서요."},{tactic:"practical",label:"대화가 통하고 함께 살 조건도 맞아 보여서요."},{tactic:"glamour",label:"한국에 오면 지금보다 훨씬 편하게 해줄게요."}]},
+    {q:"직접 만나면 제일 먼저 뭘 하고 싶어요?",options:[{tactic:"warm",label:"당신이 자주 가는 평범한 식당에 가고 싶어요."},{tactic:"practical",label:"가족과 직장을 먼저 보고 싶어요."},{tactic:"glamour",label:"가장 좋은 호텔과 비싼 식사를 예약할게요."}]},
+    {q:"한국에 가도 내 일을 계속하고 싶어요. 괜찮아요?",options:[{tactic:"warm",label:"당연하죠. 당신 삶도 계속되어야 해요."},{tactic:"practical",label:"수입·통근·집안일을 표로 맞춰 봅시다."},{tactic:"hard",label:"집이 안정된 뒤에 허락할지 생각해 볼게요."}]},
+    {q:"본국 가족이 급하면 돈을 보내야 해요. 당신 생각은요?",options:[{tactic:"warm",label:"가족인데 당연히 도와야죠."},{tactic:"practical",label:"정기액과 긴급 한도를 같이 정해요."},{tactic:"gray",label:"일단 부모님께는 적게 말하고 보내요."}]},
+    {q:"아이 생각은 정말 같아야 할까요?",options:[{tactic:"warm",label:"당신 마음이 바뀔 때까지 기다릴 수 있어요."},{tactic:"practical",label:"원하는 시기와 안 원하는 경우까지 적어 봐요."},{tactic:"hard",label:"나는 꼭 원하니 그건 양보하기 어려워요."}]},
+    {q:"우리가 크게 싸우면 어떻게 할 거예요?",options:[{tactic:"warm",label:"안아주고 감정이 가라앉으면 이야기할게요."},{tactic:"practical",label:"통역을 두고 사실부터 다시 확인해요."},{tactic:"avoid",label:"며칠 연락을 끊고 각자 생각해요."}]},
+    {q:"주변에서는 빨리 정하라는데, 당신은요?",options:[{tactic:"warm",label:"놓치기 싫으니 지금 약속하고 싶어요."},{tactic:"practical",label:"좋아해도 확인할 건 확인하고 정해요."},{tactic:"gray",label:"업체에는 한다고 하고 우리끼리 시간을 벌어요."}]},
+    {q:"좋아하는 건 나예요, 국제결혼이라는 조건이에요?",options:[{tactic:"warm",label:"조건이 아니라 지금의 당신이 좋아요."},{tactic:"practical",label:"둘 다예요. 마음과 생활은 분리할 수 없어요."},{tactic:"glamour",label:"결혼하면 말보다 더 크게 증명할게요."}]}
+  ];
+  const scamCrisisDeck = [
+    {title:"한밤중 병원비 송금",text:"상대 가족이 쓰러졌다며 오늘 안에 제3자 계좌로 돈을 보내 달라고 합니다.",amount:35,cutscene:"./assets/cutscenes/video-call.webp"},
+    {title:"계약서 밖 현금 봉투",text:"업체 직원과 상대가 동시에 '현지 관행'이라며 기록 없는 보증금을 요구합니다.",amount:80,cutscene:"./assets/cutscenes/broker-suspicion.webp"},
+    {title:"정착자금 선입금",text:"입국 직전이라며 정착자금 일부를 업체가 지정한 다른 사람 계좌로 보내 달라고 합니다.",amount:140,cutscene:"./assets/cutscenes/broker-suspicion.webp"}
+  ];
+  const crisisOptions = [{tactic:"verify",label:"은행·병원·계약 당사자에게 직접 확인한다"},{tactic:"pay",label:"관계를 잃기 싫어 일단 돈을 보낸다"},{tactic:"bluff",label:"이미 변호사와 경찰에 자료를 넘겼다고 허세를 부린다"},{tactic:"walk",label:"돈과 관계를 모두 여기서 끊는다"}];
+  const nightlifeOptions = [{tactic:"support",label:"왜 숨겼는지 듣고 안전한 다른 일로 옮길 계획을 세운다"},{tactic:"hard",label:"당장 그만두게 하고 휴대폰·계좌를 모두 검사한다"},{tactic:"gray",label:"수입이 큰 동안 모른 척하고 공동빚부터 갚는다"},{tactic:"walk",label:"짐을 싸서 별거를 요구한다"}];
+
   const conflictDeck = [
     {title:"가족 송금이 예정보다 커졌다",text:"배우자 가족에게 갑작스러운 돈 요청이 왔습니다.",options:[{tactic:"honest",label:"계좌와 사정을 같이 보고 이번 한도를 정한다"},{tactic:"gray",label:"이번에는 보내고 다음 달 생활비를 둘러댄다"},{tactic:"hard",label:"앞으로 송금을 전면 금지한다"},{tactic:"avoid",label:"며칠 뒤 다시 말하자며 대화를 멈춘다"}]},
     {title:"번역기가 싸움을 키웠다",text:"같은 문장을 서로 다르게 이해했습니다.",options:[{tactic:"honest",label:"통역 가능한 사람과 문장을 다시 확인한다"},{tactic:"gray",label:"내가 그런 뜻이 아니었다며 대충 넘긴다"},{tactic:"hard",label:"한국에 왔으니 한국어만 쓰라고 한다"},{tactic:"avoid",label:"산책하고 감정이 내려간 뒤 다시 말한다"}]},
@@ -574,12 +606,12 @@
   const routeRisks = {
     app:[{id:"normal",label:"실제 사용자",weight:72},{id:"catfish",label:"사진·신원 불일치 가능성",weight:18},{id:"romance",label:"제3자 금전유도 계정",weight:10}],
     friend:[{id:"solid",label:"직접 아는 소개",weight:65},{id:"vague",label:"지인의 지인 수준",weight:25},{id:"pressure",label:"성사 압박이 큰 소개",weight:10}],
-    broker:[{id:"transparent",label:"포함비용이 비교적 투명한 업체",weight:62},{id:"sloppy",label:"번역·일정 관리가 부실한 업체",weight:25},{id:"predatory",label:"추가결제 유도가 강한 업체",weight:13}],
+    broker:[{id:"transparent",label:"포함비용이 비교적 투명한 업체",weight:45},{id:"sloppy",label:"번역·일정 관리가 부실한 업체",weight:20},{id:"predatory",label:"추가결제 유도가 강한 업체",weight:18},{id:"collusion",label:"상대·제3자와 공모한 업체",weight:17}],
     community:[{id:"supportive",label:"당사자 의사를 존중하는 주변",weight:68},{id:"gossip",label:"소문과 간섭이 많은 주변",weight:22},{id:"pressure",label:"가족 기대가 앞서는 주변",weight:10}]
   };
 
   const els = {
-    seed:$("#kg-seed"),phase:$("#kg-phase-title"),setup:$("#kg-setup-section"),setupBadge:$("#kg-setup-badge"),setupHelp:$("#kg-setup-help"),setupReview:$("#kg-setup-review"),setupPrev:$("#kg-setup-prev"),setupNext:$("#kg-setup-next"),playerGrid:$("#kg-player-grid"),countryGrid:$("#kg-country-grid"),routeGrid:$("#kg-route-grid"),setupChoice:$("#kg-setup-choice"),start:$("#kg-start"),progress:$("#kg-progress"),alert:$("#kg-alert"),board:$("#kg-board"),candidateSection:$("#kg-candidate-section"),candidateGrid:$("#kg-candidate-grid"),candidateTitle:$("#kg-candidate-title"),candidateHelp:$("#kg-candidate-help"),targetBadge:$("#kg-target-badge"),actionSection:$("#kg-action-section"),actionTitle:$("#kg-action-title"),actionHelp:$("#kg-action-help"),actionBadge:$("#kg-action-badge"),actionType:$("#kg-action-type"),actionGrid:$("#kg-action-grid"),choiceText:$("#kg-choice-text"),commit:$("#kg-commit"),result:$("#kg-result-section"),playerResult:$("#kg-player-result"),womanResult:$("#kg-woman-result"),householdResult:$("#kg-household-result"),next:$("#kg-next"),conflictPanel:$("#kg-conflict-panel"),conflictTitle:$("#kg-conflict-title"),conflictText:$("#kg-conflict-text"),conflictOptions:$("#kg-conflict-options"),match:$("#kg-match-section"),matchGrid:$("#kg-match-grid"),matchChoice:$("#kg-match-choice"),matchCommit:$("#kg-match-commit"),final:$("#kg-final-section"),finalScore:$("#kg-final-score"),finalOutcome:$("#kg-final-outcome"),finalSummary:$("#kg-final-summary"),finalDetail:$("#kg-final-detail"),statGrid:$("#kg-stat-grid"),milestones:$("#kg-milestones"),partner:$("#kg-partner-card"),ledger:$("#kg-ledger"),routeBadge:$("#kg-route-badge"),review:$("#kg-review-section"),reviewResults:$("#kg-review-results"),history:$("#kg-history")
+    seed:$("#kg-seed"),phase:$("#kg-phase-title"),setup:$("#kg-setup-section"),setupBadge:$("#kg-setup-badge"),setupHelp:$("#kg-setup-help"),setupReview:$("#kg-setup-review"),setupPrev:$("#kg-setup-prev"),setupNext:$("#kg-setup-next"),playerGrid:$("#kg-player-grid"),countryGrid:$("#kg-country-grid"),routeGrid:$("#kg-route-grid"),setupChoice:$("#kg-setup-choice"),start:$("#kg-start"),progress:$("#kg-progress"),alert:$("#kg-alert"),board:$("#kg-board"),candidateSection:$("#kg-candidate-section"),candidateGrid:$("#kg-candidate-grid"),candidateTitle:$("#kg-candidate-title"),candidateHelp:$("#kg-candidate-help"),targetBadge:$("#kg-target-badge"),dialogueSection:$("#kg-dialogue-section"),dialogueTitle:$("#kg-dialogue-title"),dialogueText:$("#kg-dialogue-text"),dialogueOptions:$("#kg-dialogue-options"),dialogueAnswer:$("#kg-dialogue-answer"),dialogueImage:$("#kg-dialogue-image"),actionSection:$("#kg-action-section"),actionTitle:$("#kg-action-title"),actionHelp:$("#kg-action-help"),actionBadge:$("#kg-action-badge"),actionType:$("#kg-action-type"),actionGrid:$("#kg-action-grid"),choiceText:$("#kg-choice-text"),commit:$("#kg-commit"),result:$("#kg-result-section"),playerResult:$("#kg-player-result"),womanResult:$("#kg-woman-result"),householdResult:$("#kg-household-result"),next:$("#kg-next"),conflictPanel:$("#kg-conflict-panel"),conflictTitle:$("#kg-conflict-title"),conflictText:$("#kg-conflict-text"),conflictOptions:$("#kg-conflict-options"),eventCutscene:$("#kg-event-cutscene"),match:$("#kg-match-section"),matchGrid:$("#kg-match-grid"),matchChoice:$("#kg-match-choice"),matchCommit:$("#kg-match-commit"),final:$("#kg-final-section"),finalScore:$("#kg-final-score"),finalOutcome:$("#kg-final-outcome"),finalSummary:$("#kg-final-summary"),finalDetail:$("#kg-final-detail"),statGrid:$("#kg-stat-grid"),milestones:$("#kg-milestones"),partner:$("#kg-partner-card"),ledger:$("#kg-ledger"),routeBadge:$("#kg-route-badge"),review:$("#kg-review-section"),reviewResults:$("#kg-review-results"),history:$("#kg-history")
   };
 
   let setup = {playerId:null,countryId:null,routeId:null};
@@ -663,7 +695,7 @@
   function makeCandidates(random,countryId,routeId){
     const base=shuffled(random,profiles.filter(profile=>profile.country===countryId));
     const route=routes.find(item=>item.id===routeId)||{},reasonKey=route.kind==="broker"?"broker":routeId,motiveIds=routeMotiveIds[reasonKey]||routeMotiveIds.app;
-    return base.map((profile,index)=>{
+    const result=base.map((profile,index)=>{
       const intent=weighted(random,intents);
       return Object.assign({},profile,{
         portraitOrder:index,
@@ -676,9 +708,12 @@
         spendingStyle:weighted(random,spendingStyles),
         burden:weighted(random,burdens),
         surprise:pick(random,surprises),
-        conflictStyle:pick(random,conflictStyles)
+        conflictStyle:pick(random,conflictStyles),
+        workSecret:weighted(random,workSecrets)
       });
     });
+    if(!result.some(item=>item.intent.fraud)&&random()<.72){const target=pick(random,result);target.intent=intents.find(item=>item.id===(isBroker(route)?"collusion":"fraud"));}
+    return result;
   }
 
   function startGame(){
@@ -686,7 +721,7 @@
     const seed=Math.max(1,Number(els.seed.value)||1),random=mulberry32(seed),player=players.find(item=>item.id===setup.playerId),country=countries.find(item=>item.id===setup.countryId),route=routes.find(item=>item.id===setup.routeId),burden=pick(random,playerBurdens);
     const activeCandidates=makeCandidates(random,country.id,route.id);
     const riskKey=isBroker(route)?"broker":route.id;
-    game={seed,random,playerId:player.id,countryId:country.id,routeId:route.id,routeRisk:weighted(random,routeRisks[riskKey]),vendorChecks:0,adminReady:0,stage:"courtship",turn:0,activeCandidates,rapport:{},selectedCandidate:null,selectedAction:null,actionGroup:"heart",actionUse:{},resolved:false,ended:false,partnerId:null,cash:Math.max(0,player.cash+(burden.cash||0)),debts:0,ledger:[],playerBurden:burden,prep:{docs:false,agreement:false,wedding:false},stats:null,pendingConflict:null,latest:null,lastBudgetText:"",recentEvents:[],recentConflicts:[],memories:[],resentment:0,partnerGoal:null,partnerEmployed:false,partnerIncomeRate:0,partnerEarned:0,partnerSpent:0,protectedCash:0,controls:0,grayWins:0,grayFails:0,lieExposure:0,exposureDebt:0,fertilityKnown:false,fertilityBoost:1,fertilityAttempts:0,lastFertilityChance:0,pregnant:false,pregnancyTurn:null,child:false,childWell:0,score:0,outcome:null};
+    game={seed,random,playerId:player.id,countryId:country.id,routeId:route.id,routeRisk:weighted(random,routeRisks[riskKey]),vendorChecks:0,adminReady:0,stage:"courtship",turn:0,activeCandidates,rapport:{},selectedCandidate:null,selectedAction:null,actionGroup:"heart",actionUse:{},resolved:false,ended:false,partnerId:null,cash:Math.max(0,player.cash+(burden.cash||0)),debts:0,ledger:[],playerBurden:burden,prep:{docs:false,agreement:false,wedding:false},stats:null,pendingConflict:null,latest:null,lastBudgetText:"",recentEvents:[],recentConflicts:[],memories:[],resentment:0,partnerGoal:null,partnerEmployed:false,partnerIncomeRate:0,partnerEarned:0,partnerSpent:0,protectedCash:0,controls:0,grayWins:0,grayFails:0,lieExposure:0,exposureDebt:0,fertilityKnown:false,fertilityBoost:1,fertilityAttempts:0,lastFertilityChance:0,pregnant:false,pregnancyTurn:null,child:false,childWell:0,score:0,outcome:null,dialogue:null,dialogueHistory:[],danger:0,dangerSignals:[],scamStage:0,crisisCount:0,missedPayments:0,creditFrozen:false,nightlifeResolved:false,maxDebt:0};
     activeCandidates.forEach(candidate=>{game.rapport[candidate.id]={interest:route.id==="friend"?1:0,trust:(route.id==="friend"||route.id==="community")?1:0,comm:0,evidence:isBroker(route)?1:0,interactions:0,visits:0,knowsChild:false};});
     spend(route.startCost,route.name+" 시작비용");
     if(isBroker(route))addLedger("계약 총액 예정 "+money(routeCost(route,country)),0);
@@ -714,6 +749,7 @@
   function stageActions(){return game.stage==="courtship"?courtshipActions:game.stage==="prep"?prepActions:lifeActions;}
   function actionAvailable(action){
     const route=getRoute();
+    if(game.creditFrozen&&["gift","creditFlex","bigWedding","housing","quickPackage"].includes(action.id))return false;
     if(action.requiresChild&&!game.child)return false;
     if(action.routeIds&&!action.routeIds.includes(route.id))return false;
     if(action.routeKinds&&!action.routeKinds.includes(route.kind))return false;
@@ -776,6 +812,29 @@
     els.targetBadge.textContent=selected?selected.name:"선택 전";
     els.candidateHelp.textContent=getCountry().name+" 사람 네 명만 표시됩니다. 계기와 이유는 보이지만 숨은 의도는 아직 모릅니다.";
   }
+  function startDialogue(candidate){
+    if(!candidate)return;
+    game.dialogue={candidateId:candidate.id,scene:courtshipDialogues[game.turn%courtshipDialogues.length],resolved:false,result:""};
+  }
+  function resolveDialogue(index){
+    if(!game.dialogue||game.dialogue.resolved)return;
+    const candidate=getCandidate(game.dialogue.candidateId),r=rapport(candidate.id),option=game.dialogue.scene.options[index];
+    let good=false,result="";
+    if(option.tactic==="warm"){good=["family","independence"].includes(candidate.priority)||candidate.conflictStyle.id==="playful";r.interest+=good?2:1;r.trust+=good?1:0;result=good?"잠깐 웃은 뒤, 자기 이야기를 더 길게 들려줬습니다.":"기분 좋은 말이지만 실제 생활에서는 어떨지 되묻습니다.";}
+    if(option.tactic==="practical"){good=["career","stability"].includes(candidate.priority)||candidate.conflictStyle.id==="calculating";r.trust+=good?2:1;r.comm+=2;r.evidence+=1;r.interest+=good?1:-1;result=good?"구체적인 답이 마음에 든 듯 질문을 더 이어갑니다.":"맞는 말이지만 면접을 보는 것 같다며 조금 식었습니다.";}
+    if(option.tactic==="glamour"){good=candidate.intent.fraud||candidate.intent.id==="migration"||candidate.spendingStyle.value>=36;r.interest+=good?3:1;game.danger+=good?1:0;result=good?"화려한 약속에 눈빛이 달라지고 결정을 서두르자고 합니다.":"돈보다 당신의 실제 하루가 궁금하다며 선을 긋습니다.";}
+    if(option.tactic==="hard"){good=candidate.conflictStyle.id==="calculating";r.trust+=good?1:-2;r.comm-=1;result=good?"적어도 솔직하긴 하다며 조건을 다시 협상합니다.":"자기 삶을 허락받아야 하느냐며 표정이 굳었습니다.";}
+    if(option.tactic==="gray"){good=candidate.conflictStyle.id==="calculating"||candidate.intent.fraud;r.interest+=good?2:0;r.trust+=good?0:-1;game.exposureDebt+=1;result=good?"둘만의 비밀이 생긴 듯 가까워졌지만 들키면 문제가 됩니다.":"작은 거짓말부터 시작하고 싶지는 않다고 말합니다.";}
+    if(option.tactic==="avoid"){good=candidate.conflictStyle.id==="avoidant";r.trust+=good?1:-1;r.comm+=good?1:-1;result=good?"서로 식힐 시간이 필요하다는 데 고개를 끄덕입니다.":"연락을 끊는 건 벌을 주는 것 같다고 말합니다.";}
+    if(candidate.intent.fraud&&["glamour","gray","warm"].includes(option.tactic)){game.danger+=1;game.scamStage+=1;}
+    game.dialogue.resolved=true;game.dialogue.result=candidate.name+" · "+result;game.dialogueHistory.push({turn:game.turn,candidateId:candidate.id,tactic:option.tactic,good});render();
+  }
+  function renderDialogue(){
+    const d=game.dialogue;els.dialogueSection.hidden=!d;if(!d)return;
+    const candidate=getCandidate(d.candidateId);els.dialogueTitle.textContent=candidate.name+"의 질문";els.dialogueText.textContent="“"+d.scene.q+"”";
+    els.dialogueOptions.hidden=d.resolved;els.dialogueOptions.innerHTML=d.scene.options.map((option,index)=>"<button class='btn kg-dialogue-choice' type='button' data-dialogue='"+index+"'>"+(index+1)+". "+option.label+"</button>").join("");
+    els.dialogueAnswer.hidden=!d.resolved;els.dialogueAnswer.textContent=d.result;
+  }
   function renderActions(){
     const groups=currentGroups();
     if(!groups.some(group=>group.id===game.actionGroup))game.actionGroup=groups[0]?groups[0].id:null;
@@ -790,13 +849,13 @@
     const selected=actions.find(action=>action.id===game.selectedAction)||[...courtshipActions,...prepActions,...lifeActions].find(action=>action.id===game.selectedAction);
     els.actionBadge.textContent=selected?selected.name:"선택 전";
     els.choiceText.textContent=selected?(game.stage==="courtship"&&game.selectedCandidate?getCandidate(game.selectedCandidate).name+"와 ":"")+selected.name+" 선택":"행동 카드를 하나 고르세요.";
-    els.commit.disabled=!selected||(game.stage==="courtship"&&!game.selectedCandidate);
+    els.commit.disabled=!selected||(game.stage==="courtship"&&(!game.selectedCandidate||!game.dialogue||!game.dialogue.resolved));
     els.actionTitle.textContent=game.stage==="courtship"?"이번 만남에서 할 일":game.stage==="prep"?"이번에 준비할 일":"이번 반년의 내 선택 · "+lifeChapterName();
     els.actionHelp.textContent=game.stage==="courtship"?getRoute().name+"에서 가능한 행동까지 함께 표시됩니다.":game.stage==="prep"?"다섯 번 안에 필수 준비 세 가지를 끝내세요.":lifeChapter().focus+"에 맞는 행동이 열립니다.";
   }
   function renderStatus(){
     const stats=game.stats;
-    const items=stats?[{label:"현금",value:money(game.cash)},{label:"빚",value:money(game.debts)},{label:"순자금",value:money(game.cash-game.debts)},{label:"신뢰",value:stats.trust+" / 10"},{label:"대화",value:stats.comm+" / 10"},{label:"배우자 자율",value:stats.autonomy+" / 10"},{label:"스트레스",value:stats.stress+" / 12"}]:[{label:"현금",value:money(game.cash)},{label:"빚",value:money(game.debts)},{label:"선택 국가",value:getCountry().name},{label:"만남 경로",value:getRoute().name},{label:"남은 차례",value:Math.max(0,COURTSHIP_TURNS-game.turn)+""},{label:"숨은 부담",value:game.playerBurden.label}];
+    const items=stats?[{label:"현금",value:money(game.cash)},{label:"빚",value:money(game.debts)+(game.missedPayments?" · 연체 "+game.missedPayments+"회":"")},{label:"순자금",value:money(game.cash-game.debts)},{label:"신뢰",value:stats.trust+" / 10"},{label:"대화",value:stats.comm+" / 10"},{label:"배우자 자율",value:stats.autonomy+" / 10"},{label:"스트레스",value:stats.stress+" / 12"}]:[{label:"현금",value:money(game.cash)},{label:"빚",value:money(game.debts)},{label:"위험 신호",value:game.danger+" / 10"},{label:"선택 국가",value:getCountry().name},{label:"만남 경로",value:getRoute().name},{label:"남은 차례",value:Math.max(0,COURTSHIP_TURNS-game.turn)+""},{label:"숨은 부담",value:game.playerBurden.label}];
     els.statGrid.innerHTML=items.map(item=>"<div class='kg-stat'><span class='text-small kg-muted'>"+item.label+"</span><strong>"+item.value+"</strong></div>").join("");
     els.routeBadge.textContent=game.stage==="life"?lifeChapter().years+"차 · "+lifeChapterName():getCountry().name+" · "+getRoute().name;
     if(game.stage==="prep"||game.stage==="life"||game.stage==="done"){
@@ -813,7 +872,7 @@
     els.playerResult.innerHTML="<strong>내 선택 · "+game.latest.playerTitle+"</strong><div class='text-small'>"+game.latest.playerText+"</div>";
     els.womanResult.innerHTML="<strong>"+game.latest.womanTitle+"</strong><div class='text-small'>"+game.latest.womanText+"</div>";
     if(game.latest.householdTitle){const scope=game.stage==="courtship"?"경로":game.stage==="prep"?"준비":"가정";els.householdResult.hidden=false;els.householdResult.innerHTML="<strong>"+scope+" · "+game.latest.householdTitle+"</strong><div class='text-small'>"+game.latest.householdText+"</div>";}else els.householdResult.hidden=true;
-    if(game.pendingConflict){els.conflictPanel.hidden=false;els.next.disabled=true;els.conflictTitle.textContent=(game.pendingConflict.kind==="request"?"배우자의 제안 · ":"부부싸움 · ")+game.pendingConflict.event.title;els.conflictText.textContent=game.pendingConflict.event.text;els.conflictOptions.innerHTML=game.pendingConflict.event.options.map((option,index)=>"<button class='btn kg-conflict-choice' type='button' data-conflict='"+index+"'><strong>"+(index+1)+".</strong> "+option.label+"</button>").join("");}else{els.conflictPanel.hidden=true;els.next.disabled=false;}
+    if(game.pendingConflict){const kind=game.pendingConflict.kind,prefix=kind==="request"?"배우자의 제안 · ":kind==="crisis"?"긴급 위기 · ":kind==="nightlife"?"숨겨진 밤 · ":"부부싸움 · ";els.conflictPanel.hidden=false;els.next.disabled=true;els.conflictTitle.textContent=prefix+game.pendingConflict.event.title;els.conflictText.textContent=game.pendingConflict.event.text;els.eventCutscene.hidden=!game.pendingConflict.event.cutscene;if(game.pendingConflict.event.cutscene)els.eventCutscene.src=game.pendingConflict.event.cutscene;els.conflictOptions.innerHTML=game.pendingConflict.event.options.map((option,index)=>"<button class='btn kg-conflict-choice' type='button' data-conflict='"+index+"'><strong>"+(index+1)+".</strong> "+option.label+"</button>").join("");}else{els.conflictPanel.hidden=true;els.eventCutscene.hidden=true;els.next.disabled=false;}
   }
   function renderMatch(){
     els.matchGrid.innerHTML=game.activeCandidates.map(candidate=>candidateCard(candidate,"match")).join("");
@@ -826,11 +885,12 @@
     if(!game){els.setup.hidden=false;els.board.hidden=true;els.progress.hidden=true;els.alert.hidden=true;els.phase.textContent="출발 조건 정하기";renderSetup();renderHistory();return;}
     const info=phaseInfo();els.phase.textContent=info.title;els.alert.textContent=info.alert;els.alert.hidden=false;els.setup.hidden=true;els.board.hidden=false;els.progress.hidden=false;renderProgress();renderStatus();
     els.candidateSection.hidden=game.stage!=="courtship"||game.resolved;
+    els.dialogueSection.hidden=game.stage!=="courtship"||game.resolved||!game.dialogue;
     els.actionSection.hidden=!["courtship","prep","life"].includes(game.stage)||game.resolved;
     els.result.hidden=!game.resolved||game.ended;
     els.match.hidden=game.stage!=="match";
     els.final.hidden=!game.ended;
-    if(game.stage==="courtship"&&!game.resolved)renderCandidates();
+    if(game.stage==="courtship"&&!game.resolved){renderCandidates();renderDialogue();}
     if(["courtship","prep","life"].includes(game.stage)&&!game.resolved)renderActions();
     if(game.resolved&&!game.ended)renderResults();
     if(game.stage==="match")renderMatch();
@@ -864,6 +924,16 @@
     }
     return "";
   }
+  function actualScam(candidate){return Boolean(candidate&&(candidate.intent.fraud||(isBroker(getRoute())&&game.routeRisk.id==="collusion")));}
+  function maybeQueueScamCrisis(candidate,r,action){
+    const actual=actualScam(candidate),signalChance=actual?.68:.10;
+    if(game.turn<1||game.pendingConflict||game.random()>signalChance)return;
+    game.danger=clamp(game.danger+(actual?2:1),0,10);game.scamStage+=1;
+    const signals=["송금 계좌 명의가 설명과 다릅니다.","업체와 상대가 똑같은 문장으로 결정을 재촉합니다.","가족 사정이 매번 달라지는데 오늘 안에 돈이 필요하다고 합니다."];
+    const signal=signals[(game.scamStage-1)%signals.length];game.dangerSignals.push(signal);
+    game.latest.householdTitle="불길한 신호";game.latest.householdText=signal+" 확인할 수도, 믿고 밀어붙일 수도 있습니다.";
+    if(game.danger>=3&&game.random()<.82){const crisis=Object.assign({},scamCrisisDeck[Math.min(game.scamStage-1,scamCrisisDeck.length-1)]);crisis.options=shuffled(game.random,crisisOptions);game.pendingConflict={kind:"crisis",candidateId:candidate.id,event:crisis};game.crisisCount+=1;}
+  }
   function applyCourtship(){
     const action=courtshipActions.find(item=>item.id===game.selectedAction),candidate=getCandidate(game.selectedCandidate),r=rapport(candidate.id),cost=actionCost(action);
     if(cost<0)earn(-cost,"추가근무 수입");else if(cost>0)spend(cost,action.name);
@@ -896,6 +966,14 @@
     if(!womanText)womanText=candidate.name+"도 이번 선택을 보고 관계를 계속할지 판단했습니다.";
     const pathText=routeEvent(candidate,r,action);
     game.latest={playerTitle:action.name,playerText,womanTitle:candidate.name+"의 선택",womanText,householdTitle:pathText?"만남 경로에서 생긴 일":null,householdText:pathText?pathText.trim():null};
+    maybeQueueScamCrisis(candidate,r,action);
+  }
+  function resolveCrisis(index){
+    const pending=game.pendingConflict,event=pending.event,option=event.options[index],candidate=getCandidate(pending.candidateId),r=rapport(candidate.id),actual=actualScam(candidate);game.pendingConflict=null;
+    if(option.tactic==="walk"){endGame("walked");return;}
+    if(option.tactic==="verify"){spend(5,"외부 사실 확인");r.evidence+=3;game.vendorChecks+=1;game.danger=Math.max(0,game.danger-2);if(actual&&(r.evidence>=4||game.vendorChecks>=2)){endGame("blocked");return;}game.latest.householdTitle="직접 확인";game.latest.householdText=actual?"일부 설명이 틀렸지만 결정적인 연결고리는 아직 잡지 못했습니다.":"급한 사정은 사실이었지만 제3자 계좌 요구는 철회됐습니다.";render();return;}
+    if(option.tactic==="pay"){spend(event.amount,event.title);game.danger+=2;if(actual&&(game.scamStage>=2||game.random()<.7)){endGame(candidate.intent.collusion||game.routeRisk.id==="collusion"?"brokerScam":"scam");return;}game.latest.householdTitle="송금 후의 침묵";game.latest.householdText="돈은 빠져나갔고 관계는 잠시 이어졌지만 의심은 더 커졌습니다.";render();return;}
+    const success=game.random()<(.45+(getPlayer().social||0)*.12);if(actual&&success){endGame("blocked");return;}if(!actual){r.trust-=2;game.grayFails+=1;game.latest.householdTitle="허세의 역풍";game.latest.householdText="실제 위급한 사정을 범죄로 몰아 관계가 크게 상했습니다.";}else{spend(30,"허세가 들통난 뒤 손실");game.danger+=1;game.latest.householdTitle="상대가 물러서지 않음";game.latest.householdText="허세를 간파하고 더 구체적인 돈 요구를 보내왔습니다.";}render();
   }
   function applyPrep(){
     const action=prepActions.find(item=>item.id===game.selectedAction),partner=getCandidate(game.partnerId),cost=actionCost(action);if(cost<0)earn(-cost,"추가근무 수입");else if(cost>0)spend(cost,action.name);
@@ -917,11 +995,23 @@
     earn(playerIncome,"내 6개월 실수령");if(partnerIncome){earn(partnerIncome,"배우자 6개월 소득");game.partnerEarned+=partnerIncome;}
     const living=player.halfCost+25+(game.child?30:0)+(game.pregnant?12:0),personal=partner.spendingStyle.value,family=partner.intent.id==="family"||partner.motive.id==="family"?24:12;
     spend(living,"6개월 주거·식비·보험·교통");spend(personal+family,"배우자 개인 생활비와 가족 지출");game.partnerSpent+=personal+family;
-    let interest=0,repaid=0;
-    if(game.debts>0){interest=Math.max(1,Math.round(game.debts*.02));game.debts+=interest;addLedger("6개월 빚 이자",interest);adjustStats({stress:1,stability:-1});}
-    if(game.debts>0&&game.cash>50){repaid=Math.min(game.debts,Math.max(20,Math.floor((game.cash-50)*.65)));game.cash-=repaid;game.debts-=repaid;addLedger("기존 빚 상환",repaid);}
+    let interest=0,repaid=0,minimum=0;
+    if(game.debts>0){const rate=game.debts>=300?.10:game.debts>=150?.075:.05;interest=Math.max(2,Math.round(game.debts*rate));game.debts+=interest;addLedger("6개월 고금리 이자",interest);minimum=Math.max(8,Math.round(game.debts*.04));if(game.cash>=minimum){game.cash-=minimum;game.debts-=minimum;repaid=minimum;addLedger("최소 상환액",minimum);}else{const shortage=minimum-game.cash;game.cash=0;game.debts+=shortage;game.missedPayments+=1;addLedger("연체로 불어난 금액",shortage);}adjustStats({stress:game.debts>=150?2:1,stability:game.debts>=150?-2:-1});}
+    game.creditFrozen=game.debts>=150;game.maxDebt=Math.max(game.maxDebt,game.debts);
     game.lastBudget={playerIncome,partnerIncome,living,partnerCost:personal+family,interest,repaid};
-    return "수입: 나 "+money(playerIncome)+(partnerIncome?", 배우자 "+money(partnerIncome):", 배우자 0원")+". 지출: 공동생활 "+money(living)+", 배우자 개인·가족 "+money(personal+family)+(interest?", 이자 "+money(interest):"")+(repaid?". 빚 상환 "+money(repaid):"")+". 현재 현금 "+money(game.cash)+", 빚 "+money(game.debts)+".";
+    return "수입: 나 "+money(playerIncome)+(partnerIncome?", 배우자 "+money(partnerIncome):", 배우자 0원")+". 지출: 공동생활 "+money(living)+", 배우자 개인·가족 "+money(personal+family)+(interest?", 이자 "+money(interest):"")+(repaid?". 최소 상환 "+money(repaid):"")+(game.missedPayments?". 연체 "+game.missedPayments+"회":"")+". 현재 현금 "+money(game.cash)+", 빚 "+money(game.debts)+".";
+  }
+  function queueNightlife(partner){
+    if(game.nightlifeResolved||!partner.workSecret||partner.workSecret.id==="none"||game.turn<LIFE_START+3||game.pendingConflict)return false;
+    const due=game.turn>=LIFE_START+6||game.random()<.28;if(!due)return false;
+    game.pendingConflict={kind:"nightlife",event:{title:"비 오는 밤, 낯선 출근길",text:"배우자가 노래방·유흥업소가 모인 거리에서 다른 이름으로 일해 온 사실을 우연히 보게 됩니다. 이유와 범위는 아직 모릅니다.",cutscene:"./assets/cutscenes/nightlife-secret.webp",options:shuffled(game.random,nightlifeOptions)}};return true;
+  }
+  function resolveNightlife(index){
+    const partner=getCandidate(game.partnerId),secret=partner.workSecret,option=game.pendingConflict.event.options[index];game.pendingConflict=null;game.nightlifeResolved=true;
+    if(option.tactic==="walk"){endGame("nightlifeBreak");return;}
+    if(option.tactic==="support"){spend(20,"안전한 일 전환·상담");if(["nightlifeNeed","brokerJob"].includes(secret.id)){adjustStats({trust:2,comm:2,autonomy:1,stress:-1});game.partnerEmployed=true;game.partnerIncomeRate=Math.max(70,game.partnerIncomeRate-20);game.latest.householdTitle="숨긴 이유를 들음";game.latest.householdText=secret.id==="nightlifeNeed"?"가족 빚과 체류 불안 때문에 시작했다고 털어놓고 다른 일로 옮겼습니다.":"업체 소개로 시작된 위험한 일을 끊고 관련 연락을 보여줬습니다.";}else{adjustStats({trust:-1,comm:1,stress:1});game.latest.householdTitle="설명 뒤에도 남은 의심";game.latest.householdText="생계만으로 설명되지 않는 연락과 지출이 남아 관계가 완전히 회복되지는 않았습니다.";}render();return;}
+    if(option.tactic==="hard"){game.controls+=2;game.partnerEmployed=false;adjustStats({trust:-2,autonomy:-3,stress:2,stability:1});if(secret.id==="brokerJob"){game.vendorChecks+=2;game.latest.householdText="강압적인 검사는 상처를 남겼지만 업체가 소개한 계좌와 연락망을 찾아냈습니다.";}else game.latest.householdText="일은 당장 멈췄지만 감시당했다는 분노와 생계 공백이 시작됐습니다.";game.latest.householdTitle="강제로 멈춘 밤일";render();return;}
+    earn(60,"숨긴 야간근무 수입");const repay=Math.min(game.debts,60);game.cash-=repay;game.debts-=repay;game.exposureDebt+=2;adjustStats({stability:2,trust:-1,stress:1});game.latest.householdTitle="모른 척한 대가";game.latest.householdText="빚은 "+money(repay)+" 줄었지만 위험한 근무와 숨김을 묵인한 사실이 다음 위기로 남았습니다.";render();
   }
   function lifeWomanPhase(partner,action){
     let title=partner.name+"의 반년",text="";
@@ -980,11 +1070,12 @@
     const chapter=lifeChapter(),primary=game.random()<.72?chapterEvents[chapter.id]:householdEvents;let event=freshPick(primary,game.recentEvents);if(!event)event=freshPick(householdEvents,game.recentEvents);rememberRecent(game.recentEvents,event.title,4);if(event.cash<0)spend(Math.abs(event.cash),event.title);else if(event.cash>0)earn(event.cash,event.title);if(event.title==="소득 공백"&&game.random()<.5)game.partnerEmployed=false;if(event.employment)game.partnerEmployed=true;adjustStats(event);
     if(game.child){const delta=action.id==="childcare"?2:(action.id==="overtime"||action.id==="control")?-5:-1;game.childWell=clamp(game.childWell+delta,0,100);}
     game.latest.householdTitle=lifeChapterName()+" · "+event.title;game.lastBudgetText=settleBudget(partner);game.latest.householdText=event.text+"<span class='kg-budget-note text-small'>이번 반년 가계 · "+game.lastBudgetText+"</span>";
-    queuePartnerMoment();
+    if(game.debts>=450||game.missedPayments>=3){endGame("bankrupt");return;}
+    if(!queueNightlife(partner))queuePartnerMoment();
   }
 
   function resolveConflict(index){
-    if(!game.pendingConflict)return;const kind=game.pendingConflict.kind||"conflict",priorHousehold=game.latest.householdText||"",partner=getCandidate(game.partnerId),player=getPlayer(),option=game.pendingConflict.event.options[index],style=partner.conflictStyle.id;
+    if(!game.pendingConflict)return;const kind=game.pendingConflict.kind||"conflict";if(kind==="crisis"){resolveCrisis(index);return;}if(kind==="nightlife"){resolveNightlife(index);return;}const priorHousehold=game.latest.householdText||"",partner=getCandidate(game.partnerId),player=getPlayer(),option=game.pendingConflict.event.options[index],style=partner.conflictStyle.id;
     const base={honest:.66,gray:.57,hard:.46,avoid:.44}[option.tactic],bonuses={repair:{honest:.20,gray:-.08,hard:-.12,avoid:-.05},avoidant:{honest:-.08,gray:.05,hard:-.15,avoid:.22},explosive:{honest:-.08,gray:.05,hard:.14,avoid:.04},calculating:{honest:.03,gray:.22,hard:.08,avoid:-.10},playful:{honest:.06,gray:.05,hard:-.12,avoid:.20}};
     const chance=clamp(base+(bonuses[style][option.tactic]||0)+(option.tactic==="honest"&&(player.conflict||0)),.15,.92),success=game.random()<chance;let text="";
     if(success&&option.tactic==="honest"){adjustStats({trust:2,comm:2,stress:-1});text="정면 대화가 통했습니다.";}
@@ -1004,7 +1095,7 @@
   function resolveTurn(){if(!game||game.resolved||game.ended||!game.selectedAction)return;if(game.stage==="courtship"&&!game.selectedCandidate)return;if(game.stage==="courtship")applyCourtship();if(game.stage==="prep")applyPrep();if(game.stage==="life")applyLife();if(!game.ended)game.resolved=true;render();}
   function advanceTurn(){
     if(!game.resolved||game.ended||game.pendingConflict)return;game.resolved=false;game.selectedAction=null;game.latest=null;
-    if(game.stage==="courtship"){if(game.turn>=COURTSHIP_TURNS-1){game.stage="match";}else game.turn+=1;game.selectedCandidate=null;game.actionGroup="heart";}
+    if(game.stage==="courtship"){if(game.turn>=COURTSHIP_TURNS-1){game.stage="match";}else game.turn+=1;game.selectedCandidate=null;game.dialogue=null;game.actionGroup="heart";}
     else if(game.stage==="prep"){if(game.turn>=LIFE_START-1){if(!game.prep.docs||!game.prep.agreement||!game.prep.wedding){endGame("postponed");return;}game.stage="life";game.turn=LIFE_START;game.actionGroup="relationship";}else game.turn+=1;}
     else if(game.stage==="life"){if(game.turn>=LAST_TURN){endGame("complete");return;}game.turn+=1;if(game.pregnant&&!game.child&&game.turn>=game.pregnancyTurn+2){game.child=true;game.pregnant=false;game.childWell=70;spend(45,"출산·산후·초기용품");adjustStats({stress:2,stability:-1,trust:1});addMemory("아이를 맞이함","warm");}}
     render();
@@ -1038,21 +1129,26 @@
     else if(code==="rejected")outcome={title:"서로의 선택이 맞지 않음",summary:"상대도 결혼하지 않기로 결정했습니다.",detail:"<strong>프로필을 고른다고 상대의 동의를 얻는 것은 아닙니다.</strong>"};
     else if(code==="postponed")outcome={title:"결혼 준비 중단",summary:"서류·생활합의·예식 중 필요한 준비가 비었습니다.",detail:"<strong>빠른 진행이 준비 부족을 지워주지는 못했습니다.</strong>"};
     else if(code==="scam")outcome={title:"조직적 기만과 잠적",summary:"정보 확인이 충분하지 않은 상태에서 금전 피해가 발생했습니다.",detail:"<strong class='kg-danger'>사기 사건</strong><div class='text-small kg-muted'>사기 확률은 모든 국적과 얼굴에 동일하게 적용한 게임값이며 현실 통계가 아닙니다.</div>"};
+    else if(code==="brokerScam")outcome={title:"업체·상대 공모 사기",summary:"업체의 신뢰를 빌린 제3자 계좌로 돈이 넘어간 뒤 연락망이 함께 사라졌습니다.",detail:"<strong class='kg-danger'>공모 사기 게임오버</strong><div class='text-small kg-muted'>국적이 아니라 이번 판의 숨은 인물·업체 상태가 원인입니다.</div>"};
+    else if(code==="walked")outcome={title:"불길한 거래에서 철수",summary:"관계의 진실은 끝까지 알지 못했지만 더 큰 금전 손실 가능성을 끊었습니다.",detail:"<strong>살아남았지만 사랑도 끝난 결말입니다.</strong>"};
+    else if(code==="bankrupt")outcome={title:"신용 붕괴·가계 파산",summary:"고금리 이자와 연체가 소득을 앞질러 생활을 유지할 수 없게 됐습니다.",detail:"<strong class='kg-danger'>재정 게임오버</strong><div class='text-small kg-muted'>최대 빚 "+money(game.maxDebt)+" · 연체 "+game.missedPayments+"회</div>"};
+    else if(code==="nightlifeBreak")outcome={title:"비밀 이중생활로 파국",summary:"숨겨진 야간근무를 발견한 밤, 설명을 듣기 전에 관계를 끝냈습니다.",detail:"<strong class='kg-danger'>별거 결말</strong><div class='text-small kg-muted'>실제 이유와 다른 대응의 가능성은 이번 판에 남습니다.</div>"};
     else if(code==="safety")outcome={title:"배우자의 안전 이탈",summary:"통제와 고립이 심해져 관계가 종료됐습니다.",detail:"<strong>사기 잠적과는 다른 사건입니다.</strong>"};
     else if(code==="separation")outcome={title:"관계 파탄·별거",summary:"높은 스트레스와 낮은 신뢰가 누적됐습니다.",detail:"<strong>한 번의 사건보다 생활의 누적이 원인이 됐습니다.</strong>"};
     else{const score=happinessScore(),axes=axisScores();if(score>=88&&(!game.child||game.childWell>=65))outcome={title:game.child?"행복하고 안정된 가족":"행복한 부부 생활",summary:game.child?"부부 관계와 아이의 안정이 함께 유지됐습니다.":"출산 여부와 무관하게 서로 만족스러운 생활을 만들었습니다.",detail:"<strong class='kg-good'>좋은 결말</strong>"};else if(axes.relationship>=72&&axes.finance<55)outcome={title:"사이는 좋지만 빚에 눌린 결혼",summary:"두 사람의 관계는 남았지만 재정 부담이 다음 10년을 압박합니다.",detail:"<strong>관계와 경제의 결과가 엇갈렸습니다.</strong>"};else if(axes.safety<45)outcome={title:"불안정한 관계 유지",summary:"혼인은 유지됐지만 통제와 숨김이 안전감을 훼손했습니다.",detail:"<strong class='kg-danger'>유지 ≠ 안전</strong>"};else if(score>=68)outcome={title:"유지되는 현실 결혼",summary:"좋은 부분과 해결되지 않은 문제가 함께 남았습니다.",detail:"<strong>완벽하지 않지만 살아 있는 결혼입니다.</strong>"};else outcome={title:"불행한 결혼 유지",summary:"법적 혼인은 남았지만 관계 만족과 생활 안정이 낮습니다.",detail:"<strong class='kg-danger'>결혼 성사 ≠ 승리</strong>"};}
     game.score=happinessScore();outcome.detail+=truthSheet(partner);game.outcome=outcome;history.unshift({seed:game.seed,country:getCountry().name,route:getRoute().name,player:getPlayer().name,partner:partner?partner.name:"없음",outcome:outcome.title,score:game.score});history=history.slice(0,8);render();
   }
 
-  function simulatePolicy(policy,seed){const r=mulberry32(seed),fraud=r()<.08;let married=r()<clamp(.48+policy.charm*.1+policy.verify*.05+policy.gray*.07,.2,.9);if(!married)return {married:false,happy:false,scam:false,safety:false,score:38};if(fraud&&r()>(policy.verify*.72+policy.reserve*.18))return {married:true,happy:false,scam:true,safety:false,score:12};let trust=5,comm=4,autonomy=5,stability=5,stress=3,exposure=0;for(let i=0;i<LIFE_TURNS;i+=1){if(i%2===0){trust+=policy.talk;comm+=policy.talk;stability+=policy.money;stress+=policy.stress;autonomy+=policy.autonomy;}if(policy.gray&&r()<.6){stability+=2;exposure+=1;}else if(policy.gray){trust-=2;stress+=2;}if(exposure&&r()<.24){trust-=2;comm-=1;stress+=2;exposure-=1;}if(policy.control&&i%2===0){trust-=1;autonomy-=2;stress+=1;}trust=clamp(trust,0,10);comm=clamp(comm,0,10);autonomy=clamp(autonomy,0,10);stability=clamp(stability,0,10);stress=clamp(stress,0,12);}const safety=autonomy<=1&&trust<=3,score=clamp(Math.round((trust*6+comm*4+autonomy*4+stability*4+(12-stress)*2)/2.1),0,100);return {married:true,happy:!safety&&score>=88,scam:false,safety,score};}
+  function simulatePolicy(policy,seed){const r=mulberry32(seed),fraud=r()<.20;let married=r()<clamp(.48+policy.charm*.1+policy.verify*.05+policy.gray*.07,.2,.9);if(!married)return {married:false,happy:false,scam:false,safety:false,score:38};if(fraud&&r()>(policy.verify*.72+policy.reserve*.18))return {married:true,happy:false,scam:true,safety:false,score:12};let trust=5,comm=4,autonomy=5,stability=5,stress=3,exposure=0;for(let i=0;i<LIFE_TURNS;i+=1){if(i%2===0){trust+=policy.talk;comm+=policy.talk;stability+=policy.money;stress+=policy.stress;autonomy+=policy.autonomy;}if(policy.gray&&r()<.6){stability+=2;exposure+=1;}else if(policy.gray){trust-=2;stress+=2;}if(exposure&&r()<.24){trust-=2;comm-=1;stress+=2;exposure-=1;}if(policy.control&&i%2===0){trust-=1;autonomy-=2;stress+=1;}trust=clamp(trust,0,10);comm=clamp(comm,0,10);autonomy=clamp(autonomy,0,10);stability=clamp(stability,0,10);stress=clamp(stress,0,12);}const safety=autonomy<=1&&trust<=3,score=clamp(Math.round((trust*6+comm*4+autonomy*4+stability*4+(12-stress)*2)/2.1),0,100);return {married:true,happy:!safety&&score>=88,scam:false,safety,score};}
   function runAutoReview(){const policies=[{label:"대화와 확인 중심",verify:1,reserve:0,talk:1,money:0,stress:-1,autonomy:1,gray:0,charm:0,control:0},{label:"확인 뒤 가끔 편법",verify:1,reserve:1,talk:1,money:0,stress:0,autonomy:0,gray:1,charm:0,control:0},{label:"빚내서 좋은 모습",verify:0,reserve:0,talk:0,money:1,stress:1,autonomy:0,gray:1,charm:1,control:0},{label:"통제하며 빠르게",verify:0,reserve:0,talk:0,money:0,stress:1,autonomy:0,gray:0,charm:1,control:1}],base=Math.max(1,Number(els.seed.value)||1);lastReview=policies.map(policy=>{let married=0,happy=0,scam=0,safety=0,total=0;for(let i=0;i<500;i+=1){const result=simulatePolicy(policy,base+i*7919);married+=result.married?1:0;happy+=result.happy?1:0;scam+=result.scam?1:0;safety+=result.safety?1:0;total+=result.score;}return {label:policy.label,married:Math.round(married/5),happy:Math.round(happy/5),scam:Math.round(scam/5),safety:Math.round(safety/5),score:total/500};});els.reviewResults.innerHTML=lastReview.map(item=>"<div class='kg-review-row'><strong>"+item.label+"</strong><div class='kg-review-track'><span style='width:"+item.happy+"%'></span></div><span>행복 "+item.happy+"%</span><span class='text-small kg-muted'>결혼 "+item.married+"% · 사기피해 "+item.scam+"% · 안전이탈 "+item.safety+"% · 평균 "+item.score.toFixed(1)+"점</span></div>").join("");els.review.hidden=false;}
-  function reviewPrompt(){return "국결 생존기 v0.9의 완료 기록과 500번 자동시험을 보고 가장 불균형한 수치 하나만 조정해줘. 아이 상태에 맞는 사건, 배우자의 기억·개인 목표·제안, 반복사건 방지, 업체확인과 체류행정 분리, 빚 이자·우선상환, 부부관계·경제·자율·안전·가족계획의 다섯 결말축이 핵심이다. 완료기록="+JSON.stringify(history)+", 자동시험="+JSON.stringify(lastReview);}
+  function reviewPrompt(){return "국결 생존기 v1.0의 완료 기록과 500번 자동시험을 보고 가장 불균형한 수치 하나만 조정해줘. 연애 대화, 사기 위기, 업체 공모, 비밀 야간근무, 고금리 빚과 중도 게임오버, 부부관계·경제·자율·안전·가족계획의 다섯 결말축이 핵심이다. 완료기록="+JSON.stringify(history)+", 자동시험="+JSON.stringify(lastReview);}
 
   root.addEventListener("click",event=>{
     const player=event.target.closest("[data-player]");if(player&&!game){setup.playerId=player.dataset.player;renderSetup();return;}
     const country=event.target.closest("[data-country]");if(country&&!game){setup.countryId=country.dataset.country;renderSetup();return;}
     const route=event.target.closest("[data-route]");if(route&&!game){setup.routeId=route.dataset.route;renderSetup();return;}
-    const candidate=event.target.closest("[data-candidate]");if(candidate&&game&&game.stage==="courtship"){game.selectedCandidate=candidate.dataset.candidate;game.selectedAction=null;render();return;}
+    const candidate=event.target.closest("[data-candidate]");if(candidate&&game&&game.stage==="courtship"){game.selectedCandidate=candidate.dataset.candidate;game.selectedAction=null;startDialogue(getCandidate(game.selectedCandidate));render();return;}
+    const dialogue=event.target.closest("[data-dialogue]");if(dialogue&&game){resolveDialogue(Number(dialogue.dataset.dialogue));return;}
     const match=event.target.closest("[data-match]");if(match&&game&&game.stage==="match"){game.selectedCandidate=match.dataset.match;render();return;}
     const action=event.target.closest("[data-action]");if(action&&game){game.selectedAction=action.dataset.action;renderActions();return;}
     const conflict=event.target.closest("[data-conflict]");if(conflict&&game){resolveConflict(Number(conflict.dataset.conflict));}
@@ -1062,7 +1158,7 @@
   els.setupNext.addEventListener("click",()=>{const ready=[setup.playerId,setup.countryId,setup.routeId][setupStep];if(setupStep<3&&ready){setupStep+=1;renderSetup();}});
   els.start.addEventListener("click",startGame);els.commit.addEventListener("click",resolveTurn);els.next.addEventListener("click",advanceTurn);els.matchCommit.addEventListener("click",resolveMatch);
   $("#kg-new-game").addEventListener("click",resetSetup);$("#kg-final-new").addEventListener("click",()=>{els.seed.value=String((Number(els.seed.value)||1)+1);setup={playerId:game.playerId,countryId:game.countryId,routeId:game.routeId};game=null;startGame();});$("#kg-auto-review").addEventListener("click",runAutoReview);
-  $("#kg-send-review").addEventListener("click",async()=>{if(window.openai&&window.openai.sendFollowUpMessage)await window.openai.sendFollowUpMessage({prompt:reviewPrompt(),title:"v0.9 균형을 이어서 조정할까요?"});});
+  $("#kg-send-review").addEventListener("click",async()=>{if(window.openai&&window.openai.sendFollowUpMessage)await window.openai.sendFollowUpMessage({prompt:reviewPrompt(),title:"v1.0 균형을 이어서 조정할까요?"});});
   render();
 })();
 
