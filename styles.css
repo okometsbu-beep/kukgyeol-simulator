@@ -165,6 +165,135 @@ html body #kg-life-game .kg-impact b { color: var(--accent-strong); }
 html body #kg-life-game .kg-signal-box { margin-top: .55rem; padding: .6rem; border: 1px solid rgb(255 117 143 / 55%); border-radius: .55rem; background: rgb(255 117 143 / 8%); }
 html body #kg-life-game .kg-signal-box strong { color: #ff9aad; }
 
+/* v2 · 연애 시뮬레이션 화면 */
+html body #kg-life-game .kg-vn-stage {
+  position: relative;
+  overflow: hidden;
+  min-height: 610px;
+  border: 1px solid rgb(183 161 255 / 48%);
+  border-radius: 1rem;
+  background: #21182c;
+  box-shadow: var(--shadow);
+}
+
+html body #kg-life-game .kg-vn-stage[hidden] { display: none; }
+
+html body #kg-life-game .kg-vn-hud {
+  position: absolute;
+  z-index: 5;
+  inset: .75rem .75rem auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .5rem;
+  align-items: center;
+  padding: .5rem .65rem;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: .72rem;
+  background: rgb(16 13 22 / 74%);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
+  backdrop-filter: blur(12px);
+  font-size: .76rem;
+}
+
+html body #kg-life-game .kg-vn-hud strong { overflow: hidden; color: #fff; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
+html body #kg-life-game .kg-vn-hud > :first-child { color: var(--viz-series-4); }
+html body #kg-life-game .kg-vn-hud > :last-child { color: #b9f2dd; }
+
+html body #kg-life-game .kg-vn-visual { position: relative; height: 490px; overflow: hidden; }
+html body #kg-life-game .kg-vn-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(18 13 26 / 2%) 42%, #15101f 98%),
+    radial-gradient(circle at 70% 20%, rgb(255 197 208 / 38%), transparent 23rem),
+    linear-gradient(135deg, #6b4d73, #302545 56%, #152b36);
+}
+
+html body #kg-life-game .kg-vn-backdrop::before,
+html body #kg-life-game .kg-vn-backdrop::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(5px);
+  opacity: .45;
+}
+
+html body #kg-life-game .kg-vn-backdrop::before { width: 17rem; height: 17rem; right: -3rem; top: 5rem; background: #f0bc96; }
+html body #kg-life-game .kg-vn-backdrop::after { width: 12rem; height: 12rem; left: -2rem; top: 12rem; background: #70bba9; }
+
+html body #kg-life-game .kg-vn-portrait {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: -1px;
+  width: min(74%, 430px);
+  height: 90%;
+  transform: translateX(-50%);
+  border-radius: 45% 45% 0 0;
+  background-color: transparent;
+  filter: drop-shadow(0 18px 24px rgb(0 0 0 / 35%));
+}
+
+html body #kg-life-game .kg-vn-change { position: absolute; z-index: 4; left: .75rem; bottom: .75rem; min-height: 36px; padding: .42rem .58rem; background: rgb(16 13 22 / 72%); font-size: .72rem; backdrop-filter: blur(8px); }
+html body #kg-life-game .kg-vn-meter { position: absolute; z-index: 4; right: .75rem; bottom: .75rem; display: flex; gap: .3rem; align-items: center; padding: .38rem .55rem; border-radius: 999px; background: rgb(16 13 22 / 76%); font-size: .72rem; backdrop-filter: blur(8px); }
+
+html body #kg-life-game .kg-vn-dialogue {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  gap: .38rem;
+  min-height: 120px;
+  margin: -1.3rem .8rem .8rem;
+  padding: .8rem .95rem;
+  border: 1px solid rgb(183 161 255 / 50%);
+  border-radius: .85rem;
+  background: rgb(16 13 22 / 93%);
+  box-shadow: 0 16px 40px rgb(0 0 0 / 32%);
+  backdrop-filter: blur(14px);
+}
+
+html body #kg-life-game .kg-vn-dialogue strong { color: #d9cbff; font-size: .86rem; }
+html body #kg-life-game .kg-vn-dialogue p { margin: 0; font-size: 1.02rem; line-height: 1.62; }
+html body #kg-life-game .kg-vn-why { padding-top: .4rem; border-top: 1px dashed rgb(255 255 255 / 14%); color: var(--muted-foreground); font-size: .75rem; line-height: 1.5; }
+
+html body #kg-life-game .kg-plan-panel { display: grid; gap: .55rem; margin: .7rem 0; padding: .7rem; border: 1px solid rgb(117 215 177 / 30%); border-radius: .8rem; background: linear-gradient(135deg, rgb(117 215 177 / 8%), rgb(155 123 255 / 8%)); }
+html body #kg-life-game .kg-plan-head { display: flex; flex-wrap: wrap; gap: .25rem .6rem; align-items: baseline; justify-content: space-between; }
+html body #kg-life-game .kg-plan-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; }
+html body #kg-life-game .kg-plan-choice { min-height: 42px; padding: .48rem .55rem; font-size: .78rem; }
+html body #kg-life-game .kg-plan-choice[aria-pressed="true"] { border-color: #75d7b1; color: #d9fff0; background: rgb(117 215 177 / 13%); }
+html body #kg-life-game .kg-plan-forecast { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; }
+html body #kg-life-game .kg-forecast-item { padding: .5rem; border: 1px solid rgb(255 255 255 / 8%); border-radius: .55rem; background: rgb(0 0 0 / 12%); }
+html body #kg-life-game .kg-forecast-item span { display: block; color: var(--muted-foreground); font-size: .68rem; }
+html body #kg-life-game .kg-forecast-item strong { display: block; margin-top: .12rem; font-size: .79rem; line-height: 1.35; }
+html body #kg-life-game .kg-legacy-action-type { display: none; }
+
+html body #kg-life-game .kg-action-grid { grid-template-columns: 1fr 1fr; }
+html body #kg-life-game .kg-action {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .2rem .55rem;
+  align-content: start;
+  min-height: 180px;
+  padding: .75rem;
+  text-align: left;
+}
+
+html body #kg-life-game .kg-action > strong,
+html body #kg-life-game .kg-action > .text-small,
+html body #kg-life-game .kg-action > .kg-impact,
+html body #kg-life-game .kg-action > .kg-tags { grid-column: 2; }
+html body #kg-life-game .kg-action-icon { grid-row: 1 / span 4; font-size: 1.35rem; }
+html body #kg-life-game .kg-action .kg-impact { margin-top: .3rem; padding: .42rem .5rem; }
+html body #kg-life-game .kg-action .kg-impact span { display: block; }
+html body #kg-life-game .kg-action .kg-impact b { display: inline-block; min-width: 2.5rem; }
+html body #kg-life-game .kg-action-why { grid-column: 2; color: #f6d68c; font-size: .7rem; line-height: 1.4; }
+
+html body #kg-life-game .kg-payment-panel { display: grid; gap: .55rem; margin: .7rem 0; padding: .75rem; border: 1px solid rgb(246 189 96 / 55%); border-radius: .75rem; background: rgb(246 189 96 / 9%); }
+html body #kg-life-game .kg-payment-panel[hidden] { display: none; }
+html body #kg-life-game .kg-payment-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .4rem; }
+html body #kg-life-game .kg-payment-options .btn { min-height: 42px; padding: .48rem; font-size: .76rem; }
+
 @media (max-width: 620px) {
   body {
     padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
@@ -200,6 +329,22 @@ html body #kg-life-game .kg-signal-box strong { color: #ff9aad; }
   html body #kg-life-game .kg-speech { font-size: .98rem; }
   html body #kg-life-game .kg-section { margin-top: .68rem; }
   html body #kg-life-game .kg-alert { margin-top: .6rem; padding: .6rem .7rem; font-size: .82rem; line-height: 1.45; }
+
+  html body #kg-life-game .kg-vn-stage { min-height: 465px; border-radius: .78rem; }
+  html body #kg-life-game .kg-vn-visual { height: 350px; }
+  html body #kg-life-game .kg-vn-portrait { width: min(86%, 330px); height: 90%; }
+  html body #kg-life-game .kg-vn-hud { inset: .5rem .5rem auto; grid-template-columns: auto 1fr; font-size: .68rem; }
+  html body #kg-life-game .kg-vn-hud > :last-child { grid-column: 1 / -1; justify-self: center; }
+  html body #kg-life-game .kg-vn-dialogue { min-height: 112px; margin: -.7rem .5rem .5rem; padding: .65rem .72rem; }
+  html body #kg-life-game .kg-vn-dialogue p { font-size: .94rem; line-height: 1.55; }
+  html body #kg-life-game .kg-plan-options { grid-template-columns: 1fr; }
+  html body #kg-life-game .kg-plan-choice { min-height: 40px; text-align: left; }
+  html body #kg-life-game .kg-plan-forecast { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  html body #kg-life-game .kg-forecast-item { padding: .42rem; }
+  html body #kg-life-game .kg-forecast-item strong { font-size: .7rem; }
+  html body #kg-life-game .kg-action-grid { grid-template-columns: 1fr; }
+  html body #kg-life-game .kg-action { min-height: auto; padding: .7rem; }
+  html body #kg-life-game .kg-payment-options { grid-template-columns: 1fr; }
 
   html body #kg-life-game .kg-progress { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .25rem; margin-top: .6rem; }
   html body #kg-life-game .kg-progress-group { padding: .42rem .38rem; }

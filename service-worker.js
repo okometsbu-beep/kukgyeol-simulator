@@ -1,4 +1,4 @@
-const CACHE_NAME = "kukgyeol-v4";
+const CACHE_NAME = "kukgyeol-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -8,6 +8,7 @@ const APP_SHELL = [
   "./assets/men.webp",
   "./assets/women-a.webp",
   "./assets/women-b.webp",
+  "./assets/women-c.webp",
   "./assets/women-legacy.webp",
   "./assets/cutscenes/video-call.webp",
   "./assets/cutscenes/broker-suspicion.webp",
