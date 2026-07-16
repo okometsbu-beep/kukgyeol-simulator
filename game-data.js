@@ -2,12 +2,12 @@
   "use strict";
 
   const players = [
-    { id: "junsu", name: "김준수", age: 38, job: "중소기업 대리", cash: 32000000, income: 3900000, calm: 6, charm: 4, empathy: 7, reason: 4, courage: 3, art: 0, hook: "상대의 기분을 잘 읽지만 결정이 느리다", flaw: "거절당할까 봐 할 말을 삼킨다" },
-    { id: "minho", name: "박민호", age: 44, job: "자영업", cash: 65000000, income: 6100000, calm: 3, charm: 6, empathy: 3, reason: 4, courage: 8, art: 1, hook: "돈과 배짱이 있지만 속도를 너무 낸다", flaw: "빨리 확답을 받고 싶어 한다" },
-    { id: "taeho", name: "이태호", age: 35, job: "개발자", cash: 48000000, income: 5200000, calm: 7, charm: 3, empathy: 3, reason: 8, courage: 4, art: 2, hook: "자료를 잘 보지만 감정 표현이 서툴다", flaw: "사람의 말을 보고서처럼 듣는다" },
-    { id: "seongjin", name: "최성진", age: 49, job: "운송업", cash: 80000000, income: 5800000, calm: 4, charm: 5, empathy: 5, reason: 4, courage: 7, art: 3, hook: "생활력과 추진력이 좋지만 돈을 앞세우기 쉽다", flaw: "나이 차이를 돈으로 메우려 한다" },
-    { id: "hyunwoo", name: "정현우", age: 41, job: "공무원", cash: 40000000, income: 4300000, calm: 6, charm: 4, empathy: 6, reason: 7, courage: 5, art: 4, hook: "약속과 확인에 강한 균형형", flaw: "한번 의심하면 표정에 다 드러난다" },
-    { id: "dojun", name: "한도준", age: 33, job: "프리랜서 영상편집자", cash: 18000000, income: 4700000, calm: 4, charm: 8, empathy: 7, reason: 3, courage: 6, art: 5, hook: "대화와 설렘에 강하지만 돈 관리가 약하다", flaw: "수입과 미래 계획이 들쭉날쭉하다" }
+    { id: "junsu", name: "김준수", age: 38, job: "중소기업 대리", cash: 18000000, income: 3900000, singleLiving: 1450000, monthlyCommitment: 250000, calm: 6, charm: 4, empathy: 7, reason: 4, courage: 3, appearance: 5, portability: 3, art: 0, hook: "공감은 좋지만 결정을 오래 미루는 직장인", flaw: "거절당할까 봐 할 말을 삼킨다" },
+    { id: "minho", name: "박민호", age: 44, job: "자영업", cash: 32000000, income: 5400000, singleLiving: 1900000, monthlyCommitment: 1200000, calm: 3, charm: 6, empathy: 3, reason: 4, courage: 8, appearance: 6, portability: 4, art: 1, hook: "수입은 높지만 사업 고정비와 성급함이 큰 자영업자", flaw: "빨리 확답을 받고 싶어 한다" },
+    { id: "taeho", name: "이태호", age: 35, job: "개발자", cash: 25000000, income: 5200000, singleLiving: 1650000, monthlyCommitment: 450000, calm: 7, charm: 3, empathy: 3, reason: 8, courage: 4, appearance: 4, portability: 8, art: 2, hook: "재택 이동은 쉽지만 감정 표현이 서툰 개발자", flaw: "사람의 말을 보고서처럼 듣는다" },
+    { id: "seongjin", name: "최성진", age: 49, job: "운송업", cash: 35000000, income: 5200000, singleLiving: 1800000, monthlyCommitment: 1500000, calm: 4, charm: 5, empathy: 5, reason: 4, courage: 7, appearance: 4, portability: 2, art: 3, hook: "현금은 많지만 차량·사업비와 나이 차이 부담이 큰 생활형", flaw: "나이 차이를 돈으로 메우려 한다" },
+    { id: "hyunwoo", name: "정현우", age: 41, job: "공무원", cash: 22000000, income: 4300000, singleLiving: 1550000, monthlyCommitment: 300000, calm: 6, charm: 4, empathy: 6, reason: 7, courage: 5, appearance: 5, portability: 1, art: 4, hook: "생활은 안정적이지만 해외 이동이 어려운 공무원", flaw: "한번 의심하면 표정에 다 드러난다" },
+    { id: "dojun", name: "한도준", age: 33, job: "프리랜서 영상편집자", cash: 12000000, income: 4500000, singleLiving: 1700000, monthlyCommitment: 150000, calm: 4, charm: 8, empathy: 7, reason: 3, courage: 6, appearance: 8, portability: 9, art: 5, hook: "외모와 대화는 강하지만 수입이 들쭉날쭉한 프리랜서", flaw: "좋을 때 쓴 돈을 나중에 계산한다" }
   ];
 
   const countries = [
@@ -114,7 +114,7 @@
       ["그레이스", 41, "온라인 영어 강사", "아이 없이 대화가 통하는 재혼을 원한다", "유쾌하고 독립적이다", "사랑에도 근무시간이 있어요. 수업 중엔 답장 못 해요.", "임신을 원하지 않는다"],
       ["베아", 28, "간호조무사", "해외 취업보다 안정적인 가족을 꿈꾼다", "헌신적이지만 거절을 어려워한다", "괜찮다고 해도 한 번 더 제 뜻을 물어봐 줘요.", "아이 둘을 원하지만 시기는 협의하고 싶다"],
       ["카밀", 34, "회계 보조", "가족 빚을 숨기지 않고 받아들일 사람을 찾는다", "현실적이고 체면보다 사실을 중시한다", "우리 집 형편을 말하면 도망갈까 봐 무서웠어요.", "가족 지원 상한을 함께 정하고 싶다"],
-      ["리자", 39, "바·레스토랑 매니저", "야간 서비스업에 대한 편견 없는 사람을 원한다", "강단 있고 소문에 지쳐 있다", "밤에 일한다는 이유로 심문받는 결혼은 싫어요.", "한국에서도 관리직으로 일하고 싶다"],
+      ["리자", 39, "바·레스토랑 매니저", "야간 서비스업에 대한 편견 없는 사람을 원한다", "강단 있고 소문에 지쳐 있다", "밤에 일한다는 이유만으로 계속 캐묻는 결혼은 싫어요.", "한국에서도 관리직으로 일하고 싶다"],
       ["루스", 31, "프리랜서 번역가", "종교와 생활 방식을 존중할 동반자를 찾는다", "조용하지만 원칙에는 단호하다", "결혼한다고 신앙이나 제 이름을 버리진 않을 거예요.", "교회 공동체와 계속 연결되고 싶다"]
     ],
     kh: [
@@ -178,7 +178,7 @@
         digital: clue("ph_chat", "친구와의 오래된 대화", "clue", "한국행보다 동반자의 성격을 걱정하는 대화가 결혼 전부터 이어진다.", "메시지 원본", 2)
       },
       statements: [
-        { text: "사랑해도 우리 부모님 약값까지 없어지는 건 아니잖아요.", press: "그녀는 액수 상한과 공동계좌 규칙을 문서로 정하자고 제안한다.", required: ["ph_budget", "ph_transfer"], success: "요구가 갑자기 만들어진 것이 아니라는 사실이 확인됐다." },
+        { text: "제가 당신을 사랑해도 부모님이 매달 내는 약값은 그대로예요. 제 수입에서 얼마를 도울 수 있는지 우리 생활비와 함께 정하고 싶어요.", press: "그녀는 부모 약값, 자기 수입, 부부 생활비를 한 표에 적고 매달 지원할 수 있는 상한을 정하자고 제안한다.", required: ["ph_budget", "ph_transfer"], success: "가족 지원 요구가 갑자기 만들어진 것이 아니라 이전부터 예산에 기록돼 있었다는 사실이 확인됐다." },
         { text: "한국이 목적이었다면 제 일을 계속할 방법부터 찾지 않았을 거예요.", press: "그녀는 자격 전환에 필요한 자료를 보여 준다.", required: ["ph_work", "ph_chat"], success: "결혼과 별개로 이어 온 계획이 확인됐다." }
       ],
       truth: "그녀의 동기는 낭만만으로 이루어지지 않았지만 거짓은 아니었다. 가족부양·직업·생활비를 숨기지 않고 협상하려 했다. 현실적이라는 이유만으로 사기라고 단정하면 오판이다."
