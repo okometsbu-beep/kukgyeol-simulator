@@ -8,7 +8,7 @@
   <title>진심의 증거 · 국제연애 미스터리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=4">
+  <link rel="stylesheet" href="./styles.css?v=5">
 </head>
 <body>
   <a class="skip-link" href="#main">게임으로 바로가기</a>
@@ -39,7 +39,7 @@
           <p class="eyebrow">사건 준비</p>
           <h2 id="setup-title">주인공을 고르세요</h2>
         </div>
-        <span id="setup-step" class="step-badge">1 / 4</span>
+        <span id="setup-step" class="step-badge">1 / 5</span>
       </header>
       <div class="setup-progress" aria-hidden="true"><span id="setup-progress-bar"></span></div>
       <p id="setup-guide" class="setup-guide"></p>
@@ -90,6 +90,11 @@
             <div id="portrait-wrap" class="portrait-wrap" hidden>
               <div id="partner-portrait" class="portrait-photo"></div>
             </div>
+            <div id="event-card" class="event-card" hidden>
+              <span>STORY EVENT</span>
+              <h2 id="event-title"></h2>
+              <p id="event-text"></p>
+            </div>
           </div>
 
           <div class="objective-card">
@@ -103,7 +108,7 @@
               <strong id="speaker-name"></strong>
               <span id="speaker-mood" class="mood-chip"></span>
             </div>
-            <p id="dialogue-text"></p>
+            <div id="dialogue-text" class="dialogue-text"></div>
           </div>
 
           <div id="statement-box" class="statement-box" hidden>
@@ -126,6 +131,11 @@
                 <p id="relationship-label"></p>
               </div>
             </div>
+          </section>
+
+          <section class="side-card player-menu-card">
+            <div class="side-title"><h3>나의 소개·능력</h3><span>성장 기록</span></div>
+            <button id="open-player-profile" class="secondary-button full-button" type="button">주인공 전체 보기</button>
           </section>
 
           <section class="side-card">
@@ -152,6 +162,7 @@
       </div>
 
       <nav class="mobile-dock" aria-label="게임 메뉴">
+        <button id="mobile-player" type="button"><span>👤</span>내 프로필</button>
         <button id="mobile-notebook" type="button"><span>📓</span>사건 수첩</button>
         <button id="mobile-status" type="button"><span>💳</span>재정</button>
         <button id="mobile-save" type="button"><span>💾</span>저장</button>
@@ -207,7 +218,7 @@
     </button>
   </template>
 
-  <script src="./game-data.js?v=4"></script>
-  <script src="./game.js?v=4"></script>
+  <script src="./game-data.js?v=5"></script>
+  <script src="./game.js?v=5"></script>
 </body>
 </html>
