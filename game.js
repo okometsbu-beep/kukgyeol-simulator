@@ -17,17 +17,23 @@
   const scenes = [
     { id: "contact", title: "첫 연락", objective: "프로필 밖의 사람을 확인한다", bg: "video-call" },
     { id: "her_question", title: "그녀의 질문", objective: "나도 검증받는 사람임을 기억한다", bg: "video-call" },
+    { id: "first_date_chat", title: "조금 사적인 문답", objective: "조건표가 아닌 사람의 말버릇을 알아간다", bg: "video-call" },
     { id: "route_pressure", title: "만남의 규칙", objective: "만남을 주선한 구조와 비용을 파악한다", bg: "broker-suspicion" },
     { id: "arrival", title: "현지 첫 만남", objective: "통역을 거치지 않은 표정과 말을 살핀다", bg: "airport" },
     { id: "private_talk", title: "둘만의 대화", objective: "결혼을 선택한 진짜 계기를 듣는다", bg: "romance-start" },
+    { id: "family_call", title: "화면 너머의 가족", objective: "가족의 기대와 당사자의 뜻을 구분한다", bg: "video-call" },
     { id: "boundaries", title: "서로의 선", objective: "아이·직업·몸·첫날밤에 대한 동의를 확인한다", bg: "romance-start" },
+    { id: "speed_pressure", title: "오늘 결정하라는 사람들", objective: "빠른 감정과 빠른 절차를 분리한다", bg: "broker-suspicion" },
     { id: "documents", title: "서류의 날짜", objective: "느낌과 별개로 기본 사실을 검증한다", bg: "broker-suspicion" },
     { id: "romance", title: "마음이 움직이는 밤", objective: "의심만 하다가 관계를 놓치지 않는다", bg: "romance-start" },
+    { id: "her_investigation", title: "이번에는 그녀의 확인", objective: "상대가 내 삶을 검증할 권리도 받아들인다", bg: "video-call" },
     { id: "money_crisis", title: "갑작스러운 돈 이야기", objective: "돕는 것과 확인하는 것을 동시에 해낸다", bg: "broker-suspicion" },
     { id: "investigation", title: "보이지 않는 연결", objective: "소문이 아닌 확인 가능한 자료를 찾는다", bg: "nightlife-secret" },
+    { id: "anonymous_tip", title: "익명의 제보", objective: "충격적인 주장보다 원본과 발신자를 확인한다", bg: "nightlife-secret" },
     { id: "interrogation_one", title: "첫 번째 진술", objective: "사람이 아니라 모순을 겨눈다", bg: "broker-suspicion" },
     { id: "breathing_room", title: "흔들리는 마음", objective: "스트레스와 관계, 조사 사이의 균형을 잡는다", bg: "nightlife-secret" },
     { id: "interrogation_two", title: "마지막 진술", objective: "결론 전에 남은 모순 하나를 확인한다", bg: "broker-suspicion" },
+    { id: "final_check", title: "마지막 한 통", objective: "결론을 바꿀 수 있는 확인을 한 번만 더 한다", bg: "airport" },
     { id: "decision", title: "결정의 날", objective: "증거가 말하는 만큼만 결론 내린다", bg: "wedding" }
   ];
 
@@ -305,6 +311,12 @@
           choice("player_polish", "수입을 조금 부풀려 안심시킨다", "‘결혼하면 더 벌 수 있다’며 불확실한 계획을 확정처럼 말한다.", "지금: 호감 가능 · 앞으로: 들키면 큰 약점", 0, "risky"),
           choice("player_counter", "대답 뒤 같은 질문을 돌려준다", "내 상황을 먼저 말하고 그녀의 빚·일·가족지원도 묻는다.", "지금: 분위기는 현실적 · 앞으로: 생활 협상 단서", 0, "investigate")
         ] };
+      case "first_date_chat":
+        return { ...common, mood: "조금 장난스러움", text: `${partner.name}이 준비했다며 휴대폰 메모를 펼친다.\n\n“질문 세 개만 해요. 마지막 연애는 왜 끝났어요? 혼자 있을 때 제일 창피한 습관은? 그리고… 저한테 처음 설렌 순간은?”`, choices: [
+          choice("awkward_story", "멋있지 않은 실제 이야기를 들려준다", "외로워서 소개팅 앱을 지웠다 다시 깐 일과 연애에서 피했던 갈등을 말한다.", "지금: 체면↓ · 앞으로: 대사가 더 솔직해짐", 0, "romance"),
+          choice("compatibility_quiz", "나도 준비한 질문표를 꺼낸다", "생활패턴·돈·아이·거주지를 빠르게 확인한다.", "지금: 설렘은 적음 · 앞으로: 조건 충돌 조기 발견", 0, "investigate"),
+          choice("pickup_line", "능청스러운 답으로 분위기를 잡는다", "‘처음 화면이 켜진 순간’이라며 살짝 과장해 웃음을 노린다.", "매력 높음: 호감↑ · 낮음: 작업 멘트로 들림", 0, "risky")
+        ] };
       case "route_pressure":
         if (route.id === "broker") return { ...common, speaker: "업체 실장", mood: "계약 재촉", text: `“지금 후보가 제일 괜찮습니다. 이번 주 안에 출국하면 잔금 포함 총액은 약 ${formatWon(14630000 + 4690000)}입니다. 오늘 예약금부터 걸죠.”\n\n평균 수치와 내 계약서의 포함 항목은 같은 말이 아니다.`, choices: routeChoices() };
         if (route.id === "app") return { ...common, speaker: partner.name, mood: "기대와 경계", text: `“앱에서 오래 이야기만 하다가 사라지는 사람도 많았어요. 만날 거면 날짜를 정해요. 대신 제 신분증 사진을 먼저 보내라는 건 싫어요.”`, choices: routeChoices() };
@@ -321,11 +333,23 @@
           choice("ask_korea", "왜 하필 한국인지 구체적으로 묻는다", "생활·직업·가족·체류 계획을 한 항목씩 묻는다.", "지금: 조금 딱딱함 · 앞으로: 계획 검증", 0, "investigate"),
           choice("test_love", "돈이 없어도 결혼할지 떠본다", "실제 상황이 아닌 가난을 연기해 반응을 시험한다.", "지금: 반응을 빨리 봄 · 앞으로: 거짓말 노출 위험", 0, "risky")
         ] };
+      case "family_call":
+        return { ...common, speaker: `${partner.name}의 가족`, mood: "기대와 긴장", text: `화면에 가족들이 한꺼번에 들어온다. 누군가는 한국 집 크기를 묻고, 누군가는 ${partner.name}에게 현지말로 빠르게 무언가를 재촉한다.\n\n가족이 원하는 것과 그녀가 원하는 것이 같다고 단정할 수 없다.`, choices: [
+          choice("family_independent", "독립 통역으로 가족과 따로 확인한다", "생활비·거주·결혼 속도를 가족과 당사자에게 각각 묻는다.", "지금: 30만원·2일 · 앞으로: 가족 진술 비교", 300000, "investigate"),
+          choice("family_gift", "분위기를 위해 부모님 선물을 건넨다", "큰 설명 없이 현금성 선물로 첫인상을 부드럽게 만든다.", "지금: 100만원 · 앞으로: 호감↑, 금전 기대↑", 1000000, "risky"),
+          choice("family_private", "가족 통화 뒤 그녀의 뜻을 다시 묻는다", "가족 앞에서 답하지 못한 부분을 둘만 있을 때 확인한다.", "지금: 2일 · 앞으로: 당사자 의사 확인", 0, "romance")
+        ] };
       case "boundaries":
         return { ...common, mood: "선명한 표정", text: `“${partner.boundary}. 그리고 문신, 담배, 아이, 밤일 같은 것도 서로 물을 수 있어요. 하지만 검사받는 기분이면 싫어요.”\n\n빠른 성혼 노선일수록 동의하지 않은 침묵을 ‘예’로 해석하기 쉽다.`, choices: [
           choice("mutual_boundaries", "서로 같은 질문표에 답한다", "아이 계획·임신검사·문신·흡연·직업·송금을 나도 똑같이 공개한다.", "지금: 어색하지만 공평 · 앞으로: 갈등 예방", 0, "romance"),
           choice("body_check", "그녀의 문신과 몸 상태부터 확인한다", "내 정보는 공개하지 않고 신체·임신 가능성을 먼저 확인하려 한다.", "지금: 정보를 빨리 얻음 · 앞으로: 신뢰 크게 하락", 0, "risky"),
           choice("slow_consent", "결혼과 첫날밤의 속도를 분리한다", "좋아하는 마음과 성관계·혼인 동의는 별개라고 분명히 말한다.", "지금: 업체 일정과 충돌 · 앞으로: 강요 위험 감소", 0, "romance")
+        ] };
+      case "speed_pressure":
+        return { ...common, speaker: route.id === "broker" ? "업체 실장" : partner.name, mood: "시간 압박", text: route.id === "broker" ? `“두 분 분위기 좋잖아요. 오늘 성혼 서약하고 같은 방을 쓰면 일정도 비용도 아낄 수 있습니다.”\n\n직원은 침묵을 동의처럼 받아 적으려 한다.` : `“가족들이 항공권 날짜부터 잡자고 해요. 우리 좋아하는 건 맞지만, 결혼 날짜까지 오늘 정해야 해요?”`, choices: [
+          choice("private_consent", "직원을 내보내고 서로의 뜻만 확인한다", "비용·가족·첫날밤을 하나씩 떼어 예·아니오를 다시 묻는다.", "지금: 일정이 늦어짐 · 앞으로: 압박 주체 확인", 0, "investigate"),
+          choice("sign_fast", "분위기가 좋을 때 성혼 서약을 한다", "마음이 바뀌기 전에 예약금과 위약금 서류를 함께 처리한다.", "지금: 200만원 · 앞으로: 일정 단축, 철회 비용↑", 2000000, "risky"),
+          choice("agree_romance_not_schedule", "좋아한다고 말하되 날짜는 거절한다", "감정에 대한 확답과 절차에 대한 보류를 동시에 전한다.", "지금: 업체와 충돌 · 앞으로: 관계와 계약 분리", 0, "romance")
         ] };
       case "documents":
         return { ...common, speaker: "사건 수첩", mood: "사실 확인", text: `사진, 직장, 이전 혼인, 거주지, 송금.\n\n확인은 불신의 선언이 아니라 서로가 같은 사실 위에서 결정하기 위한 절차다. 다만 출처가 불분명한 소문은 오히려 판단을 흐린다.`, choices: [
@@ -339,10 +363,23 @@
           choice("future_plan", "1년 생활계획을 함께 그린다", "어느 나라에서 살지, 일과 돈을 어떻게 나눌지 적어 본다.", "지금: 설렘은 덜함 · 앞으로: 결혼 적합성↑", 0, "investigate"),
           choice("push_kiss", "분위기를 핑계로 먼저 입맞춤한다", "대답을 기다리지 않고 호감이 있다고 가정한다.", "지금: 매력에 따라 성공 가능 · 실패 시 신뢰 급락", 0, "risky")
         ] };
+      case "her_investigation":
+        return { ...common, mood: state.flags.playerLied ? "상처와 의심" : "조심스러운 확인", text: state.flags.playerLied ? `“회사와 수입을 찾아봤어요. 당신이 처음 말한 숫자랑 다르던데요. 저만 조사받아야 해요?”` : `“당신 집과 회사도 실제로 보고 싶어요. 저한테 서류를 요구했으니 저도 같은 기준으로 확인해도 되죠?”`, choices: [
+          choice("accept_reverse_check", "같은 기준의 확인을 받아들인다", "재직·거주·부채 자료를 보여 주고 과장한 말이 있다면 먼저 인정한다.", "지금: 자존심은 불편 · 앞으로: 상호 신뢰↑", 0, "romance"),
+          choice("privacy_double_standard", "내 사생활은 다르다며 거절한다", "결혼할 남자의 정보는 믿어야 한다며 확인을 막는다.", "지금: 정보 보호 · 앞으로: 신뢰 크게 하락", 0, "risky"),
+          choice("charm_deflect", "농담과 데이트 약속으로 넘긴다", "답을 주지 않고 분위기를 바꿔 이 질문을 미룬다.", "매력 높음: 잠시 통함 · 앞으로: 질문은 다시 돌아옴", 0, "risky")
+        ] };
       case "money_crisis":
         return { ...common, mood: "갑작스러운 위기", text: mystery.event, choices: moneyChoices(mystery) };
       case "investigation":
         return { ...common, speaker: "조사 선택", mood: "시간이 줄어든다", text: `확실한 증거는 대체로 돈이나 시간이 든다. 싼 소문은 빠르지만 잘못된 사람을 범인으로 만들 수 있다.\n\n현재 남은 일정은 ${Math.max(0, state.daysLeft)}일이다.`, choices: investigationChoices(mystery) };
+      case "anonymous_tip":
+        return { ...common, speaker: "익명의 메시지", mood: "발신자 불명", text: `‘그 사람을 믿지 마세요. 이미 다른 한국 남자와 결혼을 약속했습니다.’\n\n얼굴이 반쯤 가려진 사진 한 장이 따라왔다. 충격적인 내용일수록 누가, 언제, 어떤 원본으로 보냈는지부터 확인해야 한다.`, choices: [
+          choice("trace_tip", "발신자와 사진 원본부터 확인한다", "사진 촬영일·잘린 부분·계정 생성일을 독립적으로 대조한다.", "지금: 45만원·3일 · 앞으로: 디지털 핵심자료", 450000, "investigate"),
+          choice("show_tip_calmly", "사진을 보여 주고 설명을 요청한다", "사기라고 단정하지 않고 장소·날짜·함께 찍힌 사람을 묻는다.", "지금: 관계 긴장 · 앞으로: 새 진술 확보", 0, "romance"),
+          choice("accuse_from_tip", "사진을 근거로 즉시 거짓말이라 몰아붙인다", "발신자와 원본을 확인하기 전에 결론을 공개한다.", "지금: 빠른 반응 · 틀리면 신뢰 급락", 0, "risky"),
+          choice("delete_tip", "익명 제보는 보지 않고 지운다", "관계는 지키지만 사실일 가능성까지 함께 버린다.", "지금: 신뢰↑ · 앞으로: 핵심자료를 놓칠 수 있음", 0, "romance")
+        ] };
       case "interrogation_one":
         return interrogationContent(0);
       case "breathing_room":
@@ -354,6 +391,12 @@
         ] };
       case "interrogation_two":
         return interrogationContent(1);
+      case "final_check":
+        return { ...common, mood: "마지막 기회", text: `결정 전날 밤, 수첩을 다시 펼쳤다. 확인한 자료도 있고 돈과 시간이 없어 놓친 자료도 있다.\n\n마지막으로 한 통만 더 전화할 수 있다. 무엇을 확인할지가 결론보다 중요할 수 있다.`, choices: [
+          choice("final_source_call", "가장 중요한 원출처에 다시 전화한다", "병원·집주인·직장·계좌·계약 당사자 중 현재 사건의 핵심 출처를 확인한다.", "지금: 30만원·2일 · 앞으로: 빠진 핵심자료 1개", 300000, "investigate"),
+          choice("final_reconcile", "둘이 수첩을 함께 읽고 틀린 부분을 고친다", "내가 오해한 문장과 그녀가 숨긴 문장을 각각 하나씩 말한다.", "지금: 관계 회복 · 앞으로: 확정 증거는 늘지 않음", 0, "romance"),
+          choice("final_post_rumor", "커뮤니티에 사진과 사연을 올려 반응을 본다", "개인정보를 공개해 집단의 추측으로 결론을 얻으려 한다.", "지금: 제보 가능 · 앞으로: 오판·법적 분쟁 위험", 0, "risky")
+        ] };
       case "decision":
         return { ...common, speaker: "최종 판단", mood: "되돌릴 수 없는 선택", text: `결혼식 예약 시각까지 두 시간.\n\n사건 수첩에는 확인된 사실 ${state.evidence.filter(e => e.type === "fact").length}개, 단서 ${state.evidence.filter(e => e.type === "clue").length}개, 소문 ${state.evidence.filter(e => e.type === "rumor").length}개가 있다. ‘수상하다’와 ‘사기다’는 같은 문장이 아니다.`, choices: decisionChoices() };
       default: return common;
@@ -401,6 +444,10 @@
       choice("ask_local", "현지 지인에게 빨리 물어본다", "값은 싸지만 그 사람의 이해관계와 기억은 확인되지 않는다.", "지금: 10만원·1일 · 앞으로: 소문 1개", 100000, "risky"),
       choice("snoop_phone", "잠든 사이 휴대폰을 몰래 본다", "자료를 찾을 수 있지만 사생활 침해가 들키면 관계가 무너진다.", `지금: 비용 없음 · 남은 핵심자료 ${remainingClues.length}개`, 0, "risky")
     ];
+  }
+
+  function firstMissingCaseClue(mystery) {
+    return Object.values(mystery.clues).find(cl => !state.evidence.some(saved => saved.id === cl.id)) || null;
   }
 
   function interrogationContent(index) {
@@ -549,6 +596,9 @@
       player_honest: { title: "검증은 양쪽을 향했다", text: `현재 형편과 ${player.flaw}는 점까지 말했다. ${partner.name}은 잠시 계산하더니 자기 경계도 더 구체적으로 말했다.`, trust: 10, days: 2, flag: "playerHonest", evidence: { id: "mutual_finance", title: "서로 공개한 재정", type: "fact", text: "주인공도 현금·수입·부채를 같은 기준으로 공개했다.", source: "둘의 대화", quality: 3 } },
       player_polish: { title: "당장은 분위기가 좋아졌다", text: `숫자를 조금 키워 말하자 ${partner.name}의 표정이 편해졌다. 하지만 실제 계약이나 생활비 이야기가 나오면 이 문장이 다시 돌아온다.`, trust: 5, days: 1, flag: "playerLied" },
       player_counter: { title: "면접이 협상으로 바뀌었다", text: `내 수입을 먼저 말한 뒤 같은 항목을 물었다. ${partner.name}은 가족지원과 직업 계획을 구체적으로 답했다.`, trust: 6, days: 2, evidence: { id: "mutual_plan", title: "서로의 생활 조건", type: "fact", text: "일·부채·가족지원·거주 희망을 양쪽이 같은 질문으로 확인했다.", source: "둘의 대화", quality: 3 } },
+      awkward_story: { title: "완벽하지 않은 대답이 웃음을 만들었다", text: `멋있는 성공담 대신 피하고 후회했던 순간을 말했다. ${partner.name}도 외로울 때 같은 영상을 세 번 돌려 본다는 이야기를 털어놓았다.`, trust: 9, days: 2, flag: "humanConversation" },
+      compatibility_quiz: { title: "조건은 빨리 보였고 온도는 늦게 올랐다", text: "수면시간과 소비 습관에서 차이가 드러났다. 당장 설레는 대화는 아니었지만 미래의 싸움 하나를 미리 봤다.", trust: 4, days: 2, evidence: { id: "early_compatibility", title: "초기 생활 문답", type: "clue", text: "수면·소비·거주·아이 계획에 대한 첫 답변을 서로 기록했다.", source: "둘의 문답", quality: 2 } },
+      pickup_line: { title: state.charm >= 5 ? "뻔한 말이 이번에는 통했다" : "준비한 멘트처럼 들렸다", text: state.charm >= 5 ? `${partner.name}이 웃으며 “그 대답, 다른 사람한테도 했죠?”라고 장난을 받았다.` : "잠깐의 정적 뒤 그녀가 다음 질문으로 넘어갔다. 솔직한 답을 피했다는 인상만 남았다.", trust: state.charm >= 5 ? 7 : -4, days: 1, flag: "flirtyAnswer" },
       contract_review: { title: "계약서에 없는 돈이 보였다", text: "포함 비용과 현지 추가비가 한 문장에 섞여 있었다. 환불 규정은 소개 단계가 지나면 급격히 불리해졌다.", trust: 2, days: 3, cost: 400000, costLabel: "계약 독립 검토", evidence: { id: "route_contract", title: "업체 계약 비용표", type: "fact", text: "계약·성혼·항공·통역·현지 추가비가 서로 다른 항목임을 확인했다.", source: "계약서 독립 번역", quality: 3 } },
       pay_reservation: { title: "일정은 빨라졌고 돈은 묶였다", text: "업체는 태도가 달라질 만큼 친절해졌다. 그러나 예약금은 후보가 바뀌어도 환불이 어렵다는 말을 뒤늦게 덧붙였다.", trust: 3, days: 1, cost: 3000000, costLabel: "업체 추가 예약금", flag: "paidReservation" },
       pretend_agree: { title: "편법이 한 번은 먹혔다", text: isScam ? "잔금을 낼 것처럼 말하자 직원들끼리 ‘다음 단계 대본’을 확인하는 소리가 들렸다." : `직원은 특별한 말을 하지 않았다. 오히려 거짓 동의가 ${partner.name}에게 전달돼 어색함이 남았다.`, trust: isScam ? 0 : -7, calm: isScam ? 1 : -1, days: 1, evidence: isScam ? { id: "broker_whisper", title: "업체 직원의 단계 대화", type: "clue", text: "결정을 유도하는 순서가 미리 정해진 듯한 직원 대화를 들었다.", source: "직접 들음", quality: 2 } : null },
@@ -564,15 +614,24 @@
       listen_motive: { title: "동기와 마음을 한 문장에 섞지 않았다", text: `${partner.motive}. 그 현실적인 이유와 나에게 느끼는 호감은 동시에 존재할 수 있었다.`, trust: 10, days: 3, evidence: { id: "motive_statement", title: "당사자가 말한 결혼 계기", type: "clue", text: partner.motive, source: "둘만의 대화", quality: 2 } },
       ask_korea: { title: "계획이 구체적인 부분과 빈 부분이 갈렸다", text: "직업과 가족지원은 바로 답했지만 체류 첫 달 계획에서는 잠시 말이 막혔다. 이 침묵만으로는 어느 쪽도 확정할 수 없다.", trust: 3, days: 2, evidence: { id: "korea_plan", title: "한국 생활 계획 답변", type: "clue", text: "직업·거주·가족지원 답변을 항목별로 기록했다. 일부 일정은 아직 비어 있다.", source: "둘만의 대화", quality: 2 } },
       test_love: { title: "시험은 상대에게도 시험이 됐다", text: isScam ? "갑자기 돈이 없다는 말에 그녀는 사랑보다 한국행 일정부터 다시 물었다." : "그녀는 돈보다 왜 중요한 일을 거짓말로 떠보느냐고 화를 냈다.", trust: isScam ? -2 : -12, calm: -1, days: 1, flag: "fakePoverty", evidence: isScam ? { id: "money_first_reaction", title: "가난을 연기했을 때의 반응", type: "clue", text: "수입이 사라졌다는 말 뒤 감정보다 일정·송금 질문이 먼저 나왔다. 단독으로는 결정적이지 않다.", source: "반응 시험", quality: 1 } : null },
+      family_independent: { title: "가족의 말과 그녀의 말이 갈라졌다", text: "가족은 빠른 결혼과 정기송금을 기대했지만, 그녀는 일과 송금 상한을 먼저 합의하고 싶다고 답했다. 누구의 뜻인지 구분할 수 있게 됐다.", trust: 6, days: 2, cost: 300000, costLabel: "가족 통화 독립 통역", evidence: { id: "family_separate_answers", title: "가족과 당사자의 분리 답변", type: "fact", text: "가족의 기대와 당사자의 결혼·송금 의사를 따로 통역해 기록했다.", source: "독립 통역", quality: 3 } },
+      family_gift: { title: "가족의 환대가 빠르게 커졌다", text: "통화 분위기는 좋아졌지만 다음 연락에서는 선물 가격과 혼수 이야기가 자연스럽게 이어졌다.", trust: 7, days: 1, cost: 1000000, costLabel: "가족 현금성 선물", flag: "familyMoneyExpectation" },
+      family_private: { title: "가족 앞에서 삼킨 대답을 들었다", text: `${partner.name}은 가족이 원하는 속도와 자신이 원하는 속도가 다르다고 말했다. 그 차이가 곧 사기는 아니지만 앞으로의 갈등은 분명했다.`, trust: 9, days: 2, evidence: { id: "private_family_motive", title: "가족 압박에 대한 당사자 설명", type: "clue", text: "가족의 결혼·송금 기대와 자신의 계획이 다르다고 직접 설명했다.", source: "둘만의 통화", quality: 2 } },
       mutual_boundaries: { title: "검사가 아니라 교환이 됐다", text: `${partner.name}은 내 답을 들은 뒤 자기 답도 수정 없이 적었다. 임신과 아이 계획은 ‘원함/원치 않음’뿐 아니라 시기와 검사 동의로 나뉘었다.`, trust: 9, days: 2, evidence: { id: "boundary_sheet", title: "서로 작성한 생활·동의 질문표", type: "fact", text: "아이·임신검사·문신·흡연·직업·송금·첫날밤 동의를 양쪽이 같은 기준으로 답했다.", source: "상호 작성", quality: 3 } },
       body_check: { title: "정보는 얻었지만 사람은 멀어졌다", text: `${reactions.hurt}\n문신이나 나이, 임신 가능성은 확인 항목일 수 있어도 사기의 증거는 아니었다.`, trust: -14, calm: -1, days: 1, flag: "oneSidedCheck" },
       slow_consent: { title: "좋아함과 동의를 분리했다", text: `“그 말은 고마워요. 제가 마음을 바꿔도 화내지 않을 거죠?”\n\n업체 일정은 느려졌지만 ${partner.name}의 대답은 오히려 길어졌다.`, trust: 11, days: 3, evidence: { id: "consent_record", title: "속도와 동의에 대한 합의", type: "fact", text: "결혼 결정과 성적 동의를 분리하고 언제든 의사를 바꿀 수 있다고 합의했다.", source: "둘의 대화", quality: 3 } },
+      private_consent: { title: "침묵을 대답으로 쓰지 않았다", text: isScam ? "직원이 나간 뒤 그녀의 설명과 업체가 대신 말하던 내용 사이에 차이가 보였다." : `${partner.name}은 안도하며 좋아하는 마음과 오늘 결혼할 의사는 다르다고 분명히 말했다.`, trust: 8, days: 2, evidence: isScam ? { id: "pressure_gap", title: "업체 설명과 당사자 의사의 차이", type: "clue", text: "직원을 내보낸 뒤 결혼 속도와 비용에 대한 당사자 답이 달라졌다.", source: "둘만의 확인", quality: 2 } : { id: "clear_consent", title: "당사자의 분리된 동의", type: "fact", text: "연애 감정, 결혼 날짜, 첫날밤을 각각 따로 확인했다.", source: "둘만의 확인", quality: 3 } },
+      sign_fast: { title: "속도는 얻었고 되돌릴 비용도 생겼다", text: "예약금과 위약금이 걸리자 이후의 질문마다 ‘이미 결정했는데 왜 묻느냐’는 말이 따라붙었다.", trust: 7, calm: -1, days: 1, cost: 2000000, costLabel: "초고속 성혼 예약·서약", flag: "fastSigned" },
+      agree_romance_not_schedule: { title: "마음에는 예, 일정에는 아니오", text: `${partner.name}은 처음엔 놀랐지만 내 말의 두 부분을 이해했다. 주선자는 못마땅해했고, 둘의 대화는 오히려 선명해졌다.`, trust: 10, days: 2, flag: "separatedLoveSchedule" },
       official_docs: { title: "날짜 하나가 이야기의 뼈대가 됐다", text: "공식 서류와 원본을 대조하자 추측이 아니라 확인할 수 있는 문장이 생겼다.", trust: 1, days: 4, cost: 500000, costLabel: "서류 발급·독립 번역", evidence: mystery.clues.doc },
       trust_no_docs: { title: "오늘의 온도는 지켰다", text: `${reactions.warm}\n다만 확인하지 않은 항목은 믿는 사실이 아니라 아직 모르는 사실로 수첩에 남았다.`, trust: 7, days: 2, flag: "skippedDocs" },
       cheap_rumor: { title: "소문은 결론처럼 들렸다", text: "‘그 동네 사람은 다 안다’는 말은 컸지만 날짜도 당사자도 없었다.", trust: -3, calm: -1, days: 1, cost: 100000, costLabel: "주변 사례비", evidence: { id: `doc_rumor_${state.scene}`, title: "출처 불명 주변 소문", type: "rumor", text: "정확한 날짜와 직접 목격자를 확인하지 못한 이야기다.", source: "주변 소문", quality: 1 } },
       confess: { title: "연애가 시작됐다", text: `${partner.name}은 바로 대답하지 않았다. 한참 뒤 손을 잡으며 말했다.\n\n“의심이 없어져서가 아니라, 그래도 더 알고 싶어서 좋아요.”`, trust: 13, days: 3, flags: { dating: true, sawRomance: true } },
       future_plan: { title: "둘의 미래가 종이 위에 놓였다", text: "낭만적인 대답만 나오진 않았다. 어느 나라에서 살지와 직업 문제에서 첫 اختلاف이 보였지만, 고칠 수 있는 اختلاف이었다.", trust: 8, days: 3, evidence: { id: "one_year_plan", title: "1년 공동생활 계획", type: "fact", text: "거주·직업·생활비·가족지원·아이 계획을 함께 작성했다.", source: "공동 작성", quality: 3 }, flag: "dating" },
       push_kiss: { title: state.charm >= 6 ? "순간은 설레었지만 질문이 남았다" : "멈춰야 할 선을 넘었다", text: state.charm >= 6 ? "그녀가 잠시 웃었지만 ‘다음에는 먼저 물어봐요’라고 분명히 말했다." : `${partner.name}이 뒤로 물러났다. 호감은 동의를 대신하지 못했다.`, trust: state.charm >= 6 ? 3 : -16, calm: state.charm >= 6 ? 0 : -1, days: 1, flag: "pushedIntimacy" },
+      accept_reverse_check: { title: "확인은 권력이 아니라 규칙이 됐다", text: state.flags.playerLied ? "과장한 수입을 인정하고 실제 자료를 보여 줬다. 신뢰는 흔들렸지만 거짓말이 더 커지기 전에 멈췄다." : "그녀가 내 집과 일을 확인한 뒤 대화의 무게가 비슷해졌다.", trust: state.flags.playerLied ? -3 : 9, calm: 1, days: 2, flags: { reverseChecked: true, playerLieCleared: Boolean(state.flags.playerLied) }, evidence: { id: "reverse_check", title: "상대가 확인한 주인공 정보", type: "fact", text: "주인공의 재직·거주·재정도 상대가 같은 기준으로 확인했다.", source: "상호 검증", quality: 3 } },
+      privacy_double_standard: { title: "같은 질문에 다른 규칙을 적용했다", text: `“저는 다 보여 줬는데 당신은 믿으라고만 하네요.”\n\n${partner.name}은 더 이상 자신의 자료도 보여 줄 이유가 없다고 말했다.`, trust: -16, calm: -1, days: 1, flag: "doubleStandard" },
+      charm_deflect: { title: state.charm >= 6 ? "오늘은 웃고 넘어갔다" : "농담이 대답을 대신하지 못했다", text: state.charm >= 6 ? "데이트 약속은 잡혔지만 그녀는 ‘다음에는 진짜 답해요’라고 메모했다." : `${partner.name}은 웃지 않았다. 확인을 피한다는 인상만 강해졌다.`, trust: state.charm >= 6 ? 2 : -8, days: 1, flag: "deferredReverseCheck" },
       pay_crisis: { title: "일정은 유지됐지만 질문은 남았다", text: isScam ? "돈이 도착했다는 확인은 그녀보다 다른 사람에게서 먼저 왔다. 다음 요구가 가능하다는 신호가 됐다." : "실제 급한 문제는 해결됐다. 그러나 확인 없이 큰돈을 보내는 방식은 다음 갈등의 씨앗이 됐다.", trust: isScam ? 2 : 7, calm: -1, days: 1, cost: getRoute().id === "broker" ? 4800000 : 3200000, costLabel: "긴급 송금", flag: "paidCrisis" },
       verify_transfer: { title: "도움과 확인을 함께 했다", text: isScam ? "수취인과 원본을 확인하겠다는 말에 설명이 흔들렸다. 돈은 보내지 않았고 기록 하나가 남았다." : `${partner.name}은 처음엔 서운해했지만 실제 수취인에게 직접 보내자 안도했다.`, trust: isScam ? -2 : 6, days: 3, cost: 300000, costLabel: "독립 통역·확인", evidence: mystery.clues.money },
       hard_refusal: { title: "돈은 지켰고 관계는 다쳤다", text: isScam ? "요구는 즉시 멈췄다. 그러나 상대도 입을 닫아 더 확인할 기회가 사라졌다." : `“사정을 묻지도 않고 저를 사기꾼으로 봤네요.”\n\n${partner.name}의 목소리가 차갑게 가라앉았다.`, trust: isScam ? -4 : -18, calm: 1, days: 1, flag: "harshMoneyRefusal" },
@@ -581,10 +640,17 @@
       digital_verify: { title: "원본에는 편집되지 않은 시간이 있었다", text: "사진 촬영일, 메시지 앞뒤, 사이트 생성일을 대조했다. 문장보다 삭제와 편집의 순서가 더 많은 말을 했다.", trust: 0, days: 3, cost: 450000, costLabel: "디지털 원본 확인", evidence: mystery.clues.digital },
       ask_local: { title: "쓸모 있을 수도, 독이 될 수도 있는 말", text: "빠른 답을 얻었지만 당사자가 직접 본 것과 다른 사람에게 들은 것이 섞여 있었다.", trust: -2, calm: -1, days: 1, cost: 100000, costLabel: "현지 사례비", evidence: { id: `local_rumor_${state.scene}`, title: "현지에서 들은 평판", type: "rumor", text: "당사자·날짜·원본을 확인하지 못한 주변 이야기다. 증거로 제시하면 위험하다.", source: "현지 소문", quality: 1 } },
       snoop_phone: { title: isScam ? "자료는 찾았고 신뢰도 잃었다" : "의심이 관계를 삼켰다", text: isScam ? "결정적인 화면을 찾았지만 잠금 기록 때문에 몰래 본 사실도 들켰다." : `수상한 대화는 없었다. 대신 ${partner.name}은 침해당한 사생활만 분명히 확인했다.`, trust: isScam ? -12 : -28, calm: -1, days: 1, evidence: isScam ? mystery.clues.digital : null, flag: "snooped" },
+      trace_tip: { title: "사진보다 파일의 시간이 먼저 말했다", text: isScam ? "잘린 사진의 원본과 발신자 계정이 사건의 다른 기록에 연결됐다." : "사진은 오래전 단체 모임을 잘라낸 것이고, 익명 계정은 최근 만들어졌다. 제보가 오히려 함정에 가까웠다.", trust: isScam ? 0 : 5, days: 3, cost: 450000, costLabel: "익명 제보 원본 확인", evidence: mystery.clues.digital },
+      show_tip_calmly: { title: "비난 대신 새 진술을 얻었다", text: isScam ? `${partner.name}의 설명에서 사진 날짜가 두 번 바뀌었다. 이 말은 다음 심문에서 확인해야 한다.` : `${partner.name}은 사진 전체와 함께 있던 사람들의 연락처를 먼저 내밀었다.`, trust: isScam ? -2 : 7, days: 2, evidence: { id: "tip_response", title: "익명 사진에 대한 당사자 설명", type: "clue", text: "사진의 장소·날짜·동행인에 대한 답변을 그대로 기록했다.", source: "직접 질문", quality: 2 } },
+      accuse_from_tip: { title: isScam ? "반응은 컸지만 증거는 늘지 않았다" : "잘린 사진으로 사람을 단정했다", text: isScam ? "그녀는 연락을 끊기 전에 사진이 조작됐다고만 말했다. 원본을 찾을 통로도 함께 닫혔다." : `사진 전체를 본 뒤에도 이미 내뱉은 말은 돌아오지 않았다. ${partner.name}은 더 이상 해명하지 않겠다고 했다.`, trust: isScam ? -8 : -22, calm: -1, days: 1, flag: "tipAccusation" },
+      delete_tip: { title: "관계는 지켰지만 가능성 하나도 지웠다", text: isScam ? "며칠 뒤 같은 계정은 사라졌다. 진짜 제보였는지 함정이었는지 확인할 길도 없어졌다." : `익명 계정의 의도에 휘둘리지는 않았다. ${partner.name}과의 대화는 평소 리듬을 되찾았다.`, trust: isScam ? 2 : 8, calm: 1, days: 1, flag: "tipDeleted" },
       date_rest: { title: "사건 밖의 사람이 다시 보였다", text: `오랜만에 ${partner.name}이 크게 웃었다. 해결된 모순은 없지만, 결론을 내릴 체력은 돌아왔다.`, trust: 9, calm: 2, days: 3, cost: 350000, costLabel: "데이트·휴식" },
       solo_rest: { title: "결론보다 잠을 먼저 선택했다", text: "상담사는 불안한 느낌과 확인된 사실을 종이에 나눠 적게 했다. 같은 자료가 조금 다르게 보였다.", trust: -1, calm: 4, days: 4, cost: 200000, costLabel: "숙소 연장·상담" },
       secret_trace: { title: isScam ? "뒤를 밟아 연결을 확인했다" : "아무것도 없었고 미행만 남았다", text: isScam ? "예상하지 못한 장소에서 사건과 연결된 사람을 만나는 장면을 확인했다." : "그녀는 말한 곳에서 말한 일을 했다. 미행 사실을 알게 된 뒤 내 연락을 받지 않았다.", trust: isScam ? -6 : -24, calm: -1, days: 2, cost: 600000, costLabel: "이동·조사 비용", evidence: isScam ? mystery.clues.investigate : null, flag: "tailed" },
-      rush_answer: { title: "불안을 결혼 일정으로 덮었다", text: "업체와 가족은 환영했지만 확인되지 않은 문장들은 사라지지 않았다. 오히려 잔금과 서류 마감이 한꺼번에 다가왔다.", trust: 6, calm: -1, days: 1, cost: getRoute().id === "broker" ? 2500000 : 800000, costLabel: "일정 변경·예약금", flag: "rushedMarriage" }
+      rush_answer: { title: "불안을 결혼 일정으로 덮었다", text: "업체와 가족은 환영했지만 확인되지 않은 문장들은 사라지지 않았다. 오히려 잔금과 서류 마감이 한꺼번에 다가왔다.", trust: 6, calm: -1, days: 1, cost: getRoute().id === "broker" ? 2500000 : 800000, costLabel: "일정 변경·예약금", flag: "rushedMarriage" },
+      final_source_call: { title: "마지막 한 통이 빈칸 하나를 채웠다", text: "이미 가진 자료를 읽어 주지 않고 출처에게 날짜와 수취인을 다시 물었다. 결론이 아니라 확인 가능한 문장 하나가 더 생겼다.", trust: 0, calm: 1, days: 2, cost: 300000, costLabel: "최종 독립 확인", evidence: firstMissingCaseClue(mystery) },
+      final_reconcile: { title: "수첩에 두 사람의 수정 표시가 남았다", text: `${partner.name}도 숨겼던 두려움 하나를 인정했고, 나도 소문을 사실처럼 읽었던 부분을 고쳤다.`, trust: state.confirmed ? 9 : 6, calm: 2, days: 2, flag: "reconciled" },
+      final_post_rumor: { title: "판단을 군중에게 넘겼다", text: "몇 분 만에 확신에 찬 댓글이 쏟아졌지만 누구도 원본을 보지 않았다. 개인정보는 퍼졌고 당사자와의 대화는 끝났다.", trust: -25, calm: -2, days: 1, evidence: { id: "crowd_reaction", title: "커뮤니티의 추측", type: "rumor", text: "공개된 일부 사연을 본 익명 사용자들의 추측이다. 직접 증거가 아니다.", source: "온라인 댓글", quality: 1 }, flag: "publicRumor" }
     };
     return map[id];
   }

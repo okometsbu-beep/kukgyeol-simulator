@@ -1,4 +1,4 @@
-const CACHE_NAME = "genuine-evidence-v1";
+const CACHE_NAME = "genuine-evidence-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
