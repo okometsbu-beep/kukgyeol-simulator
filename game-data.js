@@ -2,36 +2,27 @@
   "use strict";
 
   const players = [
-    { id: "junsu", name: "김준수", age: 38, job: "중소기업 대리", cash: 32000000, income: 3900000, calm: 5, charm: 4, art: 0, hook: "안정적이지만 연애 경험이 적다", flaw: "거절당할까 봐 할 말을 삼킨다" },
-    { id: "minho", name: "박민호", age: 44, job: "자영업", cash: 65000000, income: 6100000, calm: 3, charm: 6, art: 1, hook: "결단이 빠르고 씀씀이가 크다", flaw: "빨리 확답을 받고 싶어 한다" },
-    { id: "taeho", name: "이태호", age: 35, job: "개발자", cash: 48000000, income: 5200000, calm: 7, charm: 3, art: 2, hook: "자료 확인과 계획에 강하다", flaw: "사람의 말을 보고서처럼 듣는다" },
-    { id: "seongjin", name: "최성진", age: 49, job: "운송업", cash: 80000000, income: 5800000, calm: 4, charm: 5, art: 3, hook: "생활력이 강하고 책임감이 있다", flaw: "나이 차이를 돈으로 메우려 한다" },
-    { id: "hyunwoo", name: "정현우", age: 41, job: "공무원", cash: 40000000, income: 4300000, calm: 6, charm: 4, art: 4, hook: "신중하고 약속을 잘 지킨다", flaw: "한번 의심하면 표정에 다 드러난다" },
-    { id: "dojun", name: "한도준", age: 33, job: "프리랜서 영상편집자", cash: 18000000, income: 4700000, calm: 4, charm: 7, art: 5, hook: "대화가 유쾌하고 감정 표현이 좋다", flaw: "수입과 미래 계획이 들쭉날쭉하다" }
+    { id: "junsu", name: "김준수", age: 38, job: "중소기업 대리", cash: 32000000, income: 3900000, calm: 6, charm: 4, empathy: 7, reason: 4, courage: 3, art: 0, hook: "상대의 기분을 잘 읽지만 결정이 느리다", flaw: "거절당할까 봐 할 말을 삼킨다" },
+    { id: "minho", name: "박민호", age: 44, job: "자영업", cash: 65000000, income: 6100000, calm: 3, charm: 6, empathy: 3, reason: 4, courage: 8, art: 1, hook: "돈과 배짱이 있지만 속도를 너무 낸다", flaw: "빨리 확답을 받고 싶어 한다" },
+    { id: "taeho", name: "이태호", age: 35, job: "개발자", cash: 48000000, income: 5200000, calm: 7, charm: 3, empathy: 3, reason: 8, courage: 4, art: 2, hook: "자료를 잘 보지만 감정 표현이 서툴다", flaw: "사람의 말을 보고서처럼 듣는다" },
+    { id: "seongjin", name: "최성진", age: 49, job: "운송업", cash: 80000000, income: 5800000, calm: 4, charm: 5, empathy: 5, reason: 4, courage: 7, art: 3, hook: "생활력과 추진력이 좋지만 돈을 앞세우기 쉽다", flaw: "나이 차이를 돈으로 메우려 한다" },
+    { id: "hyunwoo", name: "정현우", age: 41, job: "공무원", cash: 40000000, income: 4300000, calm: 6, charm: 4, empathy: 6, reason: 7, courage: 5, art: 4, hook: "약속과 확인에 강한 균형형", flaw: "한번 의심하면 표정에 다 드러난다" },
+    { id: "dojun", name: "한도준", age: 33, job: "프리랜서 영상편집자", cash: 18000000, income: 4700000, calm: 4, charm: 8, empathy: 7, reason: 3, courage: 6, art: 5, hook: "대화와 설렘에 강하지만 돈 관리가 약하다", flaw: "수입과 미래 계획이 들쭉날쭉하다" }
   ];
 
-  const faceSets = {
-    vn: [{ sheet: "a", cell: 0 }, { sheet: "legacy", cell: 1 }, { sheet: "a", cell: 2 }, { sheet: "b", cell: 1 }],
-    cn: [{ sheet: "legacy", cell: 4 }, { sheet: "a", cell: 1 }, { sheet: "legacy", cell: 7 }, { sheet: "a", cell: 3 }],
-    th: [{ sheet: "b", cell: 0 }, { sheet: "legacy", cell: 3 }, { sheet: "b", cell: 2 }, { sheet: "legacy", cell: 9 }],
-    jp: [{ sheet: "c", cell: 1 }, { sheet: "legacy", cell: 10 }, { sheet: "legacy", cell: 0 }, { sheet: "c", cell: 0 }],
-    ph: [{ sheet: "legacy", cell: 5 }, { sheet: "legacy", cell: 6 }, { sheet: "legacy", cell: 8 }, { sheet: "b", cell: 3 }],
-    kh: [{ sheet: "c", cell: 2 }, { sheet: "legacy", cell: 2 }, { sheet: "c", cell: 3 }, { sheet: "legacy", cell: 11 }]
-  };
-
   const countries = [
-    { id: "vn", name: "베트남", flag: "🇻🇳", city: "호찌민·다낭", note: "업체 맞선과 앱 만남이 모두 활발하다", faces: faceSets.vn },
-    { id: "cn", name: "중국", flag: "🇨🇳", city: "칭다오·선양", note: "소개·커뮤니티·직접 교류 노선이 섞여 있다", faces: faceSets.cn },
-    { id: "th", name: "태국", flag: "🇹🇭", city: "방콕·치앙마이", note: "앱과 현지 장기교류의 비중이 높다", faces: faceSets.th },
-    { id: "jp", name: "일본", flag: "🇯🇵", city: "도쿄·오사카", note: "언어교환과 취미 커뮤니티 노선이 많다", faces: faceSets.jp },
-    { id: "ph", name: "필리핀", flag: "🇵🇭", city: "마닐라·세부", note: "영어 대화가 쉽지만 장거리 판단은 남는다", faces: faceSets.ph },
-    { id: "kh", name: "캄보디아", flag: "🇰🇭", city: "프놈펜·시엠립", note: "가족·업체·통역사가 관계에 끼기 쉽다", faces: faceSets.kh }
+    { id: "vn", name: "베트남", flag: "🇻🇳", city: "호찌민·다낭", note: "업체 맞선과 앱 만남이 모두 활발하다" },
+    { id: "cn", name: "중국", flag: "🇨🇳", city: "칭다오·선양", note: "소개·커뮤니티·직접 교류 노선이 섞여 있다" },
+    { id: "th", name: "태국", flag: "🇹🇭", city: "방콕·치앙마이", note: "앱과 현지 장기교류의 비중이 높다" },
+    { id: "jp", name: "일본", flag: "🇯🇵", city: "도쿄·오사카", note: "언어교환과 취미 커뮤니티 노선이 많다" },
+    { id: "ph", name: "필리핀", flag: "🇵🇭", city: "마닐라·세부", note: "영어 대화가 쉽지만 장거리 판단은 남는다" },
+    { id: "kh", name: "캄보디아", flag: "🇰🇭", city: "프놈펜·시엠립", note: "가족·업체·통역사가 관계에 끼기 쉽다" }
   ];
 
   const routes = [
     { id: "app", name: "언어교환·소개 앱", icon: "📱", initialCost: 49000, expected: "월 5만~30만원 + 항공·체류비", speed: "느림", note: "둘만의 대화가 많다. 프로필 도용과 투자 유도는 직접 걸러야 한다.", tags: ["대화 많음", "신원 확인 중요"] },
     { id: "friend", name: "지인 소개", icon: "🤝", initialCost: 200000, expected: "소개 사례 + 항공·체류비", speed: "보통", note: "공통 지인이 완충 역할을 한다. 지인도 모든 사정을 아는 것은 아니다.", tags: ["공통 지인", "평판 확인"] },
-    { id: "broker", name: "현지 맞선 업체", icon: "🏢", initialCost: 3000000, expected: "계약·성혼 평균 약 1,463만원 + 부대비용", speed: "매우 빠름", note: "후보는 많고 진행이 빠르다. 계약·환불·통역·추가비용을 따로 확인해야 한다.", tags: ["후보 많음", "압박 강함"] },
+    { id: "broker", name: "현지 맞선 업체", icon: "🏢", initialCost: 3000000, expected: "업체에 내는 평균 비용 1,463만원 + 부대비용", speed: "매우 빠름", note: "후보는 많고 진행이 빠르다. 계약·환불·통역·추가비용을 따로 확인해야 한다.", tags: ["후보 많음", "압박 강함"] },
     { id: "community", name: "취미·교민 커뮤니티", icon: "🌏", initialCost: 100000, expected: "모임·번역·여행비 중심", speed: "느림", note: "자연스럽게 알 수 있다. 평판과 사생활 소문이 뒤섞일 수 있다.", tags: ["자연스러운 만남", "소문 주의"] }
   ];
 
@@ -98,13 +89,25 @@
     ]
   };
 
+  const profileLooks = [
+    "밝은 보정이 들어간 얼굴 사진",
+    "피부 보정이 강한 셀카",
+    "전신이 보이는 여행 사진",
+    "AI 필터 느낌이 나는 스튜디오 사진",
+    "카페에서 찍은 자연스러운 사진",
+    "화려하게 꾸민 외출 사진",
+    "몸매가 드러나는 패션 사진",
+    "직장에서 찍은 단정한 사진"
+  ];
+
   const makePeople = () => countries.flatMap(country => peopleByCountry[country.id].map((p, index) => ({
     id: `${country.id}-${index}`,
     countryId: country.id,
     name: p[0], age: p[1], job: p[2], motive: p[3], personality: p[4], voice: p[5], boundary: p[6],
-    faceSlot: index % 4,
-    art: country.faces[index % 4],
-    variant: index < 4 ? "A" : "B"
+    faceSlot: index,
+    art: { sheet: country.id, profileCell: index * 2, realCell: index * 2 + 1, cols: 4, rows: 4 },
+    profileLook: profileLooks[index],
+    profileDifference: ["조명과 피부 보정이 꽤 강하다", "눈과 턱선에 필터 흔적이 보인다", "각도 때문에 키와 체형이 다르게 보였다", "실물은 표정이 훨씬 자연스럽다"][index % 4]
   })));
 
   const clue = (id, title, type, text, source, quality) => ({ id, title, type, text, source, quality });
@@ -186,11 +189,11 @@
       truth: "그녀는 결혼 생활보다 입국과 취업을 먼저 계획했다. 단순히 결혼 후 일하려 한 것이 아니라, 배우자 모르게 숙소·알선자·이탈 시점을 준비해 두었다."
     },
     {
-      id: "broker_collusion", label: "업체와 짜인 초고속 성혼", culprit: "both", routes: ["broker"], weight: 16,
+      id: "broker_collusion", label: "업체와 짜고 서두른 결혼", culprit: "both", routes: ["broker"], weight: 16,
       event: "첫 만남 직후 업체가 ‘오늘 합방하지 않으면 신부가 마음을 바꾼다’며 추가 서약서와 잔금 결제를 동시에 내민다.",
       clues: {
         doc: clue("bc_template", "여러 신랑에게 같은 서약서", "fact", "위약금 문구와 손글씨 번역까지 다른 계약자 사례와 똑같다.", "계약 사례 대조", 3),
-        money: clue("bc_split", "성혼금 분배표", "clue", "빠른 결정을 성사시키면 그녀에게 별도 수당이 지급되는 표다.", "정산 자료", 3),
+        money: clue("bc_split", "결혼 성사 보너스 분배표", "clue", "빠른 결정을 성사시키면 그녀에게 별도 수당이 지급되는 표다.", "정산 자료", 3),
         investigate: clue("bc_previous", "이전 맞선 상대의 진술", "fact", "한 달 전에도 같은 사랑 고백과 같은 가족 사연을 들었다고 한다.", "독립 면담", 3),
         digital: clue("bc_script", "업체가 보낸 대화 대본", "fact", "고백·가족 위기·합방 권유 문장이 시간표와 함께 적혀 있다.", "메신저 원본", 3)
       },
@@ -198,7 +201,7 @@
         { text: "우리는 운명이라서 빠른 거예요. 업체는 상관없어요.", press: "왜 업체 직원이 둘만의 대화 내용을 아는지 묻자 대답을 피한다.", required: ["bc_script", "bc_previous"], success: "다른 상대에게도 반복된 대본이 확인됐다." },
         { text: "서약서는 당신이 떠날까 봐 가족이 원한 거예요.", press: "가족에게 직접 묻자는 제안에 업체가 통화를 막는다.", required: ["bc_template", "bc_split"], success: "서약서와 수당이 업체의 판매 절차였음이 드러났다." }
       ],
-      truth: "그녀와 업체는 빠른 성혼·첫날밤 압박·가족 위기를 한 세트로 운영했다. 감정 표현 자체가 증거는 아니지만, 반복 대본과 수당·계약 자료가 공모를 입증했다."
+      truth: "그녀와 업체는 빠른 결혼·첫날밤 압박·가족 위기를 한 세트로 운영했다. 감정 표현 자체가 증거는 아니지만, 반복 대본과 보너스·계약 자료가 둘이 함께 꾸민 사기를 입증했다."
     },
     {
       id: "romance_invest", label: "앱 투자형 로맨스 사기", culprit: "partner", routes: ["app", "community"], weight: 14,

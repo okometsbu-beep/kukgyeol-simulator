@@ -1,4 +1,4 @@
-const CACHE_NAME = "genuine-evidence-v2";
+const CACHE_NAME = "genuine-evidence-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -8,10 +8,12 @@ const APP_SHELL = [
   "./manifest.webmanifest",
   "./icon.svg",
   "./assets/men.webp",
-  "./assets/women-a.webp",
-  "./assets/women-b.webp",
-  "./assets/women-c.webp",
-  "./assets/women-legacy.webp",
+  "./assets/women-vn.webp",
+  "./assets/women-cn.webp",
+  "./assets/women-th.webp",
+  "./assets/women-jp.webp",
+  "./assets/women-ph.webp",
+  "./assets/women-kh.webp",
   "./assets/cutscenes/video-call.webp",
   "./assets/cutscenes/broker-suspicion.webp",
   "./assets/cutscenes/nightlife-secret.webp",

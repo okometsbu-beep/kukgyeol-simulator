@@ -121,7 +121,9 @@ button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); ou
 }
 .selection-card:hover { border-color: rgba(239,111,145,.46); transform: translateY(-2px); }
 .selection-card.is-selected { border-color: var(--rose); box-shadow: 0 0 0 2px rgba(239,111,145,.22); }
-.selection-photo { width: 100%; aspect-ratio: 4 / 3; background-color: #2c2633; background-repeat: no-repeat; }
+.selection-photo { position: relative; width: 100%; aspect-ratio: 1 / 1; background-color: #2c2633; background-repeat: no-repeat; overflow: hidden; }
+.selection-photo::after { content: "프로필 사진"; position: absolute; right: .45rem; bottom: .45rem; padding: .18rem .4rem; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; background: rgba(16,13,21,.72); color: #f5edf3; font-size: .62rem; font-weight: 800; backdrop-filter: blur(6px); }
+.selection-photo.is-man::after { content: ""; display: none; }
 .selection-body { padding: .8rem; }
 .selection-body h3 { margin: 0; font-size: 1rem; }
 .selection-body p { margin: .3rem 0 0; color: var(--muted); font-size: .79rem; }
@@ -153,6 +155,15 @@ button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); ou
 button.status-pill { cursor: pointer; }
 .game-layout { display: grid; grid-template-columns: minmax(0, 760px) 310px; gap: 1.2rem; max-width: 1160px; margin: 1.2rem auto 3rem; padding: 0 1rem; align-items: start; }
 .novel-stage { min-width: 0; }
+.duo-hud { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin-bottom: .7rem; }
+.hud-person { min-width: 0; padding: .7rem .8rem; border: 1px solid var(--line); border-radius: .85rem; background: linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.025)); }
+.hud-heading { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; margin-bottom: .48rem; }
+.hud-heading span { color: var(--muted); font-size: .67rem; font-weight: 800; }
+.hud-heading strong { overflow: hidden; font-size: .82rem; text-overflow: ellipsis; white-space: nowrap; }
+.ability-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .3rem; }
+.ability-grid span { display: grid; gap: .08rem; padding: .3rem .25rem; border-radius: .45rem; background: rgba(255,255,255,.045); color: #a69eaa; font-size: .61rem; text-align: center; }
+.ability-grid b { color: #f5edf3; font-size: .78rem; }
+.relationship-grid b { color: var(--rose-bright); }
 .scene-visual {
   position: relative;
   min-height: clamp(22rem, 57vw, 34rem);
@@ -165,10 +176,11 @@ button.status-pill { cursor: pointer; }
 .scene-gradient { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,8,13,.78), transparent 42%), linear-gradient(90deg, rgba(10,8,13,.24), transparent 40%); pointer-events: none; }
 .scene-caption { position: absolute; z-index: 2; left: 1rem; top: 1rem; max-width: calc(100% - 2rem); padding: .4rem .65rem; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; background: rgba(10,8,13,.62); color: #eee8ee; font-size: .72rem; backdrop-filter: blur(8px); }
 .portrait-wrap { position: absolute; inset: 8% 5% 0 34%; display: flex; align-items: flex-end; justify-content: center; }
-.portrait-photo { width: min(100%, 30rem); aspect-ratio: 3 / 4; background-repeat: no-repeat; filter: drop-shadow(0 20px 22px rgba(0,0,0,.45)); transform-origin: bottom; }
+.portrait-photo { width: min(92%, 29rem); aspect-ratio: 1 / 1; border: 1px solid rgba(255,255,255,.18); border-radius: 1.1rem 1.1rem .35rem .35rem; background-color: #302938; background-repeat: no-repeat; box-shadow: 0 24px 40px rgba(0,0,0,.45); transform-origin: bottom; }
 .objective-card { display: flex; gap: .55rem; align-items: baseline; margin: .7rem 0; padding: .62rem .78rem; border-left: 3px solid var(--gold); background: rgba(228,183,93,.08); font-size: .78rem; }
 .objective-card span { color: #d4b87c; white-space: nowrap; }
 .dialogue-box { position: relative; min-height: 8.5rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: .5rem 1.1rem 1.1rem 1.1rem; background: rgba(33,28,41,.97); box-shadow: 0 15px 35px rgba(0,0,0,.2); }
+.scene-context { margin: 0 0 .55rem !important; color: #9d94a2; font-family: inherit !important; font-size: .7rem !important; font-weight: 800; letter-spacing: .03em; line-height: 1.4 !important; }
 .speaker-row { display: flex; gap: .55rem; align-items: center; }
 .speaker-row strong { color: var(--rose-bright); }
 .mood-chip { padding: .14rem .42rem; border-radius: 999px; background: rgba(255,255,255,.07); color: var(--muted); font-size: .68rem; }
@@ -198,6 +210,10 @@ button.status-pill { cursor: pointer; }
 .choice-title { font-size: .94rem; }
 .choice-cost { color: #f0d394; font-size: .7rem; white-space: nowrap; }
 .choice-description { margin-top: .35rem; color: #c5bdc8; font-size: .78rem; line-height: 1.55; }
+.choice-chance { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .55rem; padding: .38rem .5rem; border: 1px solid rgba(119,169,239,.26); border-radius: .5rem; background: rgba(119,169,239,.08); color: #b8d4f8; font-size: .7rem; font-weight: 850; }
+.choice-chance::before { content: "🎲"; }
+.choice-chance.is-low { border-color: rgba(237,94,102,.35); background: rgba(237,94,102,.08); color: #f3a6ab; }
+.choice-chance.is-high { border-color: rgba(113,213,178,.32); background: rgba(113,213,178,.08); color: #9be5cc; }
 .choice-impact { margin-top: auto; padding-top: .55rem; color: #928a97; font-size: .69rem; }
 .choice-card.is-investigate .choice-title::before { content: "🔎 "; }
 .choice-card.is-romance .choice-title::before { content: "💗 "; }
@@ -226,6 +242,17 @@ button.status-pill { cursor: pointer; }
 .mobile-dock { display: none; }
 
 .overlay { position: fixed; z-index: 60; inset: 0; display: grid; place-items: center; padding: 1rem; background: rgba(5,4,7,.78); backdrop-filter: blur(8px); }
+.roll-overlay { position: fixed; z-index: 90; inset: 0; display: grid; place-items: center; padding: 1rem; background: rgba(5,4,7,.84); backdrop-filter: blur(12px); }
+.roll-card { width: min(22rem, 100%); padding: 1.4rem; border: 1px solid rgba(239,111,145,.35); border-radius: 1.2rem; background: radial-gradient(circle at 50% 0%, rgba(239,111,145,.14), transparent 55%), #1c1722; box-shadow: var(--shadow); text-align: center; }
+.roll-card h2 { margin: .25rem 0; font-size: 1.25rem; }
+.roll-dice { margin: .5rem auto; font-size: 4.4rem; line-height: 1; filter: drop-shadow(0 10px 18px rgba(0,0,0,.45)); }
+.roll-dice.is-rolling { animation: dice-roll .18s linear infinite; }
+.roll-rule { margin: .55rem 0; color: var(--muted); font-size: .8rem; }
+.roll-number { display: block; min-height: 3.6rem; color: var(--gold); font-family: Georgia, serif; font-size: 3rem; line-height: 1.1; }
+.roll-result { min-height: 1.5rem; margin: .4rem 0 0; font-weight: 900; }
+.roll-result.is-success { color: var(--mint); }
+.roll-result.is-failure { color: #ef8b91; }
+@keyframes dice-roll { 0% { transform: rotate(-12deg) scale(.94); } 50% { transform: rotate(14deg) scale(1.08); } 100% { transform: rotate(-12deg) scale(.94); } }
 .modal { width: min(700px, 100%); max-height: min(86vh, 860px); overflow: hidden; border: 1px solid var(--line); border-radius: 1rem; background: #1c1722; box-shadow: var(--shadow); }
 .modal-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--line); }
 .modal-header h2 { margin: 0; font-size: 1.2rem; }
@@ -299,7 +326,11 @@ button.evidence-card:hover { border-color: var(--blue); }
   .case-progress { display: grid; gap: 0; }
   .case-progress strong { max-width: 38vw; font-size: .8rem; }
   .scene-visual { min-height: min(58vh, 31rem); border-radius: .85rem .85rem .35rem .35rem; }
-  .portrait-wrap { inset: 11% -2% 0 20%; }
+  .portrait-wrap { inset: 12% 1% 2% 21%; }
+  .duo-hud { gap: .4rem; margin-bottom: .5rem; }
+  .hud-person { padding: .55rem; }
+  .ability-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ability-grid span { display: flex; justify-content: space-between; padding: .22rem .32rem; }
   .dialogue-box { min-height: 8rem; padding: .85rem; }
   .choice-list { grid-template-columns: 1fr; }
   .choice-card { min-height: 7.7rem; }
@@ -312,6 +343,7 @@ button.evidence-card:hover { border-color: var(--blue); }
   .setup-screen { padding-left: .65rem; padding-right: .65rem; }
   .selection-body { padding: .65rem; }
   .selection-photo { aspect-ratio: 1 / 1; }
+  .choice-card { min-height: 8.3rem; }
 }
 
 @media (max-width: 380px) {

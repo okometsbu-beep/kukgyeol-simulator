@@ -56,13 +56,34 @@
         </div>
         <div class="status-pills">
           <button id="money-pill" class="status-pill" type="button" aria-label="재정 상세">💳 <span id="cash-label">0원</span></button>
-          <span class="status-pill">💗 <span id="trust-label">50</span></span>
-          <span class="status-pill">🧠 <span id="calm-label">5</span></span>
+          <span class="status-pill" title="호감">💗 <span id="affection-label">50</span></span>
+          <span class="status-pill" title="갈등">⚠️ <span id="conflict-label">0</span></span>
         </div>
       </header>
 
       <div class="game-layout">
         <section class="novel-stage" aria-live="polite">
+          <section class="duo-hud" aria-label="두 사람의 현재 상태">
+            <article class="hud-person hud-player">
+              <div class="hud-heading"><span>주인공</span><strong id="player-hud-name"></strong></div>
+              <div class="ability-grid">
+                <span>말재주 <b id="stat-charm"></b></span>
+                <span>공감 <b id="stat-empathy"></b></span>
+                <span>판단 <b id="stat-reason"></b></span>
+                <span>배짱 <b id="stat-courage"></b></span>
+              </div>
+            </article>
+            <article class="hud-person hud-partner">
+              <div class="hud-heading"><span>두 사람</span><strong id="relationship-hud"></strong></div>
+              <div class="ability-grid relationship-grid">
+                <span>호감 <b id="hud-affection"></b></span>
+                <span>신뢰 <b id="hud-trust"></b></span>
+                <span>갈등 <b id="hud-conflict"></b></span>
+                <span>아이 <b id="hud-children"></b></span>
+              </div>
+            </article>
+          </section>
+
           <div id="scene-visual" class="scene-visual">
             <div class="scene-gradient"></div>
             <div id="scene-caption" class="scene-caption"></div>
@@ -77,6 +98,7 @@
           </div>
 
           <div id="dialogue-box" class="dialogue-box">
+            <p id="scene-context" class="scene-context"></p>
             <div class="speaker-row">
               <strong id="speaker-name"></strong>
               <span id="speaker-mood" class="mood-chip"></span>
@@ -165,10 +187,22 @@
     </section>
   </div>
 
+  <div id="roll-overlay" class="roll-overlay" role="status" aria-live="assertive" hidden>
+    <section class="roll-card">
+      <p class="eyebrow">능력 판정</p>
+      <div id="roll-dice" class="roll-dice" aria-hidden="true">🎲</div>
+      <h2 id="roll-title">주사위를 굴리는 중</h2>
+      <p id="roll-rule" class="roll-rule"></p>
+      <strong id="roll-number" class="roll-number">?</strong>
+      <p id="roll-result" class="roll-result"></p>
+    </section>
+  </div>
+
   <template id="choice-template">
     <button class="choice-card" type="button">
       <span class="choice-top"><strong class="choice-title"></strong><span class="choice-cost"></span></span>
       <span class="choice-description"></span>
+      <span class="choice-chance" hidden></span>
       <span class="choice-impact"></span>
     </button>
   </template>
