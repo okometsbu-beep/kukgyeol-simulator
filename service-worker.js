@@ -1,8 +1,10 @@
-const CACHE_NAME = "kukgyeol-v5";
+const CACHE_NAME = "genuine-evidence-v1";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
+  "./game-data.js",
+  "./game.js",
   "./manifest.webmanifest",
   "./icon.svg",
   "./assets/men.webp",
