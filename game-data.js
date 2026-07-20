@@ -66,6 +66,121 @@
     cities: { vn: ["호찌민", "다낭", "하노이", "껀터"], cn: ["칭다오", "선양", "상하이", "다롄"], th: ["방콕", "치앙마이", "파타야", "콘깬"], jp: ["도쿄", "오사카", "사이타마", "후쿠오카"], ph: ["마닐라", "세부", "다바오", "바기오"], kh: ["프놈펜", "시엠립", "바탐방", "캄퐁참"] }
   };
 
+  const behaviorProfiles = [
+    {
+      id: "warm_cautious", name: "다정하지만 천천히 마음을 여는 사람",
+      publicHint: "답장은 길지만 중요한 결정은 서두르지 않는다",
+      responseRhythm: "하루에 두세 번, 생각을 정리한 긴 답장을 보낸다",
+      affectionLanguage: "작은 약속을 기억하고 일상을 챙겨 주는 행동",
+      conflictStyle: "목소리가 커지면 일단 거리를 둔 뒤 다시 이야기한다",
+      moneyStyle: "비상금과 생활비를 나누고 큰돈은 며칠 고민한다",
+      independence: "가까운 관계에서도 혼자 보내는 시간이 꼭 필요하다",
+      jealousy: "질투는 느끼지만 확인되지 않은 일로 상대를 몰아붙이지 않는다",
+      intimacyBoundary: "충분히 안전하다고 느끼기 전에는 신체 이야기를 피한다",
+      likedReaction: "바로 답을 재촉하지 않는 태도에 안도해, 조금 생각한 뒤 평소보다 긴 답을 보냈다.",
+      dislikedReaction: "표정은 웃고 있었지만 답장이 짧아졌다. 압박이 끝날 때까지 중요한 말은 꺼내지 않았다.",
+      likes: ["honest", "space", "practical"], dislikes: ["pressure", "control", "extravagant"]
+    },
+    {
+      id: "playful_social", name: "장난스럽고 사람을 좋아하는 사람",
+      publicHint: "농담과 사진을 자주 보내고 답장이 빠른 편이다",
+      responseRhythm: "짧은 메시지를 자주 보내며 바로 반응해 주길 기대한다",
+      affectionLanguage: "함께 웃는 시간, 즉흥적인 데이트와 가벼운 스킨십",
+      conflictStyle: "처음에는 농담으로 넘기다가 참은 말을 한꺼번에 꺼낸다",
+      moneyStyle: "경험에는 잘 쓰지만 장기 저축 계획은 자주 미룬다",
+      independence: "친구와 가족 모임이 잦고 연인도 함께 어울리길 바란다",
+      jealousy: "연락이 갑자기 줄면 마음이 식었다고 오해하기 쉽다",
+      intimacyBoundary: "호감 표현은 빠르지만 공개하고 싶지 않은 정보는 분명히 나눈다",
+      likedReaction: "장난스러운 이모티콘을 연달아 보내고, 다음에 같이 해 볼 일을 먼저 제안했다.",
+      dislikedReaction: "처음에는 농담으로 넘겼지만 곧 말수가 줄었다. 가볍게 보인다는 느낌을 싫어했다.",
+      likes: ["humor", "affection", "adventure"], dislikes: ["cold", "control", "interrogation"]
+    },
+    {
+      id: "practical_planner", name: "현실을 먼저 계산하는 계획형",
+      publicHint: "감정보다 일정·돈·거주 계획을 구체적으로 묻는다",
+      responseRhythm: "바쁠 때는 답장이 늦지만 약속한 시간에는 반드시 연락한다",
+      affectionLanguage: "미래 계획을 함께 세우고 약속을 실제 행동으로 옮기는 것",
+      conflictStyle: "감정보다 사실을 정리하려 하지만 차갑게 들릴 때가 있다",
+      moneyStyle: "예산표와 개인 통장을 중시하고 충동적인 지출을 싫어한다",
+      independence: "결혼 뒤에도 자기 직업과 수입을 유지하고 싶어 한다",
+      jealousy: "말보다 일정과 행동이 맞지 않을 때 의심한다",
+      intimacyBoundary: "건강·피임·아이 계획을 먼저 합의해야 편안해진다",
+      likedReaction: "좋다는 말 대신 일정과 비용을 메모했다. 다음 약속을 구체적으로 잡는 것이 그녀의 호감 표현이었다.",
+      dislikedReaction: "근거 없는 큰 약속을 들으며 표정이 굳었다. 지킬 날짜와 방법부터 다시 물었다.",
+      likes: ["practical", "honest", "ambition"], dislikes: ["extravagant", "evasion", "pressure"]
+    },
+    {
+      id: "quiet_observer", name: "말보다 행동을 오래 보는 관찰형",
+      publicHint: "첫인상은 조용하지만 상대가 한 말을 오래 기억한다",
+      responseRhythm: "읽고도 바로 답하지 않으며 밤에 천천히 이야기한다",
+      affectionLanguage: "말없이 필요한 일을 해 주고 불편한 점을 먼저 알아차리는 것",
+      conflictStyle: "쉽게 싸우지 않지만 선을 넘으면 마음을 닫는 시간이 길다",
+      moneyStyle: "지출은 적지만 자기 돈의 세부 내역을 쉽게 공개하지 않는다",
+      independence: "혼자 결정하고 해결하려는 습관이 강하다",
+      jealousy: "표현은 적어도 비교당했다고 느낀 일을 오래 기억한다",
+      intimacyBoundary: "신뢰가 충분히 쌓여야 몸과 과거 이야기를 꺼낸다",
+      likedReaction: "한참 뒤 짧지만 정확한 답이 돌아왔다. 다음 만남에서 방금 한 말을 그대로 기억하고 있었다.",
+      dislikedReaction: "대꾸하며 싸우지는 않았지만 마음을 닫았다. 이후 질문에는 필요한 말만 골라 답했다.",
+      likes: ["space", "honest", "care"], dislikes: ["pressure", "brag", "interrogation"]
+    },
+    {
+      id: "family_centered", name: "가족과 관계를 함께 생각하는 사람",
+      publicHint: "둘의 감정만큼 양가 가족의 안심과 예의를 중요하게 여긴다",
+      responseRhythm: "가족 일정에 따라 연락 시간이 바뀌지만 연락을 끊지는 않는다",
+      affectionLanguage: "가족을 존중하고 함께 식사하며 돌봄을 나누는 행동",
+      conflictStyle: "둘만의 문제도 가족에게 조언을 구해 갈등이 커질 수 있다",
+      moneyStyle: "가족을 돕는 돈을 생활비와 별개의 책임으로 생각한다",
+      independence: "중요한 결정에서 가족 의견을 완전히 무시하기 어렵다",
+      jealousy: "자신보다 친구나 일을 우선한다고 느끼면 서운함을 크게 표현한다",
+      intimacyBoundary: "가족과 미래가 불분명한 관계에서는 친밀한 속도를 늦춘다",
+      likedReaction: "둘의 선택이 양가에 어떤 의미인지까지 물었다. 자기 가족에게도 이 대화를 전하고 싶어 했다.",
+      dislikedReaction: "자기 가족이 짐처럼 취급됐다고 느껴 목소리가 낮아졌다. 둘만의 문제가 아니라고 선을 그었다.",
+      likes: ["care", "honest", "practical"], dislikes: ["family_disrespect", "control", "evasion"]
+    },
+    {
+      id: "ambitious_independent", name: "일과 성장을 포기하지 않는 독립형",
+      publicHint: "연애 중에도 일·공부 계획을 우선순위에서 빼지 않는다",
+      responseRhythm: "근무 시간에는 연락이 뜸하지만 자기 일정은 미리 알려 준다",
+      affectionLanguage: "서로의 목표를 응원하고 능력을 인정해 주는 말",
+      conflictStyle: "통제받는다고 느끼면 즉시 반박하고 자기 선택권을 요구한다",
+      moneyStyle: "자기 수입과 개인 통장을 지키며 공동비용은 정확히 나눈다",
+      independence: "결혼을 위해 경력을 당연히 포기하라는 말을 가장 싫어한다",
+      jealousy: "연락보다 신뢰를 중시하지만 자신의 동료 관계를 의심하면 크게 화낸다",
+      intimacyBoundary: "친밀감과 결혼 약속을 교환 조건으로 묶지 않는다",
+      likedReaction: "자기 일과 목표까지 관계 안에서 존중받는다고 느꼈다. 앞으로의 계획을 먼저 공유했다.",
+      dislikedReaction: "선택권을 빼앗는 말에 즉시 반박했다. 사랑과 복종은 다른 것이라고 분명히 말했다.",
+      likes: ["ambition", "honest", "space"], dislikes: ["control", "pressure", "family_disrespect"]
+    },
+    {
+      id: "passionate_impulsive", name: "감정이 빠르고 기복도 큰 열정형",
+      publicHint: "호감 표현과 미래 이야기가 빠르지만 기분 변화도 눈에 보인다",
+      responseRhythm: "좋을 때는 밤새 대화하고 서운하면 답장을 갑자기 줄인다",
+      affectionLanguage: "강한 표현, 자주 하는 연락과 특별한 날의 이벤트",
+      conflictStyle: "감정을 바로 쏟아낸 뒤 후회하고 먼저 사과하기도 한다",
+      moneyStyle: "사랑하는 사람에게는 크게 쓰지만 계획 밖 지출이 잦다",
+      independence: "관계가 뜨거울 때는 모든 시간을 함께 보내고 싶어 한다",
+      jealousy: "애매한 연락이나 다른 이성 이야기에 반응이 빠르다",
+      intimacyBoundary: "신체적 친밀감은 빠를 수 있어도 사적인 과거는 쉽게 말하지 않는다",
+      likedReaction: "표정이 단번에 밝아지고 감정을 숨기지 않았다. 바로 다음 약속까지 잡으려 했다.",
+      dislikedReaction: "서운함을 곧바로 쏟아냈다가 답장을 끊었다. 진정된 뒤에는 먼저 사과할 여지도 남겼다.",
+      likes: ["affection", "adventure", "humor"], dislikes: ["cold", "delay", "interrogation"]
+    },
+    {
+      id: "guarded_survivor", name: "쉽게 믿지 않지만 책임감이 강한 사람",
+      publicHint: "좋은 말보다 반복되는 행동과 돈 약속을 오래 확인한다",
+      responseRhythm: "개인정보를 묻는 메시지에는 답이 늦고 일상 이야기는 편하게 한다",
+      affectionLanguage: "위기 때 도망가지 않고 함께 해결하는 행동",
+      conflictStyle: "공격받는다고 느끼면 사실을 숨기고 방어적으로 변한다",
+      moneyStyle: "비상금을 중요하게 여기며 빚이나 가족 사정을 말하기 어려워한다",
+      independence: "도움을 받아도 언젠가 반드시 갚아야 마음이 편하다",
+      jealousy: "배신 가능성에 예민하지만 직접 확인하기 전에는 드러내지 않는다",
+      intimacyBoundary: "몸·건강·과거 정보는 명확한 동의와 높은 신뢰 없이는 공유하지 않는다",
+      likedReaction: "말보다 다음 행동을 보겠다고 했지만 방어적인 표정이 조금 풀렸다. 작은 사실 하나를 먼저 꺼냈다.",
+      dislikedReaction: "예전 경험을 떠올린 듯 즉시 방어적으로 변했다. 안전하다는 확신 전에는 어떤 사정도 더 말하지 않았다.",
+      likes: ["honest", "care", "practical"], dislikes: ["pressure", "interrogation", "brag"]
+    }
+  ];
+
   const peopleByCountry = {
     vn: [
       ["마이", 29, "온라인 쇼핑몰 직원", "한국 생활보다 서로의 성격을 먼저 보고 싶다", "상냥하지만 결정을 재촉받으면 입을 닫는다", "천천히 말해줘요. 저는 약속보다 행동을 봐요.", "결혼 후에도 일을 계속하고 싶다"],
@@ -305,5 +420,5 @@
     }
   ];
 
-  window.KG_DATA = { players, countries, routes, paymentPlans, profilePools, people: makePeople(), cases };
+  window.KG_DATA = { players, countries, routes, paymentPlans, profilePools, behaviorProfiles, people: makePeople(), cases };
 })();
