@@ -2,12 +2,72 @@
   "use strict";
 
   const players = [
-    { id: "junsu", name: "김준수", age: 38, job: "중소기업 대리", cash: 18000000, income: 3900000, singleLiving: 1450000, monthlyCommitment: 250000, calm: 6, charm: 4, empathy: 7, reason: 4, courage: 3, appearance: 5, portability: 3, art: 0, hook: "공감은 좋지만 결정을 오래 미루는 직장인", flaw: "거절당할까 봐 할 말을 삼킨다" },
-    { id: "minho", name: "박민호", age: 44, job: "자영업", cash: 32000000, income: 5400000, singleLiving: 1900000, monthlyCommitment: 1200000, calm: 3, charm: 6, empathy: 3, reason: 4, courage: 8, appearance: 6, portability: 4, art: 1, hook: "수입은 높지만 사업 고정비와 성급함이 큰 자영업자", flaw: "빨리 확답을 받고 싶어 한다" },
-    { id: "taeho", name: "이태호", age: 35, job: "개발자", cash: 25000000, income: 5200000, singleLiving: 1650000, monthlyCommitment: 450000, calm: 7, charm: 3, empathy: 3, reason: 8, courage: 4, appearance: 4, portability: 8, art: 2, hook: "재택 이동은 쉽지만 감정 표현이 서툰 개발자", flaw: "사람의 말을 보고서처럼 듣는다" },
-    { id: "seongjin", name: "최성진", age: 49, job: "운송업", cash: 35000000, income: 5200000, singleLiving: 1800000, monthlyCommitment: 1500000, calm: 4, charm: 5, empathy: 5, reason: 4, courage: 7, appearance: 4, portability: 2, art: 3, hook: "현금은 많지만 차량·사업비와 나이 차이 부담이 큰 생활형", flaw: "나이 차이를 돈으로 메우려 한다" },
-    { id: "hyunwoo", name: "정현우", age: 41, job: "공무원", cash: 22000000, income: 4300000, singleLiving: 1550000, monthlyCommitment: 300000, calm: 6, charm: 4, empathy: 6, reason: 7, courage: 5, appearance: 5, portability: 1, art: 4, hook: "생활은 안정적이지만 해외 이동이 어려운 공무원", flaw: "한번 의심하면 표정에 다 드러난다" },
-    { id: "dojun", name: "한도준", age: 33, job: "프리랜서 영상편집자", cash: 12000000, income: 4500000, singleLiving: 1700000, monthlyCommitment: 150000, calm: 4, charm: 8, empathy: 7, reason: 3, courage: 6, appearance: 8, portability: 9, art: 5, hook: "외모와 대화는 강하지만 수입이 들쭉날쭉한 프리랜서", flaw: "좋을 때 쓴 돈을 나중에 계산한다" }
+    {
+      id: "junsu", name: "김준수", age: 38, job: "중소기업 대리", cash: 18000000, housingAsset: 70000000, income: 3900000, incomeRisk: "stable", singleLiving: 1450000, monthlyCommitment: 250000, calm: 6, charm: 4, empathy: 7, reason: 4, courage: 3, appearance: 5, portability: 3, art: 0,
+      hook: "공감은 좋지만 결정을 오래 미루는 직장인", flaw: "거절당할까 봐 할 말을 삼킨다",
+      needs: [
+        { id: "kind", label: "상대를 배려하는 다정한 사람", kind: "behavior", values: ["warm_cautious", "family_centered", "quiet_observer"], points: 1200 },
+        { id: "three_children", label: "아이 셋까지 함께 생각하는 사람", kind: "children", min: 3, points: 2400 },
+        { id: "natural_body", label: "과장보다 자연스럽고 건강한 체형", kind: "body", values: ["균형 잡힌 체형", "운동으로 탄탄한 체형"], points: 1100 },
+        { id: "money_rules", label: "돈 약속을 분명히 하는 사람", kind: "behavior", values: ["practical_planner", "guarded_survivor"], points: 1300 },
+        { id: "no_pressure", label: "서로의 속도를 존중하는 사람", kind: "behavior", values: ["warm_cautious", "quiet_observer", "ambitious_independent"], points: 900 }
+      ]
+    },
+    {
+      id: "minho", name: "박민호", age: 44, job: "자영업", cash: 32000000, housingAsset: 130000000, income: 5400000, incomeRisk: "business", singleLiving: 1900000, monthlyCommitment: 1200000, calm: 3, charm: 6, empathy: 3, reason: 4, courage: 8, appearance: 6, portability: 4, art: 1,
+      hook: "수입은 높지만 사업 고정비와 성급함이 큰 자영업자", flaw: "빨리 확답을 받고 싶어 한다",
+      needs: [
+        { id: "beautiful", label: "첫눈에 매력적인 사람", kind: "attractiveness", min: 8, points: 1500 },
+        { id: "busty", label: "볼륨감 있는 체형", kind: "cup", min: "D", points: 1900 },
+        { id: "gap_twenty", label: "20살 이상 나이 차이", kind: "ageGap", min: 20, points: 2600 },
+        { id: "family_first", label: "가정을 크게 꾸리고 싶은 사람", kind: "behavior", values: ["family_centered", "warm_cautious"], points: 1400 },
+        { id: "three_children", label: "아이 셋 이상을 원하는 사람", kind: "children", min: 3, points: 2500 }
+      ]
+    },
+    {
+      id: "taeho", name: "이태호", age: 35, job: "개발자", cash: 25000000, housingAsset: 100000000, income: 5200000, incomeRisk: "stable", singleLiving: 1650000, monthlyCommitment: 450000, calm: 7, charm: 3, empathy: 3, reason: 8, courage: 4, appearance: 4, portability: 8, art: 2,
+      hook: "재택 이동은 쉽지만 감정 표현이 서툰 개발자", flaw: "사람의 말을 보고서처럼 듣는다",
+      needs: [
+        { id: "planner", label: "계획과 숫자로 대화되는 사람", kind: "behavior", values: ["practical_planner", "guarded_survivor"], points: 1400 },
+        { id: "career", label: "자기 경력을 계속 키우는 사람", kind: "career", points: 1300 },
+        { id: "independent", label: "혼자서도 단단한 독립형", kind: "behavior", values: ["ambitious_independent", "practical_planner"], points: 1300 },
+        { id: "no_tattoo", label: "문신이 없는 사람", kind: "tattoo", value: "none", points: 900 },
+        { id: "chemistry", label: "친밀한 호흡까지 잘 맞는 사람", kind: "chemistry", min: 75, points: 2100 }
+      ]
+    },
+    {
+      id: "seongjin", name: "최성진", age: 49, job: "운송업", cash: 35000000, housingAsset: 160000000, income: 5200000, incomeRisk: "business", singleLiving: 1800000, monthlyCommitment: 1500000, calm: 4, charm: 5, empathy: 5, reason: 4, courage: 7, appearance: 4, portability: 2, art: 3,
+      hook: "현금은 많지만 차량·사업비와 나이 차이 부담이 큰 생활형", flaw: "나이 차이를 돈으로 메우려 한다",
+      needs: [
+        { id: "gap_twenty", label: "20살 이상 나이 차이", kind: "ageGap", min: 20, points: 2700 },
+        { id: "affectionate", label: "애정 표현이 확실한 사람", kind: "behavior", values: ["passionate_impulsive", "playful_social"], points: 1200 },
+        { id: "busty", label: "볼륨감 있는 체형", kind: "cup", min: "D", points: 1900 },
+        { id: "family_first", label: "양가와 가족행사를 중시하는 사람", kind: "behavior", values: ["family_centered"], points: 1600 },
+        { id: "children", label: "아이 둘 이상을 원하는 사람", kind: "children", min: 2, points: 1700 }
+      ]
+    },
+    {
+      id: "hyunwoo", name: "정현우", age: 41, job: "공무원", cash: 22000000, housingAsset: 90000000, income: 4300000, incomeRisk: "secure", singleLiving: 1550000, monthlyCommitment: 300000, calm: 6, charm: 4, empathy: 6, reason: 7, courage: 5, appearance: 5, portability: 1, art: 4,
+      hook: "생활은 안정적이지만 해외 이동이 어려운 공무원", flaw: "한번 의심하면 표정에 다 드러난다",
+      needs: [
+        { id: "kind", label: "성격이 선하고 책임감 있는 사람", kind: "behavior", values: ["warm_cautious", "family_centered", "guarded_survivor"], points: 1400 },
+        { id: "quiet", label: "차분하고 소란스럽지 않은 사람", kind: "behavior", values: ["quiet_observer", "warm_cautious"], points: 1100 },
+        { id: "career", label: "한국에서도 일할 의지가 있는 사람", kind: "career", points: 1200 },
+        { id: "healthy", label: "함께 생활 관리가 가능한 건강 상태", kind: "health", points: 1100 },
+        { id: "language", label: "통역 없이도 대화가 이어지는 사람", kind: "language", min: 70, points: 1500 }
+      ]
+    },
+    {
+      id: "dojun", name: "한도준", age: 33, job: "프리랜서 영상편집자", cash: 12000000, housingAsset: 50000000, income: 4500000, incomeRisk: "freelance", singleLiving: 1700000, monthlyCommitment: 150000, calm: 4, charm: 8, empathy: 7, reason: 3, courage: 6, appearance: 8, portability: 9, art: 5,
+      hook: "외모와 대화는 강하지만 수입이 들쭉날쭉한 프리랜서", flaw: "좋을 때 쓴 돈을 나중에 계산한다",
+      needs: [
+        { id: "beautiful", label: "자기 눈에 확실히 매력적인 사람", kind: "attractiveness", min: 8, points: 1500 },
+        { id: "fit", label: "운동으로 탄탄한 체형", kind: "body", values: ["운동으로 탄탄한 체형"], points: 1500 },
+        { id: "playful", label: "농담과 즉흥 여행이 통하는 사람", kind: "behavior", values: ["playful_social", "passionate_impulsive"], points: 1300 },
+        { id: "chemistry", label: "친밀한 호흡이 강하게 맞는 사람", kind: "chemistry", min: 75, points: 2200 },
+        { id: "independent", label: "각자의 일과 자유를 존중하는 사람", kind: "behavior", values: ["ambitious_independent", "practical_planner"], points: 1300 }
+      ]
+    }
   ];
 
   const countries = [

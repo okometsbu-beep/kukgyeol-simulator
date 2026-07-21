@@ -8,7 +8,7 @@
   <title>진심의 증거 · 국제연애 미스터리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=8">
+  <link rel="stylesheet" href="./styles.css?v=9">
 </head>
 <body>
   <a class="skip-link" href="#main">게임으로 바로가기</a>
@@ -56,6 +56,7 @@
         </div>
         <div class="status-pills">
           <button id="money-pill" class="status-pill" type="button" aria-label="재정 상세">💳 <span id="cash-label">0원</span></button>
+          <span class="status-pill score-pill" title="만점 없는 누적 점수">∞ <span id="score-label">0</span></span>
           <span class="status-pill" title="호감">💗 <span id="affection-label">50</span></span>
           <span class="status-pill" title="갈등">⚠️ <span id="conflict-label">0</span></span>
         </div>
@@ -81,10 +82,16 @@
                 <span>그녀의 신뢰 <b id="hud-trust"></b></span>
                 <span>확인도 <b id="hud-certainty"></b></span>
                 <span>갈등 <b id="hud-conflict"></b></span>
+                <span title="상대 피로">피로 <b id="hud-partner-fatigue"></b></span>
                 <span>아이 <b id="hud-children"></b></span>
               </div>
-              <button id="open-partner-profile-hud" class="hud-detail-button" type="button">그녀에 대해 알아낸 것 <span id="hud-known-count"></span></button>
+              <button id="open-partner-profile-hud" class="hud-detail-button" type="button">상대 프로필 <span id="hud-known-count"></span></button>
             </article>
+          </section>
+
+          <section class="communication-bar" aria-label="소통과 전문 통역 설정">
+            <span>소통 <b id="communication-label">0</b></span>
+            <button id="interpreter-toggle" type="button" aria-pressed="false">🗣️ 전문 통역 OFF<small>선택할 때만 비용 차감</small></button>
           </section>
 
           <div id="scene-visual" class="scene-visual">
@@ -140,23 +147,14 @@
                 <p id="relationship-label"></p>
               </div>
             </div>
-            <button id="open-partner-profile" class="secondary-button full-button partner-profile-button" type="button">알아낸 인물 정보 보기 <span id="partner-known-count"></span></button>
           </section>
 
           <section class="side-card player-menu-card">
-            <div class="side-title"><h3>나의 소개·능력</h3><span>성장 기록</span></div>
-            <button id="open-player-profile" class="secondary-button full-button" type="button">주인공 전체 보기</button>
-          </section>
-
-          <section class="side-card free-action-card">
-            <div class="side-title"><h3>오늘의 자유 행동</h3><span>장면 사이 준비</span></div>
-            <button id="open-free-actions" class="primary-button full-button" type="button">시간을 어떻게 쓸까?</button>
-          </section>
-
-          <section class="side-card">
-            <div class="side-title"><h3>관계 노트</h3><span id="evidence-count">0개</span></div>
-            <div id="notebook-preview" class="notebook-preview"></div>
-            <button id="open-notebook" class="secondary-button full-button" type="button">관계 노트 열기</button>
+            <div class="side-title"><h3>두 사람의 프로필</h3><span>니즈·발견</span></div>
+            <div class="profile-button-pair">
+              <button id="open-player-profile" class="secondary-button" type="button">내 프로필</button>
+              <button id="open-partner-profile" class="secondary-button" type="button">상대 프로필 <span id="partner-known-count"></span></button>
+            </div>
           </section>
 
           <section class="side-card finance-card">
@@ -178,8 +176,8 @@
 
       <nav class="mobile-dock" aria-label="게임 메뉴">
         <button id="mobile-player" type="button"><span>👤</span>내 프로필</button>
-        <button id="mobile-free-actions" type="button"><span>⏱️</span>자유 행동</button>
-        <button id="mobile-notebook" type="button"><span>📝</span>관계 노트</button>
+        <button id="mobile-partner" type="button"><span>💗</span>상대 프로필</button>
+        <button id="mobile-interpreter" type="button" aria-pressed="false"><span>🗣️</span>통역 OFF</button>
         <button id="mobile-status" type="button"><span>💳</span>재정</button>
         <button id="mobile-save" type="button"><span>💾</span>저장</button>
       </nav>
@@ -225,6 +223,14 @@
     </section>
   </div>
 
+  <div id="effect-overlay" class="effect-overlay" role="status" aria-live="polite" hidden>
+    <div id="effect-card" class="effect-card">
+      <span id="effect-kicker"></span>
+      <strong id="effect-title"></strong>
+      <p id="effect-detail"></p>
+    </div>
+  </div>
+
   <template id="choice-template">
     <button class="choice-card" type="button">
       <span class="choice-top"><strong class="choice-title"></strong><span class="choice-cost"></span></span>
@@ -234,7 +240,7 @@
     </button>
   </template>
 
-  <script src="./game-data.js?v=8"></script>
-  <script src="./game.js?v=8"></script>
+  <script src="./game-data.js?v=9"></script>
+  <script src="./game.js?v=9"></script>
 </body>
 </html>
