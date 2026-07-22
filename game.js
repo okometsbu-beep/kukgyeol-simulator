@@ -2,8 +2,8 @@
   "use strict";
 
   const DATA = window.KG_DATA;
-  const SAVE_KEY = "genuine-evidence-save-v9";
-  const SAVE_VERSION = 9;
+  const SAVE_KEY = "genuine-evidence-save-v10";
+  const SAVE_VERSION = 10;
   const DEBT_LIMIT = 12000000;
   const CONFLICT_LIMIT = 100;
   const SHARED_PERSONAL_MONTHLY = 850000;
@@ -39,6 +39,7 @@
     { id: "documents", title: "서류의 날짜", objective: "느낌과 별개로 기본 사실을 검증한다", bg: "broker-suspicion" },
     { id: "romance", title: "마음이 움직이는 밤", objective: "의심만 하다가 관계를 놓치지 않는다", bg: "romance-start" },
     { id: "first_intimacy", title: "조금 더 가까워질까", objective: "호감과 동의를 따로 확인한다", bg: "first-night" },
+    { id: "shadow_mirror", title: "서로의 그림자", objective: "끌림 속에 숨은 욕구와 상대의 선택권을 함께 본다", bg: "first-night" },
     { id: "turning_point", title: "지금이라도 말할 수 있다면", objective: "완벽한 사람보다 솔직한 선택을 요구한다", bg: "romance-start" },
     { id: "her_investigation", title: "이번에는 그녀의 확인", objective: "상대가 내 삶을 검증할 권리도 받아들인다", bg: "video-call" },
     { id: "her_crossroads", title: "그녀가 꺼낸 조건", objective: "호감만이 아니라 그녀가 원하는 미래에 답한다", bg: "romance-start" },
@@ -54,7 +55,7 @@
     { id: "wedding_place", title: "어디서 결혼할까", objective: "양가의 마음과 실제 예산을 함께 본다", bg: "wedding" },
     { id: "wedding_budget", title: "결혼식의 크기", objective: "보여 주는 하루와 결혼 뒤 생활비 사이에서 정한다", bg: "wedding" },
     { id: "wedding_day", title: "결혼식 날", objective: "예상 밖의 요구에 둘이 같은 편으로 대응한다", bg: "wedding" },
-    { id: "housing_choice", title: "서울에서 어디에 살까", objective: "집값보다 매달 감당할 돈과 두 사람의 기대를 함께 계산한다", bg: "airport" },
+    { id: "housing_choice", title: "어디에서 어떻게 살까", objective: "첫 거주지 합의에 맞춰 월 부담과 함께 사는 시간을 계산한다", bg: "airport" },
     { id: "new_home", title: "신혼집의 첫날", objective: "낯선 생활에서 생긴 불편을 말로 풀어낸다", bg: "airport" },
     { id: "household_money", title: "생활비 통장", objective: "공동생활비와 개인 돈의 선을 정한다", bg: "romance-start" },
     { id: "partner_work", title: "그녀의 일", objective: "수입, 체류, 경력을 한꺼번에 따져 본다", bg: "nightlife-secret" },
@@ -80,7 +81,7 @@
   function buildCampaign(routeId, behaviorId) {
     const required = new Set([
       "match_event", "contact", "her_daily_message", "chat_why", "route_pressure", "arrival", "private_talk",
-      "her_invitation", "boundaries", "romance", "first_intimacy", "her_crossroads", "money_crisis",
+      "her_invitation", "boundaries", "romance", "first_intimacy", "shadow_mirror", "her_crossroads", "money_crisis",
       "investigation", "interrogation_one", "breathing_room", "final_check", "move_country", "decision"
     ]);
     const routeScenes = {
@@ -107,7 +108,7 @@
   const PRE_MARRIAGE_DAY = {
     match_event: 0, contact: 1, her_daily_message: 2, chat_why: 3, chat_flirt: 5, self_growth: 12, her_question: 14,
     first_date_chat: 18, her_invitation: 19, route_pressure: 21, arrival: 30, private_talk: 33, family_call: 36,
-    boundaries: 40, speed_pressure: 43, documents: 47, romance: 51, first_intimacy: 54,
+    boundaries: 40, speed_pressure: 43, documents: 47, romance: 51, first_intimacy: 54, shadow_mirror: 56,
     turning_point: 58, her_investigation: 62, her_crossroads: 65, money_crisis: 67, investigation: 73,
     anonymous_tip: 78, interrogation_one: 82, breathing_room: 86, interrogation_two: 90,
     final_check: 95, move_country: 101, decision: 108
@@ -134,6 +135,7 @@
   };
 
   const HOUSING_OPTIONS = [
+    { id: "rent_short_stay", tenure: "rent", region: "korea", name: "서울 단기 거주 원룸", area: 23, bedrooms: 1, deposit: 0, monthly: 1650000, fit: -4, note: "보증금 없이 바로 들어가지만 비싸고 오래 살 집은 아니다" },
     { id: "rent_villa_small", tenure: "rent", name: "서울 외곽 빌라 14평 월세", area: 46, bedrooms: 1, deposit: 20000000, monthly: 950000, fit: -2, note: "둘이 시작하기엔 가능하지만 아이 계획에는 빠르게 좁아진다" },
     { id: "rent_villa_family", tenure: "rent", name: "서울 역세권 빌라 20평 월세", area: 66, bedrooms: 2, deposit: 50000000, monthly: 1450000, fit: 1, note: "출퇴근과 방 두 개를 확보하는 현실적인 타협" },
     { id: "rent_apartment", tenure: "rent", name: "서울 외곽 구축 아파트 24평 월세", area: 79, bedrooms: 3, deposit: 80000000, monthly: 2200000, fit: 3, note: "생활 만족은 높지만 월세가 가계의 목을 매달 잡는다" },
@@ -141,6 +143,40 @@
     { id: "buy_apartment_small", tenure: "buy", name: "서울 외곽 구축 아파트 18평 매수", area: 59, bedrooms: 2, price: 850000000, fit: 2, note: "서울 평균보다 낮은 외곽 구축 가정. 현금과 DSR 문턱이 매우 높다" },
     { id: "buy_apartment_family", tenure: "buy", name: "서울 25평대 아파트 매수", area: 84, bedrooms: 3, price: 1500000000, fit: 4, note: "2026년 서울 평균권을 반영한 게임상 추정치. 대출보다 자기자본이 먼저 필요하다" }
   ];
+
+  const LOCAL_HOUSING_INDEX = { vn: .42, cn: .62, th: .52, jp: .95, ph: .43, kh: .32 };
+  const DISTANCE_HOUSING_OPTIONS = [
+    { id: "distance_monthly", tenure: "rent", region: "distance", name: "각자 집 유지 · 월 1회 왕래", area: 0, bedrooms: 0, deposit: 0, monthly: 1800000, fit: -2, note: "일은 지키지만 함께 사는 시간이 적고 항공료 변동을 감수한다" },
+    { id: "distance_halfmonth", tenure: "rent", region: "distance", name: "한 달씩 번갈아 거주", area: 0, bedrooms: 1, deposit: 5000000, monthly: 2750000, fit: 1, note: "체류 공간 두 곳과 이동비가 필요하지만 생활을 실제로 비교할 수 있다" },
+    { id: "distance_base", tenure: "rent", region: "distance", name: "현지 거점집 + 한국 출장방", area: 46, bedrooms: 2, deposit: 15000000, monthly: 3400000, fit: 2, note: "같이 지내는 시간은 늘지만 두 나라 고정비를 동시에 낸다" }
+  ];
+
+  function localHousingOptions() {
+    const country = getCountry();
+    const index = LOCAL_HOUSING_INDEX[country?.id] || .55;
+    const scaled = amount => Math.round(amount * index / 10000) * 10000;
+    return [
+      { id: `local_short_${country.id}`, tenure: "rent", region: "local", name: `${country.name} 가구 포함 단기 스튜디오`, area: 28, bedrooms: 1, deposit: 0, monthly: scaled(1500000), fit: -2, note: "바로 시작할 수 있지만 여행자 요금이라 장기 생활에는 비싸다" },
+      { id: `local_home_${country.id}`, tenure: "rent", region: "local", name: `${country.name} 생활권 1베드룸`, area: 45, bedrooms: 1, deposit: scaled(18000000), monthly: scaled(1100000), fit: 1, note: "그녀의 일과 가족 생활권에서 1년을 시험하는 현실적인 선택" },
+      { id: `local_family_${country.id}`, tenure: "rent", region: "local", name: `${country.name} 가족형 2베드룸`, area: 68, bedrooms: 2, deposit: scaled(30000000), monthly: scaled(1650000), fit: 3, note: "공간은 넉넉하지만 줄어든 내 현지 수입에 부담이 커진다" }
+    ];
+  }
+
+  function housingOptions() {
+    if (state.homeCountry === "local") return localHousingOptions();
+    if (state.homeCountry === "distance") return DISTANCE_HOUSING_OPTIONS;
+    return HOUSING_OPTIONS;
+  }
+
+  function housingFallback() {
+    if (state.homeCountry === "local") return { id: `local_fallback_${getCountry().id}`, tenure: "rent", region: "local", name: `${getCountry().name} 한 달 임시 숙소`, area: 20, bedrooms: 1, deposit: 0, monthly: Math.round(1900000 * (LOCAL_HOUSING_INDEX[getCountry().id] || .55)), fit: -5 };
+    if (state.homeCountry === "distance") return { id: "distance_fallback", tenure: "rent", region: "distance", name: "각자 기존 집 · 월 1회 만남", area: 0, bedrooms: 0, deposit: 0, monthly: 2000000, fit: -4 };
+    return { id: "korea_fallback", tenure: "rent", region: "korea", name: "서울 한 달 임시 숙소", area: 18, bedrooms: 1, deposit: 0, monthly: 1950000, fit: -5 };
+  }
+
+  function housingOptionById(id) {
+    return [...HOUSING_OPTIONS, ...localHousingOptions(), ...DISTANCE_HOUSING_OPTIONS, housingFallback()].find(option => option.id === id);
+  }
 
   const setup = { step: 0, playerId: null, countryId: null, routeId: null, planId: null, partnerId: null, partnerSnapshot: null, candidates: [] };
   let state = null;
@@ -282,7 +318,7 @@
   function setupCopy() {
     const copy = [
       ["주인공을 고르세요", "보유 자금과 말재주·공감·판단·배짱이 서로 다릅니다. 앞으로 고르는 행동의 성공 확률도 달라집니다."],
-      ["어느 나라에서 만날까요?", "국가는 게임 난이도나 사기 확률이 아닙니다. 이름·도시·생활 대화의 배경만 바뀝니다."],
+      ["어느 나라에서 만날까요?", "국가가 사기 확률을 정하지는 않습니다. 다만 언어 수준·현지 임금·주거비·가족 지원과 장거리 생활 조건은 실제 규칙에 반영됩니다."],
       ["어떻게 만날까요?", "경로에 따라 비용, 만남의 속도, 얻기 쉬운 정보와 발생 가능한 사건이 달라집니다."],
       ["이용 방식을 선택하세요", "결제 금액은 실제 청구가 아니라 선택한 주인공의 게임 속 자금에서 빠집니다. 상품에 따라 후보와 대화 기능이 달라집니다."],
       ["처음 마주칠 사람", "지금 보이는 내용은 앱·지인·업체·모임에서 처음 알 수 있는 범위뿐입니다. 성격과 생활, 신체와 숨은 사정은 실제 대화와 사건에서 조금씩 드러납니다."]
@@ -333,6 +369,7 @@
     $("#setup-guide").textContent = guide;
     $("#setup-step").textContent = `${setup.step + 1} / 5`;
     $("#setup-progress-bar").style.width = `${(setup.step + 1) * 20}%`;
+    screens.setup.classList.toggle("is-player-selection", setup.step === 0);
     screens.setup.classList.toggle("is-match-selection", setup.step >= 3);
     ["app", "friend", "broker", "community"].forEach(route => screens.setup.classList.toggle(`setup-route-${route}`, setup.step >= 3 && setup.routeId === route));
     const grid = $("#setup-grid");
@@ -359,8 +396,10 @@
       button.dataset.id = item.id;
       button.setAttribute("aria-pressed", item.id === selectedId ? "true" : "false");
       if (setup.step === 0) {
-        const needPreview = (item.needs || []).map(need => `<span>${escapeHtml(need.label)} <b>+${need.points.toLocaleString("ko-KR")}</b></span>`).join("");
-        button.innerHTML = `<div class="selection-photo is-man" style="${photoStyle(item.art, "man")}"></div><div class="selection-body"><h3>${item.name} · ${item.age}세</h3><p>${item.job} · 월 ${formatWon(item.income)}</p><span class="selection-tag">${item.hook}</span><span class="selection-cost">외모 ${item.appearance} · 말재주 ${item.charm} · 공감 ${item.empathy} · 판단 ${item.reason} · 배짱 ${item.courage}</span><span class="selection-cost">현금 ${formatWon(item.cash)} · 주거 종잣돈 ${formatWon(item.housingAsset || 0)} · 월 고정비 ${formatWon(item.monthlyCommitment + item.singleLiving)}</span><div class="selection-needs-preview"><strong>이 남자가 원하는 상대 · 만점 없음</strong>${needPreview}</div></div>`;
+        const visibleNeeds = (item.needs || []).slice(0, 2);
+        const needPreview = `${visibleNeeds.map(need => `<span>${escapeHtml(need.label)}</span>`).join("")}${(item.needs || []).length > 2 ? `<span>외 ${(item.needs || []).length - 2}개 · 발견 뒤 판정</span>` : ""}`;
+        const shadows = (item.shadowDesires || []).map(shadow => `${shadow.icon} ${shadow.label}`).join(" · ");
+        button.innerHTML = `<div class="selection-photo is-man" style="${photoStyle(item.art, "man")}"></div><div class="selection-body"><h3>${item.name} · ${item.age}세</h3><p>${item.job} · 월 ${formatWon(item.income)}</p><span class="selection-tag">${item.hook}</span><span class="selection-cost">외모 ${item.appearance} · 말재주 ${item.charm} · 공감 ${item.empathy} · 판단 ${item.reason} · 배짱 ${item.courage}</span><span class="selection-cost">현금 ${formatWon(item.cash)} · 주거 종잣돈 ${formatWon(item.housingAsset || 0)} · 월 고정비 ${formatWon(item.monthlyCommitment + item.singleLiving)}</span><div class="selection-needs-preview"><strong>밝은 니즈 · 만점 없음</strong>${needPreview}<strong>어두운 욕구</strong><span>${escapeHtml(shadows)}</span></div></div>`;
       } else if (setup.step === 1) {
         button.innerHTML = `<div class="selection-body"><h3>${item.flag} ${item.name}</h3><p>${item.city}</p><span class="selection-tag">${item.note}</span></div>`;
       } else if (setup.step === 2) {
@@ -422,6 +461,16 @@
     };
   }
 
+  function estimatePartnerIncome(countryId, job) {
+    const countryBase = { vn: 950000, cn: 1850000, th: 1250000, jp: 3050000, ph: 1050000, kh: 720000 }[countryId] || 1400000;
+    let multiplier = 1;
+    if (/운영|은행|간호사|무역|회계 담당|관리자|팀장/.test(job)) multiplier = 1.35;
+    else if (/프리랜서|번역|한국어 강사|여행사|호텔 프런트|온라인 판매/.test(job)) multiplier = 1.16;
+    else if (/대학원생|보조|카페|의류점|미용사|식당/.test(job)) multiplier = .82;
+    const volatility = .86 + Math.random() * .3;
+    return Math.max(450000, Math.round(countryBase * multiplier * volatility / 50000) * 50000);
+  }
+
   function buildCandidates() {
     const templates = DATA.people.filter(person => person.countryId === setup.countryId);
     const names = shuffle(DATA.profilePools.names[setup.countryId]);
@@ -455,9 +504,10 @@
         { id: "visa_interest", label: "한국 생활에 대한 강한 관심", detail: "관계 이전부터 한국 취업과 체류 방법을 오래 알아봤다. 이것만으로 결혼 사기를 뜻하지는 않는다.", tone: "risk", gate: "document" },
         { id: "family_transfer", label: "가족이 관리하는 계좌", detail: "수입 일부가 가족 계좌로 자동 이체되며 본인이 자유롭게 쓰지 못하는 돈이 있다.", tone: "risk", gate: "event" }
       ]).slice(0, 5 + Math.floor(Math.random() * 3));
-      const estimatedIncome = 1600000 + Math.floor(Math.random() * 17) * 100000;
       const selectedJob = pick(DATA.profilePools.jobs);
+      const estimatedIncome = estimatePartnerIncome(setup.countryId, selectedJob);
       const jobPortability = /온라인|번역|한국어|무역|여행/.test(selectedJob) ? 7 : /대학원|은행|간호|가게|운영/.test(selectedJob) ? 3 : 5;
+      const shadowProfile = (behavior.shadowIds || []).map((id, shadowIndex) => ({ id, intensity: clamp(2 + ((faceSlot + index + shadowIndex) % 3), 2, 4) }));
       return {
         ...base,
         id: `proc-${setup.countryId}-${Date.now().toString(36)}-${index}-${Math.floor(Math.random() * 9999)}`,
@@ -474,6 +524,7 @@
           desiredChildren: pick([0, 1, 1, 2, 2, 2, 3, 3, 4]),
           chemistry: 35 + Math.floor(Math.random() * 61),
           pace: pick(["slow", "slow", "warm", "fast"]),
+          shadowDesires: shadowProfile,
           secrets: secretPool
         },
         estimatedIncome, jobPortability,
@@ -643,14 +694,138 @@
     return false;
   }
 
+  function needScoreValue(need) {
+    const generatedSpecKinds = new Set(["attractiveness", "cup", "body", "ageGap", "children", "chemistry", "tattoo", "health"]);
+    return generatedSpecKinds.has(need.kind) ? Math.round(need.points * .65) : need.points;
+  }
+
   function evaluateNeeds(result = null) {
     const needs = getPlayer()?.needs || [];
     const fulfilled = state.fulfilledNeeds || (state.fulfilledNeeds = []);
     needs.forEach(need => {
       if (fulfilled.includes(need.id) || !needSatisfied(need)) return;
       fulfilled.push(need.id);
-      awardScore(need.points, `니즈 달성 · ${need.label}`, result, "need");
+      const amount = needScoreValue(need);
+      awardScore(amount, `니즈 달성 · ${need.label}`, result, "need");
     });
+  }
+
+  function shadowData(id) {
+    return DATA.shadowDesires?.[id] || { id, label: id, icon: "◼", impulse: "아직 설명되지 않은 욕구", regulated: "서로의 선택권을 지킨다.", distorted: "상대의 선택권을 지운다.", compatible: [] };
+  }
+
+  function playerShadowTags(id) {
+    const tags = [];
+    const rules = [
+      ["control", /shadow_lead|cross_override|work_forbid|child_demand|intimacy_pressure|money_partner_only/],
+      ["surrender", /shadow_follow|invite_follow_her|cross_accept_terms|money_all_partner|intimacy_consent/],
+      ["possession", /shadow_test|snoop|check_phone|secret_trace|fight_win|distance_check_phone|accuse/],
+      ["rescue", /pay_crisis|gift|support|hire_help|remit_generous|wedding_pay_extra|rescue/],
+      ["escape", /rush_answer|sign_fast|marry_fast|move_local|move_korea|cross_overpromise/],
+      ["status", /why_status|luxury|surprise_upgrade|wedding_large|wedding_both|brag/],
+      ["security", /budget|contract|money_three|official_docs|housing_|work_training|shared_plan|verify_transfer/],
+      ["adoration", /flirt|confess|reassure|date_rest|couple_reconnect|pickup_line|daily_play/],
+      ["certainty", /investigat|field_|digital_|trace|official_docs|final_source|check_phone|fight_win/],
+      ["dependence", /work_forbid|money_all_partner|cross_override|intimacy_pressure/]
+    ];
+    rules.forEach(([tag, pattern]) => { if (pattern.test(id)) tags.push(tag); });
+    if (/shadow_name_it|shadow_pact|mutual_boundaries|fight_apologize|fight_pause/.test(id)) {
+      (state.playerShadow || []).forEach(item => tags.push(item.id));
+    }
+    return [...new Set(tags)];
+  }
+
+  function shadowChoiceMode(id) {
+    if (/shadow_name_it|shadow_pact|mutual_boundaries|cross_negotiate|money_three_accounts|intimacy_consent|fight_apologize|fight_pause/.test(id)) return "regulated";
+    if (/shadow_test|cross_override|work_forbid|snoop|check_phone|secret_trace|fight_win|intimacy_pressure|child_demand|rush_answer/.test(id)) return "distorted";
+    if (id === "shadow_bury") return "denied";
+    return "expressed";
+  }
+
+  function revealPartnerShadow(preferredId, source, result) {
+    const shadows = getPartner().privateTraits?.shadowDesires || [];
+    const known = state.knownPartnerShadows || (state.knownPartnerShadows = []);
+    const next = shadows.find(item => item.id === preferredId && !known.includes(item.id)) || shadows.find(item => !known.includes(item.id));
+    if (!next) return null;
+    known.push(next.id);
+    result.shadowUnlocked = [...(result.shadowUnlocked || []), next.id];
+    state.shadowHistory.unshift({ type: "reveal", id: next.id, source, day: state.elapsedDays });
+    state.shadowHistory = state.shadowHistory.slice(0, 24);
+    return next.id;
+  }
+
+  function evaluatePartnerNeeds(id, result, checkSuccess) {
+    if (!checkSuccess || !result) return;
+    const behavior = getPartner().behavior;
+    const category = behaviorCategory(id);
+    if (!behavior || !category || !behavior.likes?.includes(category)) return;
+    const observations = state.partnerNeedObservations || (state.partnerNeedObservations = {});
+    observations[category] = (observations[category] || 0) + 1;
+    const total = Object.values(observations).reduce((sum, value) => sum + value, 0);
+    const fulfilled = state.fulfilledPartnerNeeds || (state.fulfilledPartnerNeeds = []);
+    const needs = behavior.relationshipNeeds || [];
+    [2, 4].forEach((threshold, index) => {
+      const needId = `${behavior.id}_${index}`;
+      if (total < threshold || fulfilled.includes(needId) || !needs[index]) return;
+      fulfilled.push(needId);
+      const amount = index === 0 ? 260 : 420;
+      state.partnerMatchScore = (state.partnerMatchScore || 0) + amount;
+      result.partnerNeedEvents = [...(result.partnerNeedEvents || []), { label: needs[index], amount }];
+      awardScore(amount, `그녀의 니즈 충족 · ${needs[index]}`, result, "partner-need");
+    });
+  }
+
+  function applyShadowDynamics(id, result, checkSuccess) {
+    if (!result) return;
+    const tags = playerShadowTags(id);
+    const mode = shadowChoiceMode(id);
+    const playerShadow = (state.playerShadow || []).find(item => tags.includes(item.id));
+    const partnerShadows = getPartner().privateTraits?.shadowDesires || [];
+    const partnerShadow = partnerShadows.find(item => tags.includes(item.id))
+      || partnerShadows.find(item => playerShadow && shadowData(playerShadow.id).compatible?.includes(item.id));
+
+    if (playerShadow) {
+      playerShadow.expressed += 1;
+      if (mode === "regulated" && checkSuccess) playerShadow.regulated += 1;
+      if (mode === "distorted") playerShadow.distorted += 1;
+    }
+
+    state.shadowSignals = state.shadowSignals || {};
+    tags.forEach(tag => { state.shadowSignals[tag] = (state.shadowSignals[tag] || 0) + 1; });
+    if (checkSuccess && id === "shadow_name_it") revealPartnerShadow(partnerShadow?.id, "서로 욕구를 이름 붙인 대화", result);
+    else if (checkSuccess && id === "shadow_pact") revealPartnerShadow(partnerShadow?.id, "주도권과 멈춤 규칙을 합의한 경험", result);
+    else if (partnerShadow && (state.shadowSignals[partnerShadow.id] || 0) >= 2) revealPartnerShadow(partnerShadow.id, "반복되는 선택과 반응", result);
+
+    if (mode === "regulated" && checkSuccess && playerShadow && partnerShadow) {
+      const compatible = playerShadow.id === partnerShadow.id
+        || shadowData(playerShadow.id).compatible?.includes(partnerShadow.id)
+        || shadowData(partnerShadow.id).compatible?.includes(playerShadow.id);
+      if (compatible) {
+        state.shadowResonance = (state.shadowResonance || 0) + 1;
+        state.shadowRisk = clamp((state.shadowRisk || 0) - 4, 0, 100);
+        result.trust = (result.trust || 0) + 3;
+        result.affection = (result.affection || 0) + 4;
+        const amount = 320 + Math.min(480, state.shadowResonance * 40);
+        result.shadowEvents = [...(result.shadowEvents || []), { type: "resonance", player: playerShadow.id, partner: partnerShadow.id, amount }];
+        awardScore(amount, `그림자 공명 · ${shadowData(playerShadow.id).label} × ${shadowData(partnerShadow.id).label}`, result, "shadow");
+        state.shadowHistory.unshift({ type: "resonance", player: playerShadow.id, partner: partnerShadow.id, day: state.elapsedDays });
+      }
+    }
+
+    if (mode === "distorted") {
+      const risk = playerShadow ? 12 + playerShadow.intensity * 2 : 10;
+      state.shadowRisk = clamp((state.shadowRisk || 0) + risk, 0, 100);
+      result.trust = (result.trust || 0) - 4;
+      result.conflict = (result.conflict || 0) + 5;
+      result.partnerFatigue = (result.partnerFatigue || 0) + 4;
+      result.shadowEvents = [...(result.shadowEvents || []), { type: "distortion", player: playerShadow?.id || tags[0] || "unknown", risk }];
+      state.shadowHistory.unshift({ type: "distortion", id: playerShadow?.id || tags[0] || "unknown", day: state.elapsedDays });
+      if (state.shadowRisk >= 60) state.flags.shadowSpiral = true;
+    } else if (mode === "denied") {
+      state.shadowRisk = clamp((state.shadowRisk || 0) + 6, 0, 100);
+      result.shadowEvents = [...(result.shadowEvents || []), { type: "denied", risk: 6 }];
+    }
+    state.shadowHistory = state.shadowHistory.slice(0, 24);
   }
 
   function unlockProfileFromChoice(id, result, checkSuccess) {
@@ -682,10 +857,15 @@
       revealProfile(["health", "weight"], "함께 받은 부부·건강 상담", result);
       if (state.married && state.flags.sharedIntimacy && state.trust >= 70) revealProfile(["braSize", "measurements"], "오래 함께 살며 서로 자발적으로 공유", result);
     }
+    if (["shadow_name_it", "shadow_pact"].includes(id) && checkSuccess) {
+      revealProfile(["personalityCore", "intimacyBoundary", "jealousy"], "서로 숨기고 싶은 욕구를 말한 대화", result);
+    }
   }
 
   function resolvePlayerSpecial(checkSuccess) {
     const player = getPlayer();
+    state.specialUses = (state.specialUses || 0) + 1;
+    state.specialLastScene = state.scene;
     const successText = {
       junsu: "내가 이해한 감정을 먼저 말하자 그녀가 틀린 부분을 고쳐 주며 평소보다 긴 이야기를 꺼냈다.",
       minho: "책임질 범위와 한도를 분명히 하되 결정을 재촉하지 않자, 주도적이면서도 안전하다는 인상을 남겼다.",
@@ -703,7 +883,7 @@
       dojun: "솔직한 영상이 아니라 분위기를 바꾸기 위한 연출처럼 보여 중요한 답이 가벼워졌다."
     }[player.id];
     return checkSuccess
-      ? { title: `${player.name}만의 방식이 통했다`, text: successText, trust: 7, affection: 6, clarity: 3, days: 1, reaction: partnerLine("pleased") }
+      ? { title: `${player.name}만의 방식이 통했다`, text: successText, trust: 4, affection: 3, clarity: 2, days: 1, reaction: partnerLine("pleased") }
       : { title: `${player.name}의 약점까지 함께 드러났다`, text: failText, trust: -4, affection: -3, conflict: 3, stress: 2, days: 1, bad: true, reaction: partnerLine("hurt") };
   }
 
@@ -782,6 +962,14 @@
       score: 0,
       scoreLog: [],
       fulfilledNeeds: [],
+      fulfilledPartnerNeeds: [],
+      partnerNeedObservations: {},
+      partnerMatchScore: 0,
+      playerShadow: (player.shadowDesires || []).map(item => ({ id: item.id, intensity: item.intensity || 2, expressed: 0, regulated: 0, distorted: 0 })),
+      knownPartnerShadows: [],
+      shadowResonance: 0,
+      shadowRisk: 0,
+      shadowHistory: [],
       trust: 36,
       affection: 34,
       certainty: 7,
@@ -795,6 +983,8 @@
       courage: player.courage,
       appearance: player.appearance,
       skillXp: { charm: 0, empathy: 0, reason: 0, courage: 0, calm: 0, appearance: 0 },
+      specialUses: 0,
+      specialLastScene: -99,
       growthLog: [],
       communicationMode: null,
       communicationClarity: clamp((partner.languageLevel || 35) - 55, -60, 45),
@@ -1083,7 +1273,7 @@
     if (result.income) earn(result.income, result.incomeLabel || "추가 수입");
     if (result.debtPayment) repayDebt(result.debtPayment, result.debtLabel || "계획 상환");
     if (result.grow) Object.entries(result.grow).forEach(([stat, amount]) => growStat(stat, amount, result.title));
-    if (result.days) passTime(Math.min(result.days, 3));
+    if (result.days) passTime(result.days);
     if (result.evidence) addEvidence(result.evidence);
     if (result.children) state.children = Math.max(0, state.children + result.children);
     if (result.set) Object.assign(state, result.set);
@@ -1349,6 +1539,20 @@
           choice("intimacy_pressure", "결혼 얘기까지 했으니 거절하지 말라고 한다", "동의를 약속이나 비용의 대가처럼 요구한다.", "매우 위험 · 신뢰 급락 및 즉시 이별 가능", 0, "risky")
         ] };
       }
+      case "shadow_mirror": {
+        const mine = (getPlayer().shadowDesires || []).map(item => item.label).join(" · ");
+        const pactText = (state.playerShadow || []).some(item => item.id === "control")
+          ? "내가 주도하고 싶은 순간과 그녀가 반드시 직접 정할 부분을 나눈다."
+          : (state.playerShadow || []).some(item => item.id === "surrender")
+            ? "그녀에게 맡기고 싶은 순간과 내가 직접 책임질 부분을 나눈다."
+            : "서로 주도권을 바꿔 보고 불편하면 즉시 멈추는 규칙을 만든다.";
+        return { ...common, mood: "말하면 들킬 것 같은 마음", portrait: false, eventCard: true, eventTitle: "좋아함보다 말하기 어려운 것", eventText: `내 그림자 욕구\n${mine || "아직 이름 붙이지 못함"}`, text: `${partner.name}이 한참 침묵하다가 말한다.\n\n“좋은 사람처럼 보이려고 하는 말 말고요. 질투하거나, 상대를 마음대로 하고 싶거나, 반대로 전부 맡기고 싶은 순간도 있잖아요. 그런 마음이 생기면 우리는 어떻게 할까요?”\n\n욕구는 죄가 아니지만, 상대의 선택권을 지우는 순간부터 관계의 위험이 된다.`, choices: [
+          choice("shadow_name_it", "내 욕구 하나를 먼저 말하고 그녀의 욕구도 묻는다", "창피한 마음을 포장하지 않되, 그 욕구를 들어줄 의무는 없다고 먼저 말한다.", "공감·동의 판정 · 성공하면 서로의 어두운 욕구 1개 발견", 0, "romance", { stat: "empathy", assist: "courage", base: 54, joint: true, private: true, label: "그림자 대화" }),
+          choice("shadow_pact", "주도권과 멈춤 규칙을 작은 행동으로 시험한다", pactText, "배짱·동의 판정 · 공명하면 큰 점수, 맞지 않으면 즉시 중단", 0, "investigate", { stat: "courage", assist: "empathy", base: 50, joint: true, private: true, label: "경계 합의" }),
+          choice("shadow_test", "일부러 답장을 늦추고 다른 사람 이야기를 꺼내 질투를 본다", "상대가 얼마나 나를 원하는지 말 대신 불안으로 시험한다.", "반응은 빨리 보임 · 그림자 왜곡과 갈등 크게 증가", 0, "risky"),
+          choice("shadow_bury", "“난 그런 욕구 없어”라고 웃으며 덮는다", "좋은 사람처럼 보이는 쪽을 택하고 더 묻지 않는다.", "당장은 안전 · 욕구는 이름 없이 뒤에서 누적", 0, "plain")
+        ] };
+      }
       case "turning_point":
         return { ...common, mood: "쉽게 읽히지 않는 표정", text: `관계가 깊어졌지만 아직 말하지 않은 부분이 있다는 느낌도 남는다.\n\n“만약 제가 처음에 좋은 사람처럼 보이려고 거짓말한 게 있다면… 지금 말해도 우리에게 기회가 있을까요?”`, choices: [
           choice("offer_fresh_start", "지금 전부 말하면 함께 다시 판단하겠다고 한다", "무조건 용서한다고 약속하지 않고, 숨긴 사실과 앞으로의 행동을 따로 보겠다고 말한다.", "공감+배짱 판정 · 높은 호감과 신뢰라면 마음을 돌릴 기회", 0, "romance", { stat: "empathy", assist: "courage", base: 50 }),
@@ -1432,8 +1636,22 @@
           choice("move_local", `“제가 ${country.name}에서 1년 살아 보면서 일을 조정하면 어때요?”`, "내 일을 줄이는 대신 그녀의 생활권에서 결혼을 시험해 보자고 제안한다.", "직업·수입 반영 합의 판정 · 체류·직업 상담 50만원", 500000, "romance", { stat: "courage", assist: "empathy", base: 54, joint: true, residence: "local", label: "거주 합의" }),
           choice("move_distance", "“6개월만 두 나라를 오가며 일과 집을 정리하면 어때요?”", "만나는 날짜와 비용, 연락 규칙을 구체적으로 제안한다.", "직업·수입 반영 합의 판정 · 일정 준비 30만원", 300000, "risky", { stat: "reason", base: 48, joint: true, residence: "distance", label: "거주 합의" })
         ] };
-      case "housing_choice":
-        return { ...common, speaker: "주택·대출 상담 화면", mood: "숫자는 낭만을 봐주지 않음", portrait: false, eventCard: true, eventTitle: "서울 신혼집 견적", eventText: `${HOUSING_POLICY.asOf} 게임 데이터\nLTV 최대 70% · DSR 40% · 수도권 주담대 상한 반영`, context: `결혼 ${Math.max(1, state.monthsMarried)}개월째 · 주거 계약 전`, text: `서울에서 같이 살 집을 골라야 한다. 현재 현금은 ${formatWon(state.cash)}, 별도 주거 종잣돈은 ${formatWon(state.housingAsset || 0)}이다. 기준 월수입이 그대로 들어온다는 보장은 없고, 배우자가 한국에서 바로 취업하지 못하면 당분간 한 사람 수입으로 버텨야 한다.\n\n매매가는 ${HOUSING_POLICY.asOf} 시장 수준을 단순화한 게임상 추정치다. 대출은 집값의 70%가 자동으로 나오는 것이 아니라 DSR과 상품 한도 중 가장 낮은 값으로 계산한다.`, choices: housingChoices() };
+      case "housing_choice": {
+        const isLocal = state.homeCountry === "local";
+        const isDistance = state.homeCountry === "distance";
+        const marketTitle = isLocal ? `${country.name} 1년 거주 견적` : isDistance ? "두 나라 6개월 생활 견적" : "서울 신혼집 견적";
+        const marketRule = isLocal
+          ? `${country.name} 게임상 생활비 지수 · 가구 포함 임대 기준`
+          : isDistance
+            ? "항공·두 집 고정비 · 실제로 함께 지내는 시간 반영"
+            : `${HOUSING_POLICY.asOf} 게임 데이터\nLTV 최대 70% · DSR 40% · 수도권 주담대 상한 반영`;
+        const intro = isLocal
+          ? `${country.name}에서 1년을 살아 보기로 한 합의에 맞춰 그녀의 생활권 안에서 집을 고른다. 내 수입은 이동 가능성에 따라 줄고, 현지 임대료와 체류비는 게임상 생활비 지수로 계산한다. 1년 뒤 두 사람은 거주지를 다시 결정한다.`
+          : isDistance
+            ? `6개월 동안 두 나라를 오가기로 한 합의에 맞춰 왕래 빈도와 두 집의 고정비를 고른다. 싼 선택은 함께 사는 시간이 줄고, 자주 만나는 선택은 항공료와 체류 공간이 가계를 압박한다.`
+            : `서울에서 같이 살 집을 고른다. 배우자가 바로 취업하지 못하면 당분간 한 사람 수입으로 버텨야 한다. 매매 대출은 집값의 70%가 자동으로 나오는 것이 아니라 DSR과 상품 한도 중 가장 낮은 값으로 계산한다.`;
+        return { ...common, speaker: "주거·생활 상담 화면", mood: "숫자는 낭만을 봐주지 않음", portrait: false, eventCard: true, eventTitle: marketTitle, eventText: marketRule, context: `결혼 ${Math.max(1, state.monthsMarried)}개월째 · 주거 계약 전`, text: `${intro}\n\n현재 현금은 ${formatWon(state.cash)}, 별도 주거 종잣돈은 ${formatWon(state.housingAsset || 0)}이다. 마련할 수 없는 자기자본이 필요한 집은 확률 대신 ‘선택 불가’로 표시된다.`, choices: housingChoices() };
+      }
       case "new_home":
         return { ...common, mood: "낯선 집에서 지침", context: `${state.homeCountry === "korea" ? "한국" : state.homeCountry === "local" ? country.name : "두 나라"} 생활 첫 달`, text: `${state.housingChoice ? `선택한 집의 월 고정 주거비는 ${formatWon(state.monthlyHousing || 0)}이다. ` : "임시 거처에서 "}여행 때는 웃고 넘겼던 차이가 매일 반복되기 시작했다. 음식 냄새, 연락 빈도, 난방 온도, 혼자 있고 싶은 시간까지 모두 생활 문제가 됐다.\n\n“${partnerLine("married", "가끔은 해결책보다 제 편이라는 말이 먼저 필요해요.")}”`, choices: [
           choice("home_listen", "오늘은 해결책보다 마음부터 듣는다", "무엇이 제일 외롭고 힘든지 끊지 않고 듣는다.", "공감 판정 · 성공하면 호감과 적응이 크게 오름", 0, "romance", { stat: "empathy", base: 64 }),
@@ -1529,9 +1747,10 @@
       return {
         availableFunds,
         shortfall,
+        hardBlocked: shortfall > 0,
         monthly: option.monthly,
         burden,
-        approvalChance: shortfall ? clamp(28 - Math.round(shortfall / 2000000), 5, 28) : clamp(84 - Math.round(burden * 24), 58, 88),
+        approvalChance: shortfall ? 0 : clamp(76 - Math.round(burden * 24) + (option.fit || 0) * 2, 42, 86),
         detail: `보증금 ${formatWon(option.deposit)} · 월 ${formatWon(option.monthly)}`
       };
     }
@@ -1554,25 +1773,26 @@
       closing,
       requiredFunds,
       shortfall,
+      hardBlocked: shortfall > 0,
       monthly,
       burden,
-      approvalChance: shortfall ? clamp(22 - Math.round(shortfall / 10000000), 5, 22) : clamp(82 - Math.round(burden * 30), 48, 86),
+      approvalChance: shortfall ? 0 : clamp(74 - Math.round(burden * 30) + (option.fit || 0) * 2, 38, 82),
       detail: `${formatWon(option.price)} · 대출 ${formatWon(loan)} · 월 ${formatWon(monthly)}`
     };
   }
 
   function housingChoices() {
-    return HOUSING_OPTIONS.map(option => {
+    return housingOptions().map(option => {
       const quote = housingQuote(option);
       const shortage = quote.shortfall ? ` · 자기자본 ${formatWon(quote.shortfall)} 부족` : "";
       return choice(
         `housing_${option.id}`,
         option.name,
         `${option.area}㎡ · 방 ${option.bedrooms}개. ${option.note}`,
-        `${quote.detail}${shortage} · 예상 월부담률 ${Math.round(quote.burden * 100)}%`,
+        `${quote.detail}${shortage} · 예상 월부담률 ${Math.round(quote.burden * 100)}%${quote.hardBlocked ? " · 현재 선택 불가" : ""}`,
         0,
         quote.shortfall ? "risky" : option.tenure === "buy" ? "investigate" : "romance",
-        { stat: "reason", base: quote.approvalChance, joint: true, housing: true, label: option.tenure === "buy" ? "대출·잔금 승인" : "임대·생활 합의" }
+        { stat: "reason", base: quote.approvalChance, joint: true, housing: true, hardBlocked: quote.hardBlocked, label: quote.hardBlocked ? "자기자본 부족 · 선택 불가" : "두 사람의 생활 합의" }
       );
     });
   }
@@ -1598,23 +1818,24 @@
   }
 
   function resolveHousingChoice(id, checkSuccess) {
-    const option = HOUSING_OPTIONS.find(item => `housing_${item.id}` === id);
+    const option = housingOptions().find(item => `housing_${item.id}` === id);
     if (!option) return null;
     const quote = housingQuote(option);
-    if (!checkSuccess || quote.shortfall > 0) {
-      const fallback = HOUSING_OPTIONS[0];
+    if (quote.hardBlocked) return null;
+    if (!checkSuccess) {
+      const fallback = housingFallback();
       const fallbackQuote = housingQuote(fallback);
-      const deposit = Math.min(fallback.deposit, (state.housingAsset || 0) + Math.max(0, state.cash - 2000000));
+      const deposit = fallback.deposit || 0;
       takeHousingFunds(deposit, "임시 신혼집 보증금");
       state.housingDeposit = deposit;
       state.monthlyHousing = fallback.monthly;
       state.housingChoice = fallback.id;
       state.housingSatisfaction = -3;
       return {
-        title: "원하던 집의 문턱에서 막혔다",
-        text: `${quote.shortfall ? `대출 한도보다 자기자본이 ${formatWon(quote.shortfall)} 부족했다.` : "대출 심사와 두 사람의 생활 합의를 함께 통과하지 못했다."} 계약 날짜를 놓치지 않기 위해 서울 외곽 14평 빌라 월세로 임시 시작했다. 월 ${formatWon(fallbackQuote.monthly)}이 고정비가 된다.`,
-        cost: 500000,
-        costLabel: "대출·계약 심사비와 임시이사",
+        title: "집보다 먼저 생활 합의가 막혔다",
+        text: `돈은 마련할 수 있었지만 위치·공간·월 부담 중 하나에 합의하지 못했다. 선택했던 집을 억지로 계약하지 않고 ${fallback.name}에서 한 달만 지내며 다시 고르기로 했다. 월 ${formatWon(fallbackQuote.monthly)}이 임시 고정비가 된다.`,
+        cost: 250000,
+        costLabel: "임시 이사·보관비",
         affection: -3,
         trust: -2,
         conflict: 4,
@@ -1654,6 +1875,7 @@
   function weddingPlaceChoices() {
     const country = getCountry();
     return [
+      choice("wedding_register", "혼인신고를 먼저 하고 식은 1년 뒤에 할까?", "지금은 두 가족에게 작은 식사와 영상 인사만 하고, 생활비 비상금이 생긴 뒤 예식을 다시 정한다.", "합의 판정 · 80만원 · 현금 방어, 가족의 아쉬움", 800000, "investigate", { stat: "empathy", assist: "reason", base: 66, joint: true, label: "예식 연기 합의" }),
       choice("wedding_local", `${country.name}에서 먼저 식을 올리는 건 어때?`, "그녀에게 현지 가족과 친구들이 참석하기 쉬운 예식을 제안한다.", "합의 판정 · 600만원 · 현지 가족 호감", 6000000, "romance", { stat: "empathy", base: 68, joint: true, label: "상대의 동의" }),
       choice("wedding_korea", "한국에서 식을 올리는 건 어때?", "그녀의 가족 이동과 통역을 챙긴다는 조건으로 한국 예식을 제안한다.", "합의 판정 · 1,200만원 · 그녀의 외로움 위험", 12000000, "investigate", { stat: "empathy", base: 50, joint: true, label: "상대의 동의" }),
       choice("wedding_both", "두 나라에서 작게 한 번씩 하면 어때?", "큰 한 번 대신 양가가 각각 참여할 수 있는 두 번의 작은 식을 제안한다.", "합의 판정 · 1,800만원 · 빚 위험 큼", 18000000, "romance", { stat: "reason", assist: "empathy", base: 58, joint: true, label: "상대의 동의" })
@@ -1662,6 +1884,7 @@
 
   function weddingBudgetChoices() {
     return [
+      choice("wedding_defer_party", "사진과 가족 식사만 남긴다", "큰 잔치는 약속한 시점까지 미루고, 양가에게 같은 설명과 예산표를 보낸다.", "추가 30만원 · 주거 비상금 보존, 가족 서운함", 300000, "investigate"),
       choice("wedding_small", "가족 중심의 작은 식", "가까운 가족과 친구만 부르고 사진·의상도 기본 항목으로 맞춘다.", "추가 250만원 · 빚 방어, 일부 가족은 아쉬움", 2500000, "investigate"),
       choice("wedding_standard", "무리하지 않는 보통 규모", "식사와 사진, 양가 이동을 챙기되 고가 선택 항목은 줄인다.", "추가 700만원 · 호감과 비용의 균형", 7000000, "romance"),
       choice("wedding_lavish", "가족 체면을 살린 큰 결혼식", "넓은 식장, 많은 하객, 고급 사진과 예물을 선택한다.", "추가 1,500만원 · 양가 호감↑, 결혼 뒤 돈 갈등↑", 15000000, "risky")
@@ -1946,12 +2169,8 @@
   function playerSpecialChoice() {
     const player = getPlayer();
     const scene = scenes[state.scene];
-    const mandatoryScenes = new Set([
-      "arrival", "investigation", "interrogation_one", "interrogation_two", "move_country", "decision",
-      "wedding_place", "wedding_budget", "wedding_day", "housing_choice", "health_check", "pregnancy_try",
-      "pregnancy_result", "birth", "family_decision"
-    ]);
-    if (!player || !scene || mandatoryScenes.has(scene.id)) return null;
+    const allowedScenes = new Set(["private_talk", "her_question", "money_crisis", "breathing_room", "her_investigation", "marriage_crisis"]);
+    if (!player || !scene || !allowedScenes.has(scene.id) || (state.specialUses || 0) >= 3 || state.scene - (state.specialLastScene ?? -99) < 3) return null;
     const specials = {
       junsu: { stat: "empathy", title: "[준수 전용] 그녀의 말을 내 말로 다시 확인한다", description: "해결책을 내기 전에 내가 이해한 감정과 요구가 맞는지 조심스럽게 되묻는다.", impact: "성공하면 신뢰와 성격 정보 · 실패하면 우유부단하게 들림" },
       minho: { stat: "courage", title: "[민호 전용] 내가 책임질 범위와 마감부터 제시한다", description: "큰소리 대신 돈·시간·책임의 상한을 숫자로 말하고 즉답을 요구하지 않는다.", impact: "성공하면 주도권과 신뢰 · 실패하면 압박으로 받아들임" },
@@ -1962,7 +2181,7 @@
     };
     const special = specials[player.id];
     if (!special) return null;
-    return { ...choice(`special_${player.id}_${scene.id}`, special.title, special.description, special.impact, 0, "special", { stat: special.stat, base: 62, special: true, label: `${player.name} 전용` }), special: true };
+    return { ...choice(`special_${player.id}_${scene.id}`, special.title, `${special.description} 이번 캠페인에서 남은 전용 기회 ${3 - (state.specialUses || 0)}회.`, special.impact, 0, "special", { stat: special.stat, base: 50, special: true, label: `${player.name} 전용 · 제한 기회` }), special: true };
   }
 
   function enhanceSceneChoices(choices) {
@@ -1978,6 +2197,11 @@
     return highStakes ? 350000 : state.flags.metInPerson ? 250000 : 180000;
   }
 
+  function isPrivateInterpreterCheck(check) {
+    const privateScenes = new Set(["first_intimacy", "shadow_mirror", "intimacy_distance", "intimacy_talk", "marriage_crisis"]);
+    return Boolean(check?.private || privateScenes.has(scenes[state.scene]?.id));
+  }
+
   function communicationModifier(check) {
     if (!check || check.stat === "fertility" || check.housing) return 0;
     const weight = ["empathy", "charm", "courage"].includes(check.stat) || check.joint ? .42 : .28;
@@ -1986,7 +2210,10 @@
 
   function interpreterBonus(check, enabled = state.interpreterOn) {
     if (!enabled || !check || check.stat === "fertility" || check.housing) return 0;
-    return clamp(Math.round(24 + Math.max(0, -(state.communicationClarity || 0)) * .28), 18, 36);
+    if (isPrivateInterpreterCheck(check)) return 6;
+    const highStakes = /contract|money|wedding|move_|child_|health|interrogation|official|decision/.test(scenes[state.scene]?.id || "");
+    const base = highStakes ? 25 : 16;
+    return clamp(Math.round(base + Math.max(0, -(state.communicationClarity || 0)) * .2), highStakes ? 22 : 12, highStakes ? 34 : 25);
   }
 
   function renderGame() {
@@ -2093,17 +2320,23 @@
         const chance = chanceFor(item.check, state.interpreterOn);
         const chanceNode = node.querySelector(".choice-chance");
         chanceNode.hidden = false;
-        chanceNode.textContent = state.interpreterOn && translationCost
-          ? `${item.check.label || statLabel(item.check.stat)} ${baseChance}% → 통역 ${chance}% · ${formatWon(translationCost)}`
-          : `${item.check.label || statLabel(item.check.stat)} 성공 ${chance}%${(state.communicationClarity || 0) < 0 ? ` · 소통 ${state.communicationClarity}` : ""}`;
+        chanceNode.textContent = item.check.hardBlocked
+          ? item.check.label
+          : state.interpreterOn && translationCost
+            ? `${item.check.label || statLabel(item.check.stat)} ${baseChance}% → 통역 ${chance}% · ${formatWon(translationCost)}${isPrivateInterpreterCheck(item.check) ? " · 자연스러움↓" : ""}`
+            : `${item.check.label || statLabel(item.check.stat)} 성공 ${chance}%${(state.communicationClarity || 0) < 0 ? ` · 소통 ${state.communicationClarity}` : ""}`;
         chanceNode.classList.toggle("is-low", chance < 45);
         chanceNode.classList.toggle("is-high", chance >= 70);
+      }
+      if (item.check?.hardBlocked) {
+        node.disabled = true;
+        node.setAttribute("aria-disabled", "true");
       }
       const projectedDebt = Math.max(0, (item.cost || 0) + (state.interpreterOn ? translationCost || 0 : 0) - state.cash);
       if (projectedDebt && state.debt + projectedDebt >= DEBT_LIMIT) {
         node.querySelector(".choice-cost").textContent += " · 파산 위험";
       }
-      node.addEventListener("click", () => handleChoice(item));
+      if (!item.check?.hardBlocked) node.addEventListener("click", () => handleChoice(item));
       wrap.appendChild(node);
     });
   }
@@ -2116,6 +2349,29 @@
     const knownCount = Object.keys(state.knownProfile || {}).length + (state.revealedSecrets || []).length;
     if ($("#partner-known-count")) $("#partner-known-count").textContent = `${knownCount}개`;
     if ($("#hud-known-count")) $("#hud-known-count").textContent = `${knownCount}개`;
+  }
+
+  function refreshStatusHud() {
+    if (!state) return;
+    $("#chapter-label").textContent = state.married ? `결혼 ${Math.max(1, state.monthsMarried)}개월째` : `교제 ${state.elapsedDays + 1}일째`;
+    $("#cash-label").textContent = state.debt ? `빚 ${formatWon(state.debt)}` : formatWon(state.cash);
+    $("#affection-label").textContent = state.affection;
+    $("#conflict-label").textContent = state.conflict;
+    if ($("#score-label")) $("#score-label").textContent = Number(state.score || 0).toLocaleString("ko-KR");
+    if ($("#communication-label")) $("#communication-label").textContent = `${state.communicationClarity >= 0 ? "+" : ""}${state.communicationClarity}`;
+    $("#player-hud-name").textContent = `${getPlayer().name} · 스트레스 ${state.stress}`;
+    $("#stat-charm").textContent = state.charm;
+    $("#stat-empathy").textContent = state.empathy;
+    $("#stat-reason").textContent = state.reason;
+    $("#stat-courage").textContent = state.courage;
+    $("#stat-appearance").textContent = state.appearance;
+    $("#relationship-hud").textContent = relationshipLabel();
+    $("#hud-affection").textContent = state.affection;
+    $("#hud-trust").textContent = state.trust;
+    $("#hud-certainty").textContent = state.certainty;
+    $("#hud-conflict").textContent = state.conflict;
+    $("#hud-partner-fatigue").textContent = state.partnerFatigue;
+    $("#hud-children").textContent = `${state.children}명`;
   }
 
   function typeIcon(type) { return type === "fact" ? "✓" : type === "rumor" ? "?" : "◇"; }
@@ -2154,6 +2410,7 @@
   }
 
   function chanceFor(check, interpreterEnabled = state.interpreterOn) {
+    if (check.hardBlocked) return 0;
     if (check.stat === "fertility") return clamp(Math.round(check.base), 0, 100);
     const main = (statValue(check.stat) - 5) * 6;
     const assist = check.assist ? (statValue(check.assist) - 5) * 2 : 0;
@@ -2264,8 +2521,18 @@
       reason: "순서와 숫자를 설명했지만 왜 그 선택이 두 사람 모두에게 필요한지는 전달되지 않았다.",
       courage: "분명하게 말하려던 태도가 상대의 답을 기다리지 않는 압박처럼 들렸다."
     }[item?.check?.stat] || "하려던 말의 온도와 의도가 충분히 전달되지 않았다.";
-    result.title = "말이 뜻대로 닿지 않았다";
-    result.text = `‘${item?.title || "이 제안"}’을 꺼냈지만 ${miss} ${getPartner().name}은 결정을 미루거나 제안을 거절했다. 다음에는 소통 점수나 전문 통역까지 함께 고려해야 한다.`;
+    const behaviorMiss = {
+      warm_cautious: "그녀는 바로 반박하지 않았다. 잠깐 생각하겠다는 말 뒤로 답장 간격만 길어졌다.",
+      playful_social: "그녀는 웃는 이모티콘 하나를 남겼지만 평소 이어지던 농담은 거기서 끊겼다.",
+      practical_planner: "그녀는 기분을 설명하는 대신 언제, 누가, 얼마를 책임지는지 다시 물었다.",
+      quiet_observer: "그녀는 그 문장을 오래 바라본 뒤 필요한 말만 짧게 답했다.",
+      family_centered: "그녀는 둘만의 기분보다 이 선택이 가족과 생활에 남길 일을 먼저 걱정했다.",
+      ambitious_independent: "그녀는 내 제안에 자신의 선택권이 어디에 남아 있는지 되물었다.",
+      passionate_impulsive: "표정이 먼저 굳었고 서운하다는 말이 빠르게 쏟아진 뒤 대화가 끊겼다.",
+      guarded_survivor: "그녀는 설명을 더 보태지 않고 다음 행동을 보겠다며 한발 물러섰다."
+    }[getPartner().behavior?.id] || `${getPartner().name}은 대답을 미루고 표정을 살폈다.`;
+    result.title = `${scenes[state.scene]?.title || "대화"}에서 호흡이 어긋났다`;
+    result.text = `‘${item?.title || "이 제안"}’을 꺼냈지만 ${miss} ${behaviorMiss}`;
     result.trust = Math.min(Number(result.trust || 0), -2);
     result.affection = Math.min(Number(result.affection || 0), -1);
     result.conflict = Math.max(Number(result.conflict || 0), 2);
@@ -2339,14 +2606,23 @@
     if (secretSources[id] && checkSuccess) revealPartnerSecret(result, secretSources[id][0], null, secretSources[id][1]);
     unlockProfileFromChoice(id, result, checkSuccess);
     applyBehaviorResponse(id, result);
+    evaluatePartnerNeeds(id, result, checkSuccess);
+    applyShadowDynamics(id, result, checkSuccess);
     personalityReaction(id, result);
+    const privateInterpreter = state.pendingInterpreterUsed && isPrivateInterpreterCheck(choiceMeta?.check);
+    if (privateInterpreter) {
+      result.affection = Number(result.affection || 0) - 2;
+      result.intimacy = Number(result.intimacy || 0) - 4;
+      result.partnerFatigue = Number(result.partnerFatigue || 0) + 2;
+    }
     if (state.pendingSkillText) result.text += state.pendingSkillText;
     state.pendingSkillText = "";
     applyDelta(result);
-    if (checkSuccess && choiceMeta?.check) awardScore(choiceMeta.special ? 140 : 35, choiceMeta.special ? "주인공 전용 선택 성공" : "선택 판정 성공", result, choiceMeta.special ? "special" : "play");
+    if (checkSuccess && choiceMeta?.check) awardScore(choiceMeta.special ? 55 : 35, choiceMeta.special ? "제한된 전용 선택 성공" : "선택 판정 성공", result, choiceMeta.special ? "special" : "play");
     if (state.pendingInterpreterUsed) {
-      result.text += "\n\n전문 통역이 이 선택에 동행했고 비용은 선택 순간 가계에서 빠졌다.";
-      awardScore(20, "오해를 줄이는 준비", result, "play");
+      result.text += privateInterpreter
+        ? "\n\n전문 통역 덕분에 뜻은 정확했지만, 둘만의 미묘한 호흡이 끊겨 친밀감과 자연스러움은 조금 떨어졌다. 비용은 선택 순간 가계에서 빠졌다."
+        : "\n\n전문 통역이 이 선택에 동행해 복잡한 뜻을 정확히 옮겼고, 비용은 선택 순간 가계에서 빠졌다.";
     }
     evaluateNeeds(result);
     result.statChanges = statChangesSince(beforeStats);
@@ -2492,6 +2768,10 @@
       intimacy_wait: { title: "기다림이 거절로 남지 않았다", text: "서로의 속도를 확인하고 다음 만남을 약속했다. 문신·건강·속궁합 같은 사적인 정보는 아직 알 수 없다.", trust: 9, affection: 7, days: 1, reaction: `“저도 가까워지고 싶어요. 다음에도 이렇게 물어봐 줘요.”` },
       intimacy_talk_only: checkSuccess ? { title: "몸보다 먼저 경계를 알게 됐다", text: "피임, 질투, 싫은 접촉, 다툰 뒤 혼자 있고 싶은 시간을 질문과 답으로 나눴다. 사적인 신체 정보는 아직 공개되지 않았다.", trust: 9, affection: 7, days: 2, evidence: { id: "intimacy_boundaries", title: "친밀감과 경계에 대한 문답", type: "fact", text: "두 사람이 피임·동의·싫은 행동·중단 신호를 같은 질문으로 확인했다.", source: "둘만의 대화", quality: 3 }, reaction: `“이런 얘기는 부끄럽지만, 모르고 시작하는 것보다 좋아요.”` } : { title: "질문이 너무 빠른 면접처럼 이어졌다", text: "준비한 질문을 연달아 읽자 그녀가 잠시 대화를 멈췄다. 다음에는 서로 한 질문씩 주고받기로 했다.", trust: -3, affection: -2, days: 1, bad: true, reaction: `“저도 물어볼 시간이 필요해요. 하나씩 해요.”` },
       intimacy_pressure: { title: "동의를 비용과 약속의 대가로 만들었다", text: `${partner.name}은 바로 자리를 떠났다. 결혼 이야기를 했거나 돈을 썼다는 사실은 친밀한 관계를 요구할 권리가 되지 않는다.`, trust: -48, affection: -45, conflict: 38, stress: 12, days: 1, bad: true, flag: "coercivePressure", reaction: `“지금 이 말로는 더 만날 수 없어요.”` },
+      shadow_name_it: checkSuccess ? { title: "숨기던 마음에 이름이 생겼다", text: "좋아 보이는 욕구만 고르지 않았다. 질투·주도권·구원받고 싶은 마음 중 하나를 먼저 인정하고, 들어주는 것과 복종하는 것은 다르다고 합의했다.", trust: 9, affection: 8, conflict: -3, intimacy: 8, days: 2, flags: { shadowTalked: true }, reaction: `“그 마음이 있다는 것보다, 저한테 선택권을 남겨 둔 말이 더 중요해요.”` } : { title: "고백이 허락 요구처럼 들렸다", text: "욕구를 솔직히 말했지만 ‘이해한다면 해 줘야 한다’는 압박이 섞였다. 그녀는 듣는 것과 동의하는 것은 다르다고 선을 그었다.", trust: -3, affection: -2, conflict: 5, days: 1, bad: true, reaction: `“말해 준 건 고마워요. 하지만 제가 들어줘야 한다는 뜻은 아니죠.”` },
+      shadow_pact: checkSuccess ? { title: "욕구보다 멈춤 규칙이 먼저 섰다", text: "누가 주도하든 중간에 마음이 바뀔 수 있고, 거절 뒤에 보복하지 않으며, 다음 날 불편했던 점을 다시 말하기로 했다. 강한 끌림이 안전한 실험이 됐다.", trust: 8, affection: 10, conflict: -4, intimacy: 12, days: 2, flags: { shadowPact: true }, reaction: `“이렇게 멈출 수 있다는 걸 아니까 오히려 더 맡길 수 있어요.”` } : { title: "역할보다 불안이 먼저 올라왔다", text: "둘 중 한 사람이 준비되지 않았다는 신호를 보냈다. 그 자리에서 멈췄고, 무엇이 불편했는지는 다음 대화에서 다시 묻기로 했다.", trust: 3, affection: 1, days: 1, reaction: `“오늘은 여기까지만 해요. 멈춘 걸 나중에 벌로 만들지 말아 줘요.”` },
+      shadow_test: { title: "사랑을 확인하려다 불안을 주입했다", text: "일부러 만든 침묵과 다른 사람 이야기에 그녀의 반응은 커졌다. 질투는 확인했지만 그것이 사랑인지 버려질 두려움인지는 더 흐려졌다.", trust: -7, affection: -3, conflict: 9, stress: 4, partnerFatigue: 6, days: 2, bad: true, reaction: `“제 반응을 보고 싶어서 일부러 그랬다는 말이 더 무서워요.”` },
+      shadow_bury: { title: "좋은 사람의 가면은 지켰다", text: "대화는 웃으며 끝났지만 둘 다 자기 욕구를 말하지 않았다. 이름 없는 마음은 사라지지 않고 다음 질투와 돈 문제 뒤로 숨어들었다.", trust: 1, affection: 1, shadowRisk: 6, days: 1, reaction: `“없다고 하기엔… 우리 둘 다 너무 빨리 웃은 것 같아요.”` },
       offer_fresh_start: checkSuccess && partnerScam && state.affection >= 80 && state.trust >= 80 ? { title: "준비된 대본 대신 실제 고백이 나왔다", text: `${partner.name}은 처음부터 숨겼던 계획을 털어놓았다. 처음 의도는 진심이 아니었지만 함께 지내며 마음이 바뀌었다고 말했다. 용서는 자동으로 주어지지 않는다. 송금과 절차를 멈추고 원본을 함께 제출하는 행동이 뒤따라야 한다.`, trust: -8, affection: 8, conflict: 10, days: 4, set: { intimacyTruth: "fatigue" }, flags: { reformed: true, scamConfessed: true }, evidence: { id: "reform_confession", title: "초기 계획에 대한 자발적 고백", type: "fact", text: "상대가 초기 속임수의 인물·계좌·일정을 구체적으로 말하고 관련 절차 중단에 동의했다.", source: "자발적 고백·원본 제출", quality: 3 }, reaction: `“처음에는 당신을 사람이 아니라 기회로 봤어요. 지금 말해도 용서받지 못할 수 있다는 걸 알아요.”` } : checkSuccess ? { title: "말할 수 있는 자리는 만들었지만 전부 나오진 않았다", text: partnerScam ? "그녀는 작은 과장 하나만 인정했다. 마음을 바꾸기에는 아직 관계가 충분히 깊지 않거나 계획을 버릴 준비가 되지 않았다." : "좋게 보이려고 사진과 경력을 조금 꾸민 부분을 인정했다. 계획된 사기와 이어지는 고백은 없었다.", trust: 5, affection: 5, days: 2, reaction: `“한 번에 다 말하긴 무서워요. 그래도 거짓말 하나는 지금 고칠게요.”` } : { title: "기회를 말하면서도 판결처럼 들렸다", text: "이미 결론을 내린 기색이 드러났다. 그녀는 더 말하지 않았다.", trust: -7, affection: -5, days: 1, bad: true, reaction: `“이미 답을 정했다면 제가 무슨 말을 해도 같잖아요.”` },
       turning_romance: { title: "의심 밖의 기억이 생겼다", text: "시장 간식, 잘못 탄 버스, 둘만 알아듣는 농담이 사진에 남았다. 새 자료는 없지만 관계가 점수표만은 아니게 됐다.", trust: 5, affection: 13, days: 7, cost: 400000, costLabel: "둘만의 일주일", reaction: `“이번 주는 제가 확인받는 사람이 아니라 그냥 여자친구 같았어요.”` },
       turning_record: checkSuccess ? { title: "막연한 찜찜함이 확인할 문장으로 바뀌었다", text: "프로필 경력, 가족 송금, 결혼 속도 중 서로 과장한 부분을 날짜와 함께 적었다.", trust: 3, days: 2, evidence: { id: "mutual_corrections", title: "서로 바로잡은 초기 설명", type: "clue", text: "프로필과 첫 대화에서 과장하거나 생략한 항목을 두 사람이 날짜별로 기록했다.", source: "공동 작성", quality: 2 }, reaction: `“당신 것도 적었으니 제 것도 말할게요. 하지만 바로 범죄처럼 보진 말아 줘요.”` } : { title: "표가 취조 목록처럼 보였다", text: "질문 순서가 몰아붙이는 분위기가 되어 대화가 중간에 끊겼다.", trust: -6, days: 1, bad: true, reaction: `“우리 대화하는 거예요, 조사받는 거예요?”` },
@@ -2520,18 +2800,20 @@
       final_source_call: checkSuccess ? { title: "마지막 한 통이 빈칸 하나를 채웠다", text: "이미 가진 자료를 읽어 주지 않고 처음 정보를 만든 곳에 날짜와 돈을 받는 사람을 다시 물었다. 확인 가능한 문장 하나가 더 생겼다.", trust: 0, calm: 1, days: 2, cost: 300000, costLabel: "최종 독립 확인", evidence: firstMissingCaseClue(mystery) } : { title: "확인할 질문을 좁히지 못했다", text: "여러 의심을 한꺼번에 물으며 핵심 답을 얻지 못했다. 시간과 비용만 썼다.", calm: -1, stress: 5, days: 2, cost: 300000, costLabel: "최종 독립 확인", bad: true },
       final_reconcile: { title: "발견 기록에 두 사람의 수정 표시가 남았다", text: `${partner.name}도 숨겼던 두려움 하나를 인정했고, 나도 소문을 사실처럼 읽었던 부분을 고쳤다.`, trust: state.confirmed ? 9 : 6, calm: 2, days: 2, flag: "reconciled" },
       final_post_rumor: { title: "판단을 군중에게 넘겼다", text: "몇 분 만에 확신에 찬 댓글이 쏟아졌지만 누구도 원본을 보지 않았다. 개인정보는 퍼졌고 당사자와의 대화는 끝났다.", trust: -25, calm: -2, days: 1, evidence: { id: "crowd_reaction", title: "커뮤니티의 추측", type: "rumor", text: "공개된 일부 사연을 본 익명 사용자들의 추측이다. 직접 증거가 아니다.", source: "온라인 댓글", quality: 1 }, flag: "publicRumor" },
+      wedding_register: checkSuccess ? { title: "식을 미루고 생활을 먼저 시작하기로 했다", text: "양가에 1년 뒤 다시 예식 예산을 공개하겠다고 같은 날짜로 약속했다. 화려한 사진은 없지만 집과 비상금에 쓸 돈을 남겼다.", trust: 7, affection: 3, conflict: 1, days: 7, cost: 800000, costLabel: "혼인신고·가족 식사", set: { weddingPlace: "혼인신고·예식 연기" }, reaction: `“미루는 게 숨기는 일이 되지만 않으면 괜찮아요. 날짜는 같이 기억해요.”` } : { title: "예식 연기가 결혼 자체를 미루는 말처럼 들렸다", text: "돈 이야기는 맞았지만 가족에게 설명할 날짜와 방법이 없었다. 두 사람은 큰 계약을 멈추고 작은 현지 가족식부터 다시 견적 내기로 했다.", trust: -2, affection: -2, conflict: 4, days: 3, set: { weddingPlace: "작은 가족식 재협의" }, bad: true },
       wedding_local: checkSuccess ? { title: `${getCountry().name}에서 먼저 축하받기로 합의했다`, text: `${partner.name}은 가족이 직접 볼 수 있다는 말에 안도했다. 내 가족은 아쉬워했지만 영상과 한국 방문 일정을 따로 잡기로 했다.`, trust: 7, affection: 10, conflict: -3, days: 21, cost: 6000000, costLabel: "현지 결혼식 기본 준비", set: { weddingPlace: `${getCountry().name} 예식` }, reaction: `“우리 가족 앞에서 약속해 줘서 고마워요. 한국 가족에게도 제가 직접 인사할게요.”` } : { title: "현지 예식 제안에 바로 합의하지 못했다", text: "그녀는 가족을 기쁘게 하고 싶지만 결혼 뒤 빚이 두렵다고 말했다. 비용표를 다시 본 뒤 다음 장면에서 더 작은 규모를 논의하기로 했다.", trust: 1, conflict: 3, days: 3, set: { weddingPlace: "장소 재협의" }, reaction: `“싫다는 게 아니라, 이 돈을 쓰고도 우리가 괜찮을지 먼저 보고 싶어요.”`, bad: true },
       wedding_korea: checkSuccess ? { title: "한국 예식을 함께 준비하기로 했다", text: `가족 항공과 통역을 실제 예산에 넣자 ${partner.name}도 동의했다. 내 가족이 편한 만큼 그녀가 혼자가 되지 않게 역할을 나눴다.`, trust: 5, affection: 6, conflict: 1, days: 28, cost: 12000000, costLabel: "한국 결혼식 기본 준비", set: { weddingPlace: "한국 예식" }, reaction: `“제 가족이 손님처럼 서 있지 않게 당신이 옆에 있어 줘요.”` } : { title: "한국 예식 제안이 일방적으로 들렸다", text: "그녀는 자기 가족이 거의 오지 못하는 결혼식을 바로 결정할 수 없다고 답했다. 장소는 정해지지 않았다.", trust: -5, affection: -3, conflict: 8, days: 3, set: { weddingPlace: "장소 재협의" }, reaction: `“우리 결혼식인데 왜 당신 가족이 편한 것만 먼저 정해요?”`, bad: true },
       wedding_both: checkSuccess ? { title: "두 나라의 가족을 모두 만나기로 합의했다", text: "두 번의 예식은 피곤하고 비쌌지만 어느 한쪽만 손님이 되는 느낌은 줄었다. 문제는 신혼을 시작하기도 전에 통장 잔액이 빠르게 줄었다는 점이다.", trust: 9, affection: 12, conflict: -4, stress: 12, days: 42, cost: 18000000, costLabel: "양국 결혼식 기본 준비", set: { weddingPlace: "양국 예식" }, reaction: `“둘 다 작게 한다면 좋아요. 대신 빚이 생기면 숨기지 말아요.”` } : { title: "두 번의 예식은 지금 감당할 수 없었다", text: "마음은 좋았지만 예산과 일정이 맞지 않았다. 무리해서 결제하지 않고 한 나라의 식과 다른 나라의 가족 행사를 나누기로 했다.", trust: 4, affection: 2, days: 4, set: { weddingPlace: "한 번의 예식·추후 가족 행사" }, reaction: `“양쪽을 다 챙기려다 우리 생활이 무너지면 안 돼요.”` },
+      wedding_defer_party: { title: "잔치 비용을 집과 비상금으로 남겼다", text: "사진과 양가 식사만 남기고 큰 잔치는 미뤘다. 가족의 아쉬움은 있었지만 다음 달 생활비를 급전으로 막지 않아도 된다는 안도감이 더 컸다.", trust: 5, affection: 2, conflict: 1, stress: -2, days: 7, cost: 300000, costLabel: "사진·가족 식사", set: { weddingStyle: "잔치 연기" } },
       wedding_small: { title: "작지만 둘이 감당할 수 있는 식", text: "하객 수를 줄이고 꼭 필요한 항목만 남겼다. 아쉬워하는 친척도 있었지만 결혼 뒤 생활비가 남는다는 안도감이 컸다.", trust: 5, affection: 4, conflict: -2, days: 14, cost: 2500000, costLabel: "작은 결혼식 추가비", set: { weddingStyle: "가족 중심" } },
       wedding_standard: { title: "보통 규모에서 균형을 잡았다", text: "양가 이동과 식사, 사진을 챙기되 과한 선택 항목은 줄였다. 완벽한 합의는 아니었지만 누구도 일방적으로 포기하지 않았다.", trust: 6, affection: 7, days: 21, cost: 7000000, costLabel: "보통 규모 결혼식 추가비", set: { weddingStyle: "보통 규모" } },
       wedding_lavish: { title: "화려한 하루를 선택했다", text: "사진과 가족 반응은 기대 이상이었다. 그러나 결제 문자가 올 때마다 축하보다 빚이 먼저 떠올랐고, 돈 이야기는 신혼의 첫 갈등이 됐다.", trust: 5, affection: 11, conflict: 9, stress: 14, days: 30, cost: 15000000, costLabel: "대규모 결혼식 추가비", set: { weddingStyle: "큰 결혼식" } },
       wedding_calm_talk: checkSuccess ? { title: "둘이 같은 편이 됐다", text: `${withJosa(partner.name, "과", "와")} 먼저 합의한 뒤 가족에게 설명했다. 체면을 완전히 살리진 못했지만 추가금은 상징적인 선에서 끝났고, 그녀는 내 편에 서서 같은 말을 반복했다.`, trust: 9, affection: 10, conflict: -5, days: 1, cost: 300000, costLabel: "현장 통역·조정" } : { title: "말의 뜻이 엇갈렸다", text: "차분히 풀어 보려 했지만 통역과 가족의 말이 겹치며 내가 돈을 아끼려고 예식을 망친다는 인상만 남았다. 추가 요구는 줄지 않았고 둘 사이도 어색해졌다.", trust: -7, affection: -5, conflict: 13, stress: 8, days: 1, cost: 300000, costLabel: "현장 통역·조정", bad: true },
       wedding_firm_refusal: checkSuccess ? { title: "선을 분명히 지켰다", text: `계약서와 합의 금액을 차분히 읽고 추가 현금은 내지 않았다. 예식은 조금 늦었지만 ${partner.name}도 가족에게 같은 기준을 설명했다.`, trust: 5, affection: 3, conflict: 3, calm: 1, days: 1 } : { title: "거절이 모욕처럼 전달됐다", text: `말이 너무 세게 나가며 돈 문제가 두 가족의 체면 싸움으로 번졌다. 예식은 진행됐지만 ${partner.name}은 가장 힘든 날에 혼자 막았다고 느꼈다.`, trust: -13, affection: -10, conflict: 22, stress: 12, days: 1, bad: true },
       wedding_pay_extra: { title: "예식은 예정대로 진행됐다", text: "추가 돈을 내자 분위기는 금방 풀렸다. 하지만 누구도 왜 원래 견적과 달랐는지 설명하지 않았고, 다음 요구를 거절하기는 더 어려워졌다.", trust: 2, affection: 5, conflict: 3, stress: 7, days: 1, cost: 4000000, costLabel: "현장 추가 예물", flag: "paidWeddingPressure" },
-      move_korea: checkSuccess ? { title: "한국에서 시작하는 조건에 합의했다", text: `${partner.name}의 언어 수업, 개인 통장, 일자리 준비와 가족 방문 예산을 결혼 전 합의문에 적었다. 실제 이주는 결혼식 뒤에 진행한다. 한국 경력이 없어 처음 몇 달은 배우자 수입을 0원으로 잡았다.`, trust: 7, affection: 6, days: 4, cost: 300000, costLabel: "거주 상담·번역", set: { homeCountry: "korea", monthlyLiving: 2700000, partnerIncome: 0 }, flags: { residenceAgreed: true }, reaction: `“한국에 가는 건 동의해요. 대신 제 돈과 공부 시간은 제가 정할 수 있게 해 줘요.”` } : { title: "한국행 조건에 아직 합의하지 못했다", text: "언어와 체류가 모두 내 손에 달리는 구조가 두렵다는 답이 돌아왔다. 결혼을 결정하기 전에 두 나라를 오가는 6개월 계획으로 수정했다.", trust: -2, conflict: 5, days: 4, cost: 300000, costLabel: "거주 상담·번역", set: { homeCountry: "distance", monthlyLiving: 3000000, partnerIncome: Math.round(partner.estimatedIncome * .85) }, flags: { residenceAgreed: true }, bad: true, reaction: `“당신을 싫어해서가 아니라, 제가 아무것도 못 하는 사람이 되는 게 무서워요.”` },
+      move_korea: checkSuccess ? { title: "한국에서 시작하는 조건에 합의했다", text: `${partner.name}의 언어 수업, 개인 통장, 일자리 준비와 가족 방문 예산을 결혼 전 합의문에 적었다. 실제 이주는 결혼식 뒤에 진행한다. 한국 경력이 없어 처음 몇 달은 배우자 수입을 0원으로 잡았다.`, trust: 7, affection: 6, days: 4, cost: 300000, costLabel: "거주 상담·번역", set: { homeCountry: "korea", monthlyLiving: 2700000, partnerIncome: 0 }, flags: { residenceAgreed: true }, reaction: `“한국에 가는 건 동의해요. 대신 제 돈과 공부 시간은 제가 정할 수 있게 해 줘요.”` } : { title: "한국행 조건에 아직 합의하지 못했다", text: "언어와 체류가 모두 내 손에 달리는 구조가 두렵다는 답이 돌아왔다. 결혼을 결정하기 전에 두 나라를 오가는 6개월 계획으로 수정했다.", trust: -2, conflict: 5, days: 4, cost: 300000, costLabel: "거주 상담·번역", set: { homeCountry: "distance", monthlyLiving: 1900000, partnerIncome: Math.round(partner.estimatedIncome * .85) }, flags: { residenceAgreed: true }, bad: true, reaction: `“당신을 싫어해서가 아니라, 제가 아무것도 못 하는 사람이 되는 게 무서워요.”` },
       move_local: checkSuccess ? { title: `${getCountry().name}에서 1년 살아 보는 조건에 합의했다`, text: `내 직업의 이동 가능성과 예상 수입 감소를 숫자로 적었다. 결혼식 뒤 실제 이주를 시작하고, 1년 뒤 다시 거주지를 결정한다.`, trust: 9, affection: 7, calm: 1, days: 5, cost: 500000, costLabel: "현지 체류·직업 상담", set: { homeCountry: "local", monthlyLiving: 1900000, playerIncomeFactor: clamp(.45 + player.portability * .06, .5, .95) }, flags: { residenceAgreed: true }, reaction: `“제 생활을 직접 보려는 선택이 고마워요. 당신 일도 같이 지킬 방법을 찾아요.”` } : { title: "현지 1년은 두 사람 모두 감당하기 어려웠다", text: "수입 감소와 체류 조건을 계산한 뒤 한국 정착 준비와 정기 현지 방문을 묶은 대안에 합의했다.", trust: 2, days: 4, cost: 500000, costLabel: "현지 체류·직업 상담", set: { homeCountry: "korea", monthlyLiving: 2600000, partnerIncome: 0 }, flags: { residenceAgreed: true }, reaction: `“마음만으로 1년을 버티긴 어려워요. 현실적인 방법으로 다시 정해요.”` },
-      move_distance: checkSuccess ? { title: "6개월의 장거리 규칙에 합의했다", text: "각자의 일을 정리할 기간, 왕복 횟수, 통화 시간과 6개월 뒤 최종 거주 결정일을 적었다. 왕복 때문에 두 사람 수입도 온전히 유지되지는 않는다.", trust: 3, affection: -1, conflict: 4, stress: 3, days: 3, cost: 300000, costLabel: "장거리 일정·서류 준비", set: { homeCountry: "distance", monthlyLiving: 3000000, playerIncomeFactor: .82, partnerIncome: Math.round(partner.estimatedIncome * .85) }, flags: { residenceAgreed: true }, reaction: `“6개월 뒤에는 꼭 다시 정해요. 끝없이 기다리는 결혼은 싫어요.”` } : { title: "장거리 제안이 결정을 미루는 말로 들렸다", text: "그녀는 결혼 뒤에도 확실한 집이 없다는 데 동의하지 않았다. 직업과 수입을 다시 비교한 뒤 한국 정착안으로 합의했다.", trust: -5, affection: -4, conflict: 8, days: 3, cost: 300000, costLabel: "장거리 일정·서류 준비", set: { homeCountry: "korea", monthlyLiving: 2700000, partnerIncome: 0 }, flags: { residenceAgreed: true }, bad: true, reaction: `“결혼했는데 언제 함께 살지조차 모르는 건 싫어요.”` },
+      move_distance: checkSuccess ? { title: "6개월의 장거리 규칙에 합의했다", text: "각자의 일을 정리할 기간, 왕복 횟수, 통화 시간과 6개월 뒤 최종 거주 결정일을 적었다. 기본 생활비와 두 집·항공비를 이중 계산하지 않도록 장거리 주거안에 이동비를 묶었다.", trust: 3, affection: -1, conflict: 4, stress: 3, days: 3, cost: 300000, costLabel: "장거리 일정·서류 준비", set: { homeCountry: "distance", monthlyLiving: 1900000, playerIncomeFactor: .9, partnerIncome: Math.round(partner.estimatedIncome * .85) }, flags: { residenceAgreed: true }, reaction: `“6개월 뒤에는 꼭 다시 정해요. 끝없이 기다리는 결혼은 싫어요.”` } : { title: "장거리 제안이 결정을 미루는 말로 들렸다", text: "그녀는 결혼 뒤에도 확실한 집이 없다는 데 동의하지 않았다. 직업과 수입을 다시 비교한 뒤 한국 정착안으로 합의했다.", trust: -5, affection: -4, conflict: 8, days: 3, cost: 300000, costLabel: "장거리 일정·서류 준비", set: { homeCountry: "korea", monthlyLiving: 2700000, partnerIncome: 0 }, flags: { residenceAgreed: true }, bad: true, reaction: `“결혼했는데 언제 함께 살지조차 모르는 건 싫어요.”` },
       home_listen: checkSuccess ? { title: "해결보다 이해가 먼저 닿았다", text: `${partner.name}은 외롭고 무서웠던 순간을 하나씩 말했다. 내가 바로 반박하지 않자 생활 문제의 크기도 오히려 작아졌다.`, trust: 8, affection: 11, conflict: -8, intimacy: 6, days: 3 } : { title: "듣고 있었지만 마음은 닿지 않았다", text: "중간중간 해명과 충고가 끼어들었다. 그녀는 결국 “또 당신 이야기로 끝났네요”라고 말하고 방으로 들어갔다.", trust: -5, affection: -7, conflict: 10, stress: 4, days: 2, bad: true },
       home_rules: checkSuccess ? { title: "생활 규칙이 싸움을 줄였다", text: "집안일과 혼자 있는 시간을 구체적으로 나누자 서로의 행동을 악의로 해석하는 일이 줄었다.", trust: 6, affection: 5, conflict: -7, days: 3, flag: "homeRules" } : { title: "표가 또 하나의 잔소리가 됐다", text: "너무 많은 규칙을 한 번에 만들었다. 지키지 못한 칸마다 누가 더 노력하지 않았는지 따지는 싸움이 생겼다.", trust: -3, affection: -3, conflict: 8, days: 2, bad: true },
       home_buy_gifts: { title: "집은 편해졌지만 말은 남았다", text: "새 물건을 받자 표정은 밝아졌다. 그러나 외로움과 가족 생각은 택배 상자 안에 들어가지 않았다.", affection: 6, trust: 1, conflict: 2, days: 2, cost: 3000000, costLabel: "신혼 가전·선물" },
@@ -2638,7 +2920,7 @@
       state.trust = Math.min(trustCeiling(), state.trust + balancedTrust(2));
       gainCertainty(10);
       passTime(1);
-      const result = { title: "모순을 정확히 짚었다", text: `${evidence.title}을(를) 제시했다.\n\n${statement.success}`, days: 1, noApply: true, statChanges: statChangesSince(beforeStats) };
+      const result = { title: "모순을 정확히 짚었다", text: `${withJosa(evidence.title, "을", "를")} 제시했다.\n\n${statement.success}`, days: 1, noApply: true, statChanges: statChangesSince(beforeStats) };
       awardScore(180, "증거 연결 성공", result, "evidence");
       showResult(result);
     } else {
@@ -2659,13 +2941,20 @@
     feedback.classList.toggle("is-bad", Boolean(result.bad || (result.trust || 0) < -5));
     const reaction = result.reaction ? `<div class="reaction-panel"><span>${escapeHtml(getPartner().name)}의 반응</span><p>${escapeHtml(result.reaction)}</p></div>` : "";
     const report = result.report ? `<div class="investigation-report"><strong>확인 결과</strong><dl><div><dt>확인한 대상</dt><dd>${escapeHtml(result.report.target)}</dd></div><div><dt>확인된 사실</dt><dd>${escapeHtml(result.report.found)}</dd></div><div><dt>아직 모르는 것</dt><dd>${escapeHtml(result.report.unknown)}</dd></div><div><dt>다음 확인</dt><dd>${escapeHtml(result.report.next)}</dd></div></dl></div>` : "";
-    const unlocked = result.profileUnlocked?.length
-      ? `<button class="profile-unlock-panel" data-open-partner type="button"><span>새로 알게 된 정보</span><strong>${result.profileUnlocked.map(key => escapeHtml(PROFILE_LABELS[key] || key)).join(" · ")}</strong><small>눌러서 인물 정보에서 확인</small></button>`
+    const unlockedLabels = [
+      ...(result.profileUnlocked || []).map(key => PROFILE_LABELS[key] || key),
+      ...(result.shadowUnlocked || []).map(id => `어두운 욕구 · ${shadowData(id).label}`)
+    ];
+    const unlocked = unlockedLabels.length
+      ? `<button class="profile-unlock-panel" data-open-partner type="button"><span>새로 알게 된 정보</span><strong>${unlockedLabels.map(escapeHtml).join(" · ")}</strong><small>눌러서 상대 프로필에서 확인</small></button>`
       : "";
     const scoreEvents = result.scoreEvents?.length ? `<div class="score-result">${result.scoreEvents.map(item => `<span>+${item.amount.toLocaleString("ko-KR")} · ${escapeHtml(item.label)}</span>`).join("")}</div>` : "";
-    feedback.innerHTML = `<strong>${escapeHtml(result.title)}</strong><div class="result-copy">${escapeHtml(result.text).replace(/\n/g, "<br>")}</div>${scoreEvents}${unlocked}${reaction}${report}`;
+    const changes = (result.statChanges || []).length ? `<div class="result-stats">${result.statChanges.map(item => `<span class="${item.amount < 0 ? "is-down" : "is-up"}">${escapeHtml(item.label)} ${item.amount > 0 ? "+" : ""}${item.amount}</span>`).join("")}</div>` : "";
+    const shadowSummary = result.shadowEvents?.length ? `<div class="shadow-result">${result.shadowEvents.map(item => item.type === "resonance" ? `<span>그림자 공명 · 위험 ${state.shadowRisk || 0}/100</span>` : item.type === "distortion" ? `<span>그림자 왜곡 +${item.risk} · 위험 ${state.shadowRisk || 0}/100</span>` : `<span>이름 붙이지 않은 욕구 · 위험 ${state.shadowRisk || 0}/100</span>`).join("")}</div>` : "";
+    feedback.innerHTML = `<strong>${escapeHtml(result.title)}</strong><div class="result-copy">${escapeHtml(result.text).replace(/\n/g, "<br>")}</div>${changes}${shadowSummary}${scoreEvents}${unlocked}${reaction}${report}`;
     feedback.querySelector("[data-open-partner]")?.addEventListener("click", openPartnerProfile);
     renderChoices([choice("continue_scene", "다음 장면으로", "이 선택의 결과를 반영하고 이야기를 이어 간다.", `호감 ${state.affection} · 그녀의 신뢰 ${state.trust} · 확인도 ${state.certainty} · 상대 피로 ${state.partnerFatigue}`, 0, "plain")]);
+    refreshStatusHud();
     updateSidebar();
     saveGame(false);
     playResultEffects(result);
@@ -2673,25 +2962,33 @@
 
   function playResultEffects(result) {
     const events = [];
-    (result.profileUnlocked || []).forEach(key => events.push({ type: "profile", kicker: "PROFILE UNLOCKED", title: PROFILE_LABELS[key] || key, detail: partnerProfileValue(key) }));
+    if (result.profileUnlocked?.length) {
+      const labels = result.profileUnlocked.map(key => PROFILE_LABELS[key] || key);
+      events.push({ type: "profile", kicker: "PROFILE UPDATED", title: labels.length === 1 ? labels[0] : `새 정보 ${labels.length}개`, detail: labels.map(label => `· ${label}`).join(" ") });
+    }
     if (result.secretUnlocked) {
       const secret = getPartner().privateTraits?.secrets?.find(item => item.id === result.secretUnlocked);
       if (secret) events.push({ type: "profile", kicker: "HIDDEN FACT", title: secret.label, detail: secret.detail });
     }
-    (result.scoreEvents || []).forEach(item => events.push({ type: item.type === "need" ? "need" : "score", kicker: item.type === "need" ? "NEED CLEAR" : "SCORE", title: item.label, detail: `+${item.amount.toLocaleString("ko-KR")}점 · 현재 총점 ${(state.score || 0).toLocaleString("ko-KR")}점` }));
-    (result.statChanges || []).filter(item => ["affection", "trust"].includes(item.key) || (item.key === "partnerFatigue" && Math.abs(item.amount) >= 5)).forEach(item => events.push({ type: "stat", kicker: item.key === "partnerFatigue" ? "PARTNER CONDITION" : "RELATIONSHIP", title: `${item.label} ${item.amount > 0 ? "+" : ""}${item.amount}`, detail: item.key === "partnerFatigue" ? (item.amount > 0 ? "주거·일·돌봄 부담이 상대에게 누적됐습니다." : "역할과 비용을 나누며 상대가 회복했습니다.") : item.amount > 0 ? "선택이 관계에 실제로 닿았습니다." : "이 반응은 다음 대화에도 남습니다." }));
+    (result.shadowUnlocked || []).forEach(id => events.push({ type: "shadow", kicker: "SHADOW REVEALED", title: shadowData(id).label, detail: shadowData(id).impulse }));
+    const featuredScores = (result.scoreEvents || []).filter(item => ["need", "partner-need", "shadow"].includes(item.type));
+    if (featuredScores.length) {
+      const amount = featuredScores.reduce((sum, item) => sum + item.amount, 0);
+      events.push({ type: featuredScores.some(item => item.type === "shadow") ? "shadow" : "need", kicker: featuredScores.some(item => item.type === "shadow") ? "SHADOW RESONANCE" : "NEED CLEAR", title: featuredScores.map(item => item.label).join(" · "), detail: `+${amount.toLocaleString("ko-KR")}점 · 현재 총점 ${(state.score || 0).toLocaleString("ko-KR")}점` });
+    }
     if (!events.length) return;
     if (effectTimer) clearTimeout(effectTimer);
     const overlay = $("#effect-overlay");
     const card = $("#effect-card");
+    const queue = events.slice(0, 2);
     let index = 0;
     const next = () => {
-      if (index >= events.length) {
+      if (index >= queue.length) {
         overlay.hidden = true;
         effectTimer = null;
         return;
       }
-      const event = events[index++];
+      const event = queue[index++];
       card.className = `effect-card is-${event.type}`;
       $("#effect-kicker").textContent = event.kicker;
       $("#effect-title").textContent = event.title;
@@ -2700,7 +2997,7 @@
       card.style.animation = "none";
       void card.offsetWidth;
       card.style.animation = "";
-      effectTimer = setTimeout(next, window.__KG_FAST_TEST__ ? 0 : 920);
+      effectTimer = setTimeout(next, window.__KG_FAST_TEST__ ? 0 : 760);
     };
     next();
   }
@@ -2731,6 +3028,7 @@
       state.playerIncomeFactor = state.homeCountry === "local" ? clamp(.55 + getPlayer().portability * .045, .58, .95) : state.homeCountry === "distance" ? .9 : 1;
       const partnerBaseIncome = getPartner().estimatedIncome || 0;
       state.partnerIncome = state.homeCountry === "korea" ? 0 : state.homeCountry === "distance" ? Math.round(partnerBaseIncome * .65) : partnerBaseIncome;
+      state.monthlyCrossBorder = state.homeCountry === "distance" ? 0 : state.homeCountry === "local" ? 180000 : 250000;
       state.affection = clamp(state.affection + 3, 0, 100);
       state.trust = clamp(state.trust + 5, 0, 100);
       state.flags.marriedWithStrongEvidence = enough;
@@ -2758,6 +3056,7 @@
     if (id === "family_stay") {
       if (partnerScam && !enough) return finishGame("marriage_trap");
       if (partnerScam) return finishGame("unsafe_stay");
+      if ((state.shadowRisk || 0) >= 70) return finishGame("shadow_spiral");
       if (state.conflict >= 65 || state.debt >= DEBT_LIMIT * .8) return finishGame("fragile_family");
       return finishGame(state.children ? "family_happy" : "couple_happy");
     }
@@ -2805,7 +3104,8 @@
       sad_separation: ["SAD END · 사랑만으로는 맞지 않았던 생활", "사기는 없었지만 결혼은 끝났다", "진심이었던 관계도 아이, 돈, 가족, 친밀감의 차이를 견디지 못할 수 있다. 상대를 범죄자로 만들지 않고 각자의 삶으로 돌아갔다.", "airport"],
       case_solved_after: ["BEST END · 결혼 전후의 연결", "1년의 거짓말을 원본으로 입증했다", "야간근무나 국적, 외모가 아니라 계좌·업체 연락·서로 다른 진술을 연결했다. 결혼 뒤에도 증거를 지키며 피해 확산을 멈췄다.", "broker-suspicion"],
       unproven_after: ["BAD END · 의심은 맞았지만 증거가 모자랐다", "공개 고발이 확인보다 앞섰다", "실제 속임수는 있었지만 결혼 전후를 직접 잇는 원본이 부족했다. 상대와 업체가 자료를 없애며 분쟁이 길어졌다.", "nightlife-secret"],
-      false_accusation_after: ["GAME OVER · 함께 산 사람을 잘못 고발했다", "숨긴 갈등을 계획된 사기로 단정했다", "야간근무, 아이를 원하지 않는 마음, 잠자리를 피한 행동은 관계 문제였지만 사기 입증은 아니었다. 공개 고발로 가족과 평판이 함께 무너졌다.", "airport"]
+      false_accusation_after: ["GAME OVER · 함께 산 사람을 잘못 고발했다", "숨긴 갈등을 계획된 사기로 단정했다", "야간근무, 아이를 원하지 않는 마음, 잠자리를 피한 행동은 관계 문제였지만 사기 입증은 아니었다. 공개 고발로 가족과 평판이 함께 무너졌다.", "airport"],
+      shadow_spiral: ["BAD END · 욕구가 관계를 삼켰다", "끌림은 강했지만 선택권은 점점 사라졌다", "질투와 통제, 구원받고 싶은 마음을 합의 없이 반복했다. 점수와 호감이 남아 있어도 한쪽이 거절할 수 없는 관계는 함께 살 수 있는 안전한 관계가 되지 못했다.", "nightlife-secret"]
     };
     renderEnding(endings[type], type);
   }
@@ -2818,7 +3118,7 @@
     $("#ending-text").textContent = data[2];
     $("#ending-visual").style.backgroundImage = `linear-gradient(0deg, rgba(16,13,21,.48), transparent 55%), url('./assets/cutscenes/${data[3]}.webp')`;
     $("#ending-stats").innerHTML = [
-      ["무한 누적 점수", `∞ ${(state.score || 0).toLocaleString("ko-KR")}`], ["달성한 니즈", `${(state.fulfilledNeeds || []).length}개`], ["호감", `${state.affection} / 100`], ["그녀의 신뢰", `${state.trust} / 100`], ["상대 피로", `${state.partnerFatigue} / 100`], ["사실 확인도", `${state.certainty} / 100`], ["갈등", `${state.conflict} / 100`], ["스트레스", `${state.stress} / 100`], ["아이", `${state.children}명`], ["총지출", formatWon(state.spent)], ["급전", state.debt ? formatWon(state.debt) : "없음"], ["주담대 잔액", state.mortgageBalance ? formatWon(state.mortgageBalance) : "없음"], ["수집 자료", `${state.evidence.length}개`]
+      ["무한 누적 점수", `∞ ${(state.score || 0).toLocaleString("ko-KR")}`], ["내 밝은 니즈", `${(state.fulfilledNeeds || []).length}개`], ["그녀의 니즈", `${(state.fulfilledPartnerNeeds || []).length}개`], ["그림자 공명", `${state.shadowResonance || 0}회`], ["그림자 위험", `${state.shadowRisk || 0} / 100`], ["호감", `${state.affection} / 100`], ["그녀의 신뢰", `${state.trust} / 100`], ["상대 피로", `${state.partnerFatigue} / 100`], ["사실 확인도", `${state.certainty} / 100`], ["갈등", `${state.conflict} / 100`], ["스트레스", `${state.stress} / 100`], ["아이", `${state.children}명`], ["총지출", formatWon(state.spent)], ["급전", state.debt ? formatWon(state.debt) : "없음"], ["주담대 잔액", state.mortgageBalance ? formatWon(state.mortgageBalance) : "없음"], ["수집 자료", `${state.evidence.length}개`]
     ].map(([label, value]) => `<div class="ending-stat"><span>${label}</span><strong>${value}</strong></div>`).join("");
     const mystery = getCase();
     const learned = state.evidence.filter(item => item.type === "fact" || Object.values(mystery.clues).some(cl => cl.id === item.id) || item.id === "reform_confession");
@@ -2840,12 +3140,18 @@
     const growth = state.growthLog.length ? state.growthLog.slice(0, 6).map(item => `<li><b>${escapeHtml(statLabel(item.stat))} +${item.amount}</b><span>${escapeHtml(item.reason)} · ${item.day}일째</span></li>`).join("") : "<li><span>아직 능력치가 오른 기록은 없습니다. 판정 성공 3회 또는 자기계발로 성장합니다.</span></li>";
     const needs = (player.needs || []).map(need => {
       const cleared = (state.fulfilledNeeds || []).includes(need.id);
-      return `<article class="need-row${cleared ? " is-cleared" : ""}"><strong>${escapeHtml(need.label)}</strong><span>${cleared ? "✓ 달성" : `+${need.points.toLocaleString("ko-KR")}점`}</span><small>${cleared ? "상대에 대해 필요한 사실을 실제로 알아낸 뒤 달성됨" : "관련 정보가 열리고 조건이 맞으면 자동 판정"}</small></article>`;
+      return `<article class="need-row${cleared ? " is-cleared" : ""}"><strong>${escapeHtml(need.label)}</strong><span>${cleared ? "✓ 달성" : `+${needScoreValue(need).toLocaleString("ko-KR")}점`}</span><small>${cleared ? "상대에 대해 필요한 사실을 실제로 알아낸 뒤 달성됨" : "관련 정보가 열리고 조건이 맞으면 자동 판정"}</small></article>`;
     }).join("");
     const scoreHistory = (state.scoreLog || []).length
       ? state.scoreLog.slice(0, 8).map(item => `<li><span>${escapeHtml(item.label)}</span><b>+${item.amount.toLocaleString("ko-KR")}</b></li>`).join("")
       : "<li><span>아직 획득한 점수가 없습니다.</span><b>0</b></li>";
-    openModal("내 프로필", `${player.name} · ${player.age}세`, `<div class="player-profile"><div class="player-profile-head"><div class="player-profile-photo" style="${photoStyle(player.art, "man")}"></div><div><h3>${escapeHtml(player.job)}</h3><p>${escapeHtml(player.hook)}</p><small>약점: ${escapeHtml(player.flaw)}</small></div></div><div class="profile-finance"><span>무한 누적 점수 <b>∞ ${(state.score || 0).toLocaleString("ko-KR")}</b></span><span>월 기준수입 <b>${formatWon(player.income * (state.playerIncomeFactor || 1))}</b></span><span>주거 종잣돈 <b>${formatWon(state.housingAsset || 0)}</b></span><span>현금 <b>${formatWon(state.cash)}</b></span><span>빚 <b>${formatWon(state.debt)}</b></span><span>스트레스 <b>${state.stress}/100</b></span></div><h3 class="modal-section-title">내가 원하는 상대 · 만점 없음</h3><p class="helper-note">한 조건을 달성해도 점수는 끝나지 않습니다. 판정·발견·특별 선택의 점수가 계속 누적됩니다.</p><div class="needs-panel">${needs}</div><h3 class="modal-section-title">현재 능력</h3><div class="profile-stat-list">${stats.map(([id, label]) => `<div><span>${label}</span><div class="profile-stat-track"><i style="width:${state[id] * 10}%"></i></div><b>${state[id]}</b><small>처음 ${player[id]}</small></div>`).join("")}</div><h3 class="modal-section-title">관계와 소통</h3><dl class="profile-detail-list"><div><dt>만난 경로</dt><dd>${escapeHtml(getRoute().name)} · ${escapeHtml(getPlan()?.name || "기본")}</dd></div><div><dt>대화 방식</dt><dd>${escapeHtml(state.communicationMode || "아직 정하지 않음")}</dd></div><div><dt>소통 점수</dt><dd>${state.communicationClarity >= 0 ? "+" : ""}${state.communicationClarity} · 통역 ${state.interpreterOn ? "ON" : "OFF"}</dd></div><div><dt>현재 관계</dt><dd>${escapeHtml(relationshipLabel())}</dd></div></dl><h3 class="modal-section-title">최근 점수</h3><ul class="score-history">${scoreHistory}</ul><h3 class="modal-section-title">최근 성장</h3><ul class="growth-log">${growth}</ul></div>`);
+    const shadows = (player.shadowDesires || []).map(item => {
+      const progress = (state.playerShadow || []).find(saved => saved.id === item.id) || {};
+      const data = shadowData(item.id);
+      const intensity = "●".repeat(item.intensity || 2) + "○".repeat(4 - (item.intensity || 2));
+      return `<article class="shadow-card"><header><span>${data.icon}</span><strong>${escapeHtml(data.label)}</strong><b>${intensity}</b></header><p>${escapeHtml(data.impulse)}</p><dl><div><dt>다룬 방식</dt><dd>합의 ${progress.regulated || 0} · 왜곡 ${progress.distorted || 0}</dd></div><div><dt>건강한 표현</dt><dd>${escapeHtml(data.regulated)}</dd></div><div><dt>왜곡될 때</dt><dd>${escapeHtml(data.distorted)}</dd></div></dl></article>`;
+    }).join("");
+    openModal("내 프로필", `${player.name} · ${player.age}세`, `<div class="player-profile"><div class="player-profile-head"><div class="player-profile-photo" style="${photoStyle(player.art, "man")}"></div><div><h3>${escapeHtml(player.job)}</h3><p>${escapeHtml(player.hook)}</p><small>약점: ${escapeHtml(player.flaw)}</small></div></div><div class="profile-finance"><span>무한 누적 점수 <b>∞ ${(state.score || 0).toLocaleString("ko-KR")}</b></span><span>그림자 공명 <b>${state.shadowResonance || 0}회</b></span><span>그림자 위험 <b>${state.shadowRisk || 0}/100</b></span><span>그녀의 니즈 점수 <b>${(state.partnerMatchScore || 0).toLocaleString("ko-KR")}</b></span><span>월 기준수입 <b>${formatWon(player.income * (state.playerIncomeFactor || 1))}</b></span><span>현금·주거자금 <b>${formatWon(state.cash + (state.housingAsset || 0))}</b></span><span>빚 <b>${formatWon(state.debt)}</b></span><span>스트레스 <b>${state.stress}/100</b></span></div><h3 class="modal-section-title">내가 원하는 상대 · 만점 없음</h3><p class="helper-note">상대의 관련 사실을 실제로 알게 된 뒤에만 달성됩니다. 무작위 외형만으로 좋은 결말이 결정되지는 않습니다.</p><div class="needs-panel">${needs}</div><h3 class="modal-section-title">내 어두운 욕구</h3><p class="helper-note">욕구 자체보다 다루는 방식이 중요합니다. 합의된 공명은 점수가 되고, 상대의 선택권을 지우면 위험으로 남습니다.</p><div class="shadow-grid">${shadows}</div><h3 class="modal-section-title">현재 능력</h3><div class="profile-stat-list">${stats.map(([id, label]) => `<div><span>${label}</span><div class="profile-stat-track"><i style="width:${state[id] * 10}%"></i></div><b>${state[id]}</b><small>처음 ${player[id]}</small></div>`).join("")}</div><h3 class="modal-section-title">관계와 소통</h3><dl class="profile-detail-list"><div><dt>만난 경로</dt><dd>${escapeHtml(getRoute().name)} · ${escapeHtml(getPlan()?.name || "기본")}</dd></div><div><dt>대화 방식</dt><dd>${escapeHtml(state.communicationMode || "아직 정하지 않음")}</dd></div><div><dt>소통 점수</dt><dd>${state.communicationClarity >= 0 ? "+" : ""}${state.communicationClarity} · 통역 ${state.interpreterOn ? "ON" : "OFF"}</dd></div><div><dt>현재 관계</dt><dd>${escapeHtml(relationshipLabel())}</dd></div></dl><h3 class="modal-section-title">최근 점수</h3><ul class="score-history">${scoreHistory}</ul><h3 class="modal-section-title">최근 성장</h3><ul class="growth-log">${growth}</ul></div>`);
   }
 
   function partnerProfileValue(key) {
@@ -2855,7 +3161,7 @@
     const childText = { yes: "아이를 원하지만 시기와 조건을 함께 정하고 싶다", later: "지금 당장보다 생활이 안정된 뒤 다시 결정하고 싶다", unsure: "아직 확신하지 못해 더 살아 본 뒤 정하고 싶다", maybe: "아직 확신하지 못해 더 살아 본 뒤 정하고 싶다", no: "임신·출산을 원하지 않는다" }[state.childIntent] || "아직 생각을 정리하는 중";
     const values = {
       name: partner.name, photo: "처음 받은 사진", publicHint: behavior.publicHint || partner.personality,
-      claimedAge: `${partner.age}세라고 소개함`, claimedCity: `${partner.city}에 산다고 소개함`, claimedJob: `${partner.job}이라고 소개함`,
+      claimedAge: `${partner.age}세라고 소개함`, claimedCity: `${partner.city}에 산다고 소개함`, claimedJob: `${withJosa(partner.job, "이라고", "라고")} 소개함`,
       interests: (partner.interests || []).join(" · "), voice: partner.voice, boundaryClaim: partner.boundary,
       identityMark: partner.verified ? "서비스의 확인 표시가 있음 · 진실 전체를 보증하지는 않음" : "확인 표시 없음",
       responseRhythm: behavior.responseRhythm, affectionLanguage: behavior.affectionLanguage, conflictStyle: behavior.conflictStyle,
@@ -2894,6 +3200,7 @@
   function openPartnerProfile() {
     const partner = getPartner();
     const traits = partner.privateTraits || {};
+    const behaviorInfo = partner.behavior || {};
     const secrets = traits.secrets || [];
     const initialFields = ["publicHint", "claimedAge", "claimedCity", "claimedJob", "interests", "voice", "boundaryClaim", "identityMark"];
     const behaviorFields = ["personalityCore", "speechTone", "responseRhythm", "affectionLanguage", "conflictStyle", "moneyStyle", "independence", "jealousy", "motive"];
@@ -2914,12 +3221,40 @@
     const gates = [...new Set(lockedSecrets.map(secret => secret.gate))].map(gate => secretLockReason({ gate })).join(" · ");
     const secretRows = knownSecrets.map(secret => `<article class="secret-profile is-known"><span>확인됨</span><strong>${escapeHtml(secret.label)}</strong><p>${escapeHtml(secret.detail)}</p></article>`).join("")
       + (lockedSecrets.length ? `<article class="secret-profile is-locked is-summary"><span>잠긴 사정 ${lockedSecrets.length}개</span><strong>아직 이름조차 알 수 없음</strong><p>${escapeHtml(gates)}</p></article>` : "");
-    const knownCount = Object.keys(state.knownProfile || {}).length + state.revealedSecrets.length;
+    const knownCount = Object.keys(state.knownProfile || {}).length + state.revealedSecrets.length + (state.knownPartnerShadows || []).length;
     const bodyNote = state.flags.sharedIntimacy
       ? "둘이 동의해 공유한 범위만 기록되어 있습니다. 신체 정보는 사기 판정 점수가 아닙니다."
       : "키와 체형은 실제 만남에서 보일 수 있지만, 몸무게·치수·문신·속궁합 같은 사생활은 상호 동의가 없는 한 열리지 않습니다.";
     const evidenceRows = state.evidence.length ? state.evidence.map(item => evidenceCardHtml(item, false)).join("") : `<p class="preview-empty">아직 확인한 자료가 없습니다.</p>`;
-    openModal("상대 프로필", `${partner.name} · ${knownCount}개 발견`, `<div class="partner-dossier"><header class="dossier-hero"><div class="dossier-photo" style="${photoStyle(partner.art, "woman", currentPhotoMode())}"></div><div><span>${escapeHtml(getRoute().name)}에서 만남</span><h3>${escapeHtml(partner.name)}</h3><p>호감 ${state.affection} · 그녀의 신뢰 ${state.trust} · 상대 피로 ${state.partnerFatigue} · 사실 확인도 ${state.certainty}. 암흑 칸은 조건을 통과할 때 하나씩 열립니다.</p></div></header><section class="dossier-section"><h3>처음 들은 소개</h3><p>실제로 듣거나 확인한 내용만 밝게 표시됩니다.</p><dl class="dossier-grid">${initial}</dl></section><section class="dossier-section"><h3>행동으로 드러난 성격</h3><p>한 번의 정답보다 반복되는 말투와 선택을 기록합니다.</p><dl class="dossier-grid">${behavior}</dl></section><section class="dossier-section is-private"><h3>서로 동의해 알게 된 사생활</h3><p>${escapeHtml(bodyNote)}</p><dl class="dossier-grid">${body}</dl></section><section class="dossier-section"><h3>아직 말하지 않은 사정</h3><p>관련 사건·자발적 고백·원본 확인 중 맞는 조건이 있어야 이름이 드러납니다.</p><div class="secret-profile-list">${secretRows}</div></section><details class="dossier-section dossier-evidence"><summary>발견 기록과 확인 자료 ${state.evidence.length}개</summary><div class="evidence-list">${evidenceRows}</div></details></div>`);
+    const partnerNeeds = (behaviorInfo.relationshipNeeds || []).map((need, index) => {
+      const id = `${behaviorInfo.id}_${index}`;
+      const cleared = (state.fulfilledPartnerNeeds || []).includes(id);
+      return `<article class="need-row${cleared ? " is-cleared" : ""}"><strong>${escapeHtml(need)}</strong><span>${cleared ? "✓ 내가 충족" : "관찰 중"}</span><small>${cleared ? "내 반복 행동이 그녀의 관계 니즈에 실제로 닿았습니다." : "한 번의 정답보다 같은 태도가 반복되는지를 봅니다."}</small></article>`;
+    }).join("");
+    const needsPanel = state.knownProfile?.personalityCore
+      ? `<div class="needs-panel">${partnerNeeds}</div><article class="taboo-card"><span>금기</span><strong>${escapeHtml(behaviorInfo.taboo || "아직 뚜렷한 금기를 알지 못함")}</strong></article>`
+      : `<div class="dossier-lock-summary"><strong>관계 니즈와 금기는 아직 암흑</strong><span>좋아하는 행동과 부담스러워하는 행동이 반복되어야 열립니다.</span></div>`;
+    const knownShadows = state.knownPartnerShadows || [];
+    const partnerShadows = traits.shadowDesires || [];
+    const shadowRows = partnerShadows.map(item => {
+      const known = knownShadows.includes(item.id);
+      if (!known) return `<article class="shadow-card is-locked"><header><span>◼</span><strong>████████</strong><b>미확인</b></header><p>질투·돈·주도권·의존이 걸린 선택에서 행동을 반복해서 봐야 합니다.</p></article>`;
+      const data = shadowData(item.id);
+      const intensity = "●".repeat(item.intensity || 2) + "○".repeat(4 - (item.intensity || 2));
+      return `<article class="shadow-card"><header><span>${data.icon}</span><strong>${escapeHtml(data.label)}</strong><b>${intensity}</b></header><p>${escapeHtml(data.impulse)}</p><dl><div><dt>안전하게 표현할 때</dt><dd>${escapeHtml(data.regulated)}</dd></div><div><dt>왜곡될 때</dt><dd>${escapeHtml(data.distorted)}</dd></div></dl></article>`;
+    }).join("");
+    const contradiction = knownShadows.length >= 2
+      ? `<article class="contradiction-card"><span>숨은 모순</span><strong>${escapeHtml(behaviorInfo.contradiction || "말과 욕구 사이의 모순을 함께 확인했습니다.")}</strong></article>`
+      : `<article class="contradiction-card is-locked"><span>숨은 모순</span><strong>████████████</strong><small>어두운 욕구 두 개를 모두 알아야 문장이 열립니다.</small></article>`;
+    const dossier = `<div class="partner-dossier"><header class="dossier-hero"><div class="dossier-photo" style="${photoStyle(partner.art, "woman", currentPhotoMode())}"></div><div><span>${escapeHtml(getRoute().name)}에서 만남</span><h3>${escapeHtml(partner.name)}</h3><p>호감 ${state.affection} · 그녀의 신뢰 ${state.trust} · 상대 피로 ${state.partnerFatigue} · 사실 확인도 ${state.certainty}<br>그림자 공명 ${state.shadowResonance || 0} · 위험 ${state.shadowRisk || 0}/100</p></div></header><nav class="dossier-tabs" aria-label="상대 프로필 항목"><button class="is-active" data-profile-tab="intro" type="button">기본 정보</button><button data-profile-tab="life" type="button">성격·생활</button><button data-profile-tab="private" type="button">사생활·그림자</button></nav><section class="dossier-panel" data-profile-panel="intro"><section class="dossier-section"><h3>처음 들은 소개</h3><p>실제로 듣거나 확인한 내용만 밝게 표시됩니다.</p><dl class="dossier-grid">${initial}</dl></section></section><section class="dossier-panel" data-profile-panel="life" hidden><section class="dossier-section"><h3>행동으로 드러난 성격</h3><p>한 번의 정답보다 반복되는 말투와 선택을 기록합니다.</p><dl class="dossier-grid">${behavior}</dl></section><section class="dossier-section"><h3>그녀가 관계에서 원하는 것</h3><p>상대도 나를 평가합니다. 충족한 항목은 전체 점수와 그녀의 니즈 점수에 함께 반영됩니다.</p>${needsPanel}</section></section><section class="dossier-panel" data-profile-panel="private" hidden><section class="dossier-section is-shadow"><h3>그녀의 어두운 욕구</h3><p>욕구는 범죄 증거가 아닙니다. 합의된 공명과 상대 선택권을 지우는 왜곡을 구분합니다.</p><div class="shadow-grid">${shadowRows}</div>${contradiction}</section><section class="dossier-section is-private"><h3>서로 동의해 알게 된 사생활</h3><p>${escapeHtml(bodyNote)}</p><dl class="dossier-grid">${body}</dl></section><section class="dossier-section"><h3>아직 말하지 않은 사정</h3><p>관련 사건·자발적 고백·원본 확인 중 맞는 조건이 있어야 이름이 드러납니다.</p><div class="secret-profile-list">${secretRows}</div></section><details class="dossier-section dossier-evidence"><summary>발견 기록과 확인 자료 ${state.evidence.length}개</summary><div class="evidence-list">${evidenceRows}</div></details></section></div>`;
+    openModal("상대 프로필", `${partner.name} · ${knownCount}개 발견`, dossier, element => {
+      const buttons = [...element.querySelectorAll("[data-profile-tab]")];
+      const panels = [...element.querySelectorAll("[data-profile-panel]")];
+      buttons.forEach(button => button.addEventListener("click", () => {
+        buttons.forEach(item => item.classList.toggle("is-active", item === button));
+        panels.forEach(panel => { panel.hidden = panel.dataset.profilePanel !== button.dataset.profileTab; });
+      }));
+    });
   }
 
   function openMoney() {
@@ -2949,7 +3284,7 @@
     const sixMonthProjection = state.cash + monthlyBalance * 6;
     const debtRisk = state.debt >= 9000000 ? "한 달만 흔들려도 게임오버가 가까운 위험 구간" : state.debt >= 6000000 ? "이자·스트레스·부부갈등이 빠르게 커지는 경고 구간" : state.debt > 0 ? "이자와 스트레스가 매달 붙는 주의 구간" : "빚 없음";
     const tabs = [["all", "전체"], ["income", "수입"], ["expense", "생활 지출"], ["housing", "주거"], ["repayment", "빚 상환"]];
-    const homeName = HOUSING_OPTIONS.find(option => option.id === state.housingChoice)?.name || "아직 계약 전";
+    const homeName = housingOptionById(state.housingChoice)?.name || "아직 계약 전";
     const housingAssetValue = (state.homeValue || 0) + (state.housingDeposit || 0) + (state.housingAsset || 0);
     const netHousing = housingAssetValue - (state.mortgageBalance || 0);
     const sharedCosts = (state.monthlyRemittance || 0) + childCost + pregnancyCost + crossBorderCost + settlingCost;
@@ -2967,7 +3302,7 @@
   }
 
   function openHowTo() {
-    openModal("게임 방법", "사랑과 의심 사이에서 한 사람을 알아가세요", `<ol class="guide-list"><li><strong>날짜와 결혼 개월은 고정 시점으로 흐릅니다</strong><span>상단의 ‘교제 n일째’와 ‘결혼 n개월째’가 현재 시간을 뜻합니다. 장면 번호나 48분의 몇 같은 진행률은 표시하지 않습니다.</span></li><li><strong>남성 캐릭터의 니즈에는 만점이 없습니다</strong><span>내 프로필에서 원하는 성격·외모·나이 차·아이 계획 등을 확인하세요. 상대의 관련 정보가 실제로 열린 뒤 조건이 맞으면 특별점수를 받고, 판정과 발견 점수도 계속 누적됩니다.</span></li><li><strong>호감, 그녀의 신뢰, 사실 확인도는 서로 다릅니다</strong><span>다정하게 대하면 그녀가 나를 믿을 수 있지만, 그 사실만으로 직업·과거·돈의 흐름까지 확인되지는 않습니다.</span></li><li><strong>상대 프로필은 처음에는 암흑입니다</strong><span>성격은 반복 행동, 몸과 건강은 실제 만남과 동의, 숨은 사정은 대화·사건·원본으로 각각 열립니다. 새 사실과 호감·신뢰 변화는 화면 효과로 알려 줍니다.</span></li><li><strong>대부분의 답에는 성공 확률이 있습니다</strong><span>능력과 소통 점수가 확률에 함께 반영됩니다. 언어가 잘 통하지 않으면 소통 점수가 음수로 시작해 같은 말도 실패하기 쉽습니다.</span></li><li><strong>전문 통역은 선택할 때만 결제됩니다</strong><span>상시 ON/OFF 버튼으로 확률과 비용을 실시간 비교할 수 있습니다. 켠 상태에서 판정 선택지를 누를 때만 18만~35만원이 차감되며, 주거·임신처럼 통역으로 해결되지 않는 판정에는 적용되지 않습니다.</span></li><li><strong>캐릭터는 자기 방식으로 먼저 움직입니다</strong><span>일상 메시지, 데이트 제안, 결혼 조건의 말투와 내용이 성격마다 다릅니다. 반복해 관찰하면 이후 선택지에 성격 궁합 힌트가 표시됩니다.</span></li><li><strong>조사는 대상을 직접 정해야 합니다</strong><span>현지 조사에서는 직장·계좌·업체를, 디지털 확인에서는 사진·메시지·사이트를 고릅니다. 충격적인 소문보다 현재 모순과 연결된 원본을 찾으세요.</span></li><li><strong>서울 주거는 현금보다 월 부담이 중요합니다</strong><span>월세·빌라·아파트의 보증금, 자기자본, LTV·DSR·대출 상한, 원리금과 관리비를 함께 계산합니다. 좁은 집과 과도한 월 부담은 배우자의 호감·갈등·피로에 매달 반영됩니다.</span></li><li><strong>부부가 돈을 같이 쓰면 더 빠듯해집니다</strong><span>배우자 취업 전 공백, 임신·육아, 양가 왕래, 송금, 휴직·실직·사업 적자가 월별로 겹칩니다. 급전 600만원부터 이자·스트레스·갈등이 커지고 1,200만원이면 중간 게임오버입니다.</span></li></ol>`);
+    openModal("게임 방법", "사랑과 의심 사이에서 한 사람을 알아가세요", `<ol class="guide-list"><li><strong>날짜와 결혼 개월은 실제 시간입니다</strong><span>상단의 ‘교제 n일째’와 ‘결혼 n개월째’가 현재 시간을 뜻합니다. 90일짜리 선택은 수입·생활비·관계 피로도 실제로 세 달 흐릅니다.</span></li><li><strong>두 사람 모두 밝은 니즈와 어두운 욕구가 있습니다</strong><span>남성의 조건 니즈는 관련 정보를 실제로 안 뒤 판정됩니다. 두 사람의 어두운 욕구는 솔직히 이름 붙이고 멈춤 규칙을 지키면 공명 점수가 쌓이지만, 통제·감시·강요로 왜곡하면 관계 위험이 커집니다.</span></li><li><strong>무한 점수와 관계의 행복은 같은 숫자가 아닙니다</strong><span>발견·증거 연결·서로의 니즈 충족·안전한 그림자 공명으로 점수는 계속 쌓입니다. 높은 점수라도 빚, 갈등, 그림자 위험을 방치하면 나쁜 결말이 올 수 있습니다.</span></li><li><strong>호감, 그녀의 신뢰, 사실 확인도는 서로 다릅니다</strong><span>다정하게 대하면 그녀가 나를 믿을 수 있지만, 그 사실만으로 직업·과거·돈의 흐름까지 확인되지는 않습니다.</span></li><li><strong>상대 프로필은 세 탭으로 열립니다</strong><span>기본 정보, 성격·생활, 사생활·그림자를 나눠 봅니다. 성격은 반복 행동, 민감한 정보는 실제 만남과 동의, 숨은 사정은 대화·사건·원본으로 각각 열립니다.</span></li><li><strong>전문 통역은 만능 정답이 아닙니다</strong><span>법률·돈·서류 대화에서는 큰 도움이 됩니다. 둘만의 친밀한 대화에서는 뜻은 정확해져도 자연스러움과 친밀감이 줄 수 있고, 통역 사용 자체로 점수를 주지 않습니다.</span></li><li><strong>전용 선택은 제한된 기회입니다</strong><span>남성의 강점이 꼭 필요한 일부 장면에서만 나타나며 캠페인당 최대 세 번 쓸 수 있습니다. 일반 선택보다 자동으로 정답이 되지는 않습니다.</span></li><li><strong>캐릭터는 자기 방식으로 먼저 움직입니다</strong><span>일상 메시지, 데이트 제안, 결혼 조건과 실패 반응이 성격마다 다릅니다. 그녀의 니즈 두 개와 금기, 숨은 모순도 반복 행동 속에서 드러납니다.</span></li><li><strong>첫 거주지 합의가 실제 주거 시장을 바꿉니다</strong><span>한국 정착이면 서울 월세·매매와 LTV·DSR을, 현지 거주면 해당 국가의 게임상 생활비 지수와 1년 임대를, 장거리면 두 집과 항공비를 비교합니다. 마련할 수 없는 자기자본은 거짓 확률 대신 선택 불가로 표시됩니다.</span></li><li><strong>부부가 돈을 같이 쓰면 더 빠듯해집니다</strong><span>배우자 취업 공백, 임신·육아, 양가 왕래, 송금, 휴직·실직·사업 적자가 월별로 겹칩니다. 급전 600만원부터 이자·스트레스·갈등이 커지고 1,200만원이면 중간 게임오버입니다.</span></li></ol>`);
   }
 
   function openModal(kicker, title, body, afterRender) {

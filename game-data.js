@@ -70,6 +70,92 @@
     }
   ];
 
+  const shadowDesires = {
+    control: {
+      id: "control", label: "결정권을 쥐고 싶은 마음", icon: "♜",
+      impulse: "상대가 중요한 선택을 자신에게 맡길 때 강하게 끌린다.",
+      regulated: "서로 정한 범위 안에서 주도하고, 거절과 수정 권한을 남긴다.",
+      distorted: "상대의 돈·일·연락·몸에 대한 선택권까지 대신 결정하려 든다.",
+      compatible: ["surrender", "security", "dependence"]
+    },
+    surrender: {
+      id: "surrender", label: "안전한 사람에게 맡기고 싶은 마음", icon: "◐",
+      impulse: "믿을 수 있는 상대가 방향을 정해 줄 때 긴장이 풀린다.",
+      regulated: "언제든 멈출 수 있는 조건과 범위를 먼저 합의한다.",
+      distorted: "불편한 책임까지 상대에게 넘기고 의존을 사랑으로 착각한다.",
+      compatible: ["control", "rescue", "certainty"]
+    },
+    possession: {
+      id: "possession", label: "상대의 가장 중요한 사람이 되고 싶은 마음", icon: "◆",
+      impulse: "상대가 다른 누구보다 자신을 먼저 선택하길 바란다.",
+      regulated: "서로 우선할 순간과 각자의 인간관계를 함께 지킨다.",
+      distorted: "질투를 이유로 친구·가족·동료와의 관계를 감시하거나 끊게 한다.",
+      compatible: ["adoration", "dependence", "surrender"]
+    },
+    rescue: {
+      id: "rescue", label: "구원자가 되어 필요받고 싶은 마음", icon: "✚",
+      impulse: "상대의 문제를 해결해 주며 자기 가치를 확인하고 싶다.",
+      regulated: "도움의 한도와 상환·자립 계획을 함께 정한다.",
+      distorted: "돈과 희생을 은혜로 남겨 상대가 떠나지 못하게 만든다.",
+      compatible: ["security", "escape", "surrender"]
+    },
+    escape: {
+      id: "escape", label: "상대를 통해 다른 삶으로 탈출하고 싶은 마음", icon: "↗",
+      impulse: "이 관계가 지금의 답답한 삶을 완전히 바꿔 주길 바란다.",
+      regulated: "새 삶의 비용과 책임을 나누고 각자 스스로도 준비한다.",
+      distorted: "상대를 사람보다 비자·집·신분·새 출발의 수단으로 본다.",
+      compatible: ["rescue", "security", "status"]
+    },
+    status: {
+      id: "status", label: "매력적인 상대를 통해 가치를 증명하고 싶은 마음", icon: "♛",
+      impulse: "남들이 부러워할 관계를 통해 자신이 특별하다고 느끼고 싶다.",
+      regulated: "서로의 매력을 자랑스러워하되 사생활과 존엄을 지킨다.",
+      distorted: "상대를 트로피와 비교표로 만들고 보이는 조건만 관리한다.",
+      compatible: ["adoration", "escape", "possession"]
+    },
+    security: {
+      id: "security", label: "사랑으로 생활의 안전까지 보장받고 싶은 마음", icon: "▣",
+      impulse: "돈·집·체류가 안정될 때 비로소 사랑받는다고 느낀다.",
+      regulated: "수입·부채·생활비를 공개하고 두 사람의 안전망을 함께 만든다.",
+      distorted: "애정과 결혼을 경제적 보장의 대가처럼 교환한다.",
+      compatible: ["rescue", "certainty", "control"]
+    },
+    adoration: {
+      id: "adoration", label: "조건 없이 선택받고 숭배받고 싶은 마음", icon: "✦",
+      impulse: "반복되는 칭찬과 강한 애정 표현으로 자기 가치를 확인하고 싶다.",
+      regulated: "필요한 애정 표현을 말하되 상대에게 끝없는 증명을 요구하지 않는다.",
+      distorted: "답장·선물·질투를 시험해 사랑을 계속 입증하게 만든다.",
+      compatible: ["possession", "status", "rescue"]
+    },
+    certainty: {
+      id: "certainty", label: "상대의 모든 진실을 알아야 안심되는 마음", icon: "◉",
+      impulse: "빈칸이 남아 있으면 배신의 가능성부터 떠올린다.",
+      regulated: "중요한 사실을 서로 같은 기준으로 확인하고 모를 권리도 인정한다.",
+      distorted: "확인을 명분으로 휴대폰·계좌·과거와 사생활 전부를 열람하려 한다.",
+      compatible: ["security", "surrender", "control"]
+    },
+    dependence: {
+      id: "dependence", label: "상대가 나 없이는 못 살길 바라는 마음", icon: "∞",
+      impulse: "상대가 자신을 절대적으로 필요로 할 때 버려지지 않을 것 같다.",
+      regulated: "서로 의지하되 각자의 일·돈·친구와 떠날 자유를 지킨다.",
+      distorted: "상대의 자립을 약화시켜 관계 밖 선택지를 없앤다.",
+      compatible: ["rescue", "control", "possession"]
+    }
+  };
+
+  const playerShadowProfiles = {
+    junsu: [["rescue", 3], ["adoration", 2]],
+    minho: [["control", 4], ["status", 4]],
+    taeho: [["certainty", 4], ["control", 3]],
+    seongjin: [["rescue", 4], ["dependence", 3]],
+    hyunwoo: [["certainty", 4], ["possession", 2]],
+    dojun: [["adoration", 4], ["escape", 3]]
+  };
+
+  players.forEach(player => {
+    player.shadowDesires = (playerShadowProfiles[player.id] || []).map(([id, intensity]) => ({ ...shadowDesires[id], intensity }));
+  });
+
   const countries = [
     { id: "vn", name: "베트남", flag: "🇻🇳", city: "호찌민·다낭", note: "업체 맞선과 앱 만남이 모두 활발하다" },
     { id: "cn", name: "중국", flag: "🇨🇳", city: "칭다오·선양", note: "소개·커뮤니티·직접 교류 노선이 섞여 있다" },
@@ -240,6 +326,59 @@
       likes: ["honest", "care", "practical"], dislikes: ["pressure", "interrogation", "brag"]
     }
   ];
+
+  const behaviorInnerProfiles = {
+    warm_cautious: {
+      relationshipNeeds: ["대답을 재촉하지 않는 안전", "작은 약속이 실제로 반복되는 생활"],
+      taboo: "거절이나 망설임을 사랑이 없다는 뜻으로 몰아붙이는 것",
+      contradiction: "천천히 가고 싶지만, 아주 안전한 사람에게는 선택을 맡기고 싶어 한다.",
+      shadowIds: ["surrender", "security"]
+    },
+    playful_social: {
+      relationshipNeeds: ["자주 웃고 반응해 주는 관심", "친구와 일상까지 함께 즐기는 연인"],
+      taboo: "자신을 가볍거나 누구에게나 같은 사람으로 취급하는 것",
+      contradiction: "자유로운 척하지만 사랑받는다는 증명이 끊기면 질투가 빠르게 올라온다.",
+      shadowIds: ["adoration", "possession"]
+    },
+    practical_planner: {
+      relationshipNeeds: ["날짜·돈·역할이 분명한 약속", "자기 경력과 개인 돈의 존중"],
+      taboo: "방법과 기한 없이 무엇이든 해 주겠다고 약속하는 것",
+      contradiction: "공정한 계획을 원하지만 불안할수록 모든 변수를 자기 손에 두려 한다.",
+      shadowIds: ["certainty", "control"]
+    },
+    quiet_observer: {
+      relationshipNeeds: ["침묵을 벌로 해석하지 않는 여유", "말보다 오래 이어지는 행동"],
+      taboo: "대답이 느리다는 이유로 휴대폰과 사생활을 확인하는 것",
+      contradiction: "혼자 있고 싶어 하면서도 상대가 자신을 가장 먼저 알아봐 주길 바란다.",
+      shadowIds: ["possession", "certainty"]
+    },
+    family_centered: {
+      relationshipNeeds: ["양가를 짐이 아니라 삶의 일부로 보는 태도", "돌봄과 가족비용의 공동 책임"],
+      taboo: "가족과의 연결을 끊어야 사랑을 증명할 수 있다고 말하는 것",
+      contradiction: "가족을 지키려 하지만 때로는 누군가가 모든 부담에서 구해 주길 바란다.",
+      shadowIds: ["rescue", "security"]
+    },
+    ambitious_independent: {
+      relationshipNeeds: ["능력과 목표를 진심으로 인정받는 것", "결혼 뒤에도 유지되는 선택권"],
+      taboo: "사랑한다면 일과 꿈을 포기해야 한다는 요구",
+      contradiction: "독립을 강조하지만 가장 가까운 사람에게만큼은 특별한 존재로 인정받고 싶어 한다.",
+      shadowIds: ["status", "adoration"]
+    },
+    passionate_impulsive: {
+      relationshipNeeds: ["강하고 분명한 애정 표현", "갈등 뒤에도 다시 가까워지는 확신"],
+      taboo: "감정을 무시한 채 차갑게 연락을 끊는 것",
+      contradiction: "뜨겁게 사랑할수록 상대의 시간과 관심도 전부 자기 것이길 바라기 쉽다.",
+      shadowIds: ["possession", "adoration"]
+    },
+    guarded_survivor: {
+      relationshipNeeds: ["위기 때 사라지지 않는 행동", "돈과 위험을 숨기지 않는 공동 안전망"],
+      taboo: "도움을 준 뒤 빚처럼 기억해 복종을 요구하는 것",
+      contradiction: "누구에게도 기대지 않으려 하지만 안전하다고 느끼면 모든 경계를 내려놓고 싶어 한다.",
+      shadowIds: ["security", "surrender"]
+    }
+  };
+
+  behaviorProfiles.forEach(profile => Object.assign(profile, behaviorInnerProfiles[profile.id] || {}));
 
   const behaviorVoicePacks = {
     warm_cautious: {
@@ -613,5 +752,5 @@
     }
   ];
 
-  window.KG_DATA = { players, countries, routes, paymentPlans, profilePools, behaviorProfiles, people: makePeople(), cases };
+  window.KG_DATA = { players, countries, routes, paymentPlans, profilePools, behaviorProfiles, shadowDesires, people: makePeople(), cases };
 })();
