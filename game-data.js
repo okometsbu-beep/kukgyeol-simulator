@@ -67,102 +67,140 @@
         { id: "chemistry", label: "친밀한 호흡이 강하게 맞는 사람", kind: "chemistry", min: 75, points: 2200 },
         { id: "independent", label: "각자의 일과 자유를 존중하는 사람", kind: "behavior", values: ["ambitious_independent", "practical_planner"], points: 1300 }
       ]
+    },
+    {
+      id: "yeonggil", name: "오영길", age: 62, job: "은퇴한 제조업 임원", cash: 78000000, housingAsset: 270000000, income: 3600000, incomeRisk: "secure", singleLiving: 2100000, monthlyCommitment: 700000, calm: 7, charm: 5, empathy: 4, reason: 6, courage: 8, appearance: 4, portability: 8, art: 3,
+      hook: "남은 시간을 뜨겁게 살고 싶어 하는 황혼 직진남", flaw: "젊음과 속도를 사랑의 증거로 착각한다",
+      needs: [
+        { id: "affectionate", label: "감정을 숨기지 않고 표현하는 사람", kind: "behavior", values: ["passionate_impulsive", "playful_social"], points: 1500 },
+        { id: "gap_twenty", label: "큰 나이 차이에도 관계를 선택하는 사람", kind: "ageGap", min: 20, points: 2600 },
+        { id: "travel", label: "함께 자주 여행할 수 있는 사람", kind: "behavior", values: ["playful_social", "passionate_impulsive", "ambitious_independent"], points: 1300 },
+        { id: "healthy", label: "생활과 건강 관리를 함께할 사람", kind: "health", points: 1200 },
+        { id: "no_pressure", label: "주변 시선보다 둘의 속도를 정할 사람", kind: "behavior", values: ["warm_cautious", "quiet_observer"], points: 1100 }
+      ]
+    },
+    {
+      id: "gwangho", name: "배광호", age: 55, job: "고깃집 사장", cash: 46000000, housingAsset: 190000000, income: 6100000, incomeRisk: "business", singleLiving: 2050000, monthlyCommitment: 2100000, calm: 4, charm: 6, empathy: 5, reason: 5, courage: 8, appearance: 5, portability: 2, art: 1,
+      hook: "손이 크고 생활력도 강하지만 가게와 지출이 무거운 사장", flaw: "해준 만큼 상대가 따라야 한다고 생각하기 쉽다",
+      needs: [
+        { id: "family_first", label: "가게와 가족을 함께 돌볼 사람", kind: "behavior", values: ["family_centered", "guarded_survivor"], points: 1600 },
+        { id: "affectionate", label: "고마움과 애정을 자주 표현하는 사람", kind: "behavior", values: ["playful_social", "passionate_impulsive"], points: 1200 },
+        { id: "children", label: "아이와 큰 가족을 생각하는 사람", kind: "children", min: 2, points: 1800 },
+        { id: "money_rules", label: "가게 돈과 생활비를 구분할 사람", kind: "behavior", values: ["practical_planner", "guarded_survivor"], points: 1500 },
+        { id: "natural_body", label: "꾸밈보다 생활이 편안한 사람", kind: "body", values: ["균형 잡힌 체형", "부드러운 곡선이 있는 체형"], points: 1000 }
+      ]
+    },
+    {
+      id: "junyeong", name: "서준영", age: 28, job: "배달 라이더", cash: 6500000, housingAsset: 12000000, income: 3800000, incomeRisk: "freelance", singleLiving: 1500000, monthlyCommitment: 450000, calm: 3, charm: 7, empathy: 6, reason: 3, courage: 9, appearance: 7, portability: 10, art: 5,
+      hook: "어디든 갈 수 있지만 수입과 감정의 속도도 출렁이는 라이더", flaw: "강렬한 순간을 오래 갈 관계로 착각한다",
+      needs: [
+        { id: "playful", label: "즉흥적인 일상을 함께 즐기는 사람", kind: "behavior", values: ["playful_social", "passionate_impulsive"], points: 1500 },
+        { id: "beautiful", label: "첫눈에 강하게 끌리는 사람", kind: "attractiveness", min: 8, points: 1500 },
+        { id: "independent", label: "각자 일하면서도 자주 만날 사람", kind: "behavior", values: ["ambitious_independent", "practical_planner"], points: 1300 },
+        { id: "chemistry", label: "친밀한 호흡이 강하게 맞는 사람", kind: "chemistry", min: 75, points: 2100 },
+        { id: "no_pressure", label: "실수 뒤에도 다시 이야기할 사람", kind: "behavior", values: ["warm_cautious", "guarded_survivor"], points: 1000 }
+      ]
     }
   ];
 
   const shadowDesires = {
     control: {
       id: "control", label: "결정권을 쥐고 싶은 마음", icon: "♜",
-      impulse: "상대가 중요한 선택을 자신에게 맡길 때 강하게 끌린다.",
+      impulse: "“내가 정한 대로 움직이고, 중요한 결정은 결국 내 허락을 받았으면 좋겠다.”",
       regulated: "서로 정한 범위 안에서 주도하고, 거절과 수정 권한을 남긴다.",
       distorted: "상대의 돈·일·연락·몸에 대한 선택권까지 대신 결정하려 든다.",
       compatible: ["surrender", "security", "dependence"]
     },
     surrender: {
       id: "surrender", label: "안전한 사람에게 맡기고 싶은 마음", icon: "◐",
-      impulse: "믿을 수 있는 상대가 방향을 정해 줄 때 긴장이 풀린다.",
+      impulse: "“책임지기 싫은 선택까지 믿을 만한 상대가 대신 정해 주면 좋겠다.”",
       regulated: "언제든 멈출 수 있는 조건과 범위를 먼저 합의한다.",
       distorted: "불편한 책임까지 상대에게 넘기고 의존을 사랑으로 착각한다.",
       compatible: ["control", "rescue", "certainty"]
     },
     possession: {
       id: "possession", label: "상대의 가장 중요한 사람이 되고 싶은 마음", icon: "◆",
-      impulse: "상대가 다른 누구보다 자신을 먼저 선택하길 바란다.",
+      impulse: "“친구와 가족보다 나를 먼저 고르고, 다른 이성에게 줄 관심도 아까워했으면 좋겠다.”",
       regulated: "서로 우선할 순간과 각자의 인간관계를 함께 지킨다.",
       distorted: "질투를 이유로 친구·가족·동료와의 관계를 감시하거나 끊게 한다.",
       compatible: ["adoration", "dependence", "surrender"]
     },
     rescue: {
       id: "rescue", label: "구원자가 되어 필요받고 싶은 마음", icon: "✚",
-      impulse: "상대의 문제를 해결해 주며 자기 가치를 확인하고 싶다.",
+      impulse: "“내가 구해 줬다는 사실 때문에 상대가 오래 감사하고 나를 떠나지 못했으면 좋겠다.”",
       regulated: "도움의 한도와 상환·자립 계획을 함께 정한다.",
       distorted: "돈과 희생을 은혜로 남겨 상대가 떠나지 못하게 만든다.",
       compatible: ["security", "escape", "surrender"]
     },
     escape: {
       id: "escape", label: "상대를 통해 다른 삶으로 탈출하고 싶은 마음", icon: "↗",
-      impulse: "이 관계가 지금의 답답한 삶을 완전히 바꿔 주길 바란다.",
+      impulse: "“사랑뿐 아니라 국적·집·돈·신분까지 이 관계가 내 인생을 갈아엎어 줬으면 좋겠다.”",
       regulated: "새 삶의 비용과 책임을 나누고 각자 스스로도 준비한다.",
       distorted: "상대를 사람보다 비자·집·신분·새 출발의 수단으로 본다.",
       compatible: ["rescue", "security", "status"]
     },
     status: {
       id: "status", label: "매력적인 상대를 통해 가치를 증명하고 싶은 마음", icon: "♛",
-      impulse: "남들이 부러워할 관계를 통해 자신이 특별하다고 느끼고 싶다.",
+      impulse: "“남들이 배우자를 보고 나를 성공한 사람으로 평가하고 부러워했으면 좋겠다.”",
       regulated: "서로의 매력을 자랑스러워하되 사생활과 존엄을 지킨다.",
       distorted: "상대를 트로피와 비교표로 만들고 보이는 조건만 관리한다.",
       compatible: ["adoration", "escape", "possession"]
     },
     security: {
       id: "security", label: "사랑으로 생활의 안전까지 보장받고 싶은 마음", icon: "▣",
-      impulse: "돈·집·체류가 안정될 때 비로소 사랑받는다고 느낀다.",
+      impulse: "“사랑한다면 내 생활비와 집, 가족의 안전까지 책임져 줘야 한다고 느낀다.”",
       regulated: "수입·부채·생활비를 공개하고 두 사람의 안전망을 함께 만든다.",
       distorted: "애정과 결혼을 경제적 보장의 대가처럼 교환한다.",
       compatible: ["rescue", "certainty", "control"]
     },
     adoration: {
       id: "adoration", label: "조건 없이 선택받고 숭배받고 싶은 마음", icon: "✦",
-      impulse: "반복되는 칭찬과 강한 애정 표현으로 자기 가치를 확인하고 싶다.",
+      impulse: "“계속 칭찬하고 질투하고 선물하며 내가 특별하다는 걸 증명해 줬으면 좋겠다.”",
       regulated: "필요한 애정 표현을 말하되 상대에게 끝없는 증명을 요구하지 않는다.",
       distorted: "답장·선물·질투를 시험해 사랑을 계속 입증하게 만든다.",
       compatible: ["possession", "status", "rescue"]
     },
     certainty: {
       id: "certainty", label: "상대의 모든 진실을 알아야 안심되는 마음", icon: "◉",
-      impulse: "빈칸이 남아 있으면 배신의 가능성부터 떠올린다.",
+      impulse: "“휴대폰·계좌·과거까지 전부 알아야 속이지 않는다고 믿을 수 있을 것 같다.”",
       regulated: "중요한 사실을 서로 같은 기준으로 확인하고 모를 권리도 인정한다.",
       distorted: "확인을 명분으로 휴대폰·계좌·과거와 사생활 전부를 열람하려 한다.",
       compatible: ["security", "surrender", "control"]
     },
     dependence: {
       id: "dependence", label: "상대가 나 없이는 못 살길 바라는 마음", icon: "∞",
-      impulse: "상대가 자신을 절대적으로 필요로 할 때 버려지지 않을 것 같다.",
+      impulse: "“상대가 혼자서는 못 살 정도로 나를 필요로 해야 버림받지 않을 것 같다.”",
       regulated: "서로 의지하되 각자의 일·돈·친구와 떠날 자유를 지킨다.",
       distorted: "상대의 자립을 약화시켜 관계 밖 선택지를 없앤다.",
       compatible: ["rescue", "control", "possession"]
     }
   };
 
-  const playerShadowProfiles = {
-    junsu: [["rescue", 3], ["adoration", 2]],
-    minho: [["control", 4], ["status", 4]],
-    taeho: [["certainty", 4], ["control", 3]],
-    seongjin: [["rescue", 4], ["dependence", 3]],
-    hyunwoo: [["certainty", 4], ["possession", 2]],
-    dojun: [["adoration", 4], ["escape", 3]]
+  const playerCompulsions = {
+    junsu: { id: "rescuer", shadowId: "rescue", label: "구원자 콤플렉스", truth: "사연 있는 상대를 돕고 ‘나만은 떠나지 않을 사람’이 되고 싶다.", reward: "위기에서 돕는 선택은 즉시 신뢰와 특별 대사를 준다.", aftertaste: "도움의 한도를 안 정하면 송금 기대와 의존이 함께 커진다.", triggers: ["care", "affection"] },
+    minho: { id: "trophy", shadowId: "status", label: "트로피 배우자", truth: "젊고 눈에 띄는 배우자를 통해 자신의 성공을 확인하고 싶다.", reward: "과시·고급 데이트는 즉시 호감과 만족을 크게 올린다.", aftertaste: "기대 가격과 비교 습관이 올라가 장기 재정과 신뢰를 갉아먹는다.", triggers: ["extravagant", "brag"] },
+    taeho: { id: "perfect_model", shadowId: "certainty", label: "완벽한 모델 집착", truth: "상대의 말과 행동이 계산표처럼 예측 가능해야 안심한다.", reward: "검증·계획 선택은 정보와 확신을 빠르게 준다.", aftertaste: "빈칸을 못 견디면 대화가 취조로 변하고 사생활 침해 위험이 쌓인다.", triggers: ["practical", "interrogation"] },
+    seongjin: { id: "provider", shadowId: "dependence", label: "부양으로 묶어두기", truth: "돈과 생활을 책임지면 상대가 자신을 절대 떠나지 않을 거라 믿고 싶다.", reward: "큰 지출과 보호 선택은 즉시 호감과 존재감을 올린다.", aftertaste: "감사를 충성으로 바꾸려 할수록 상대의 자립과 신뢰가 약해진다.", triggers: ["extravagant", "care"] },
+    hyunwoo: { id: "certainty", shadowId: "certainty", label: "무결점 확인 강박", truth: "작은 모순 하나도 놓치면 평생 속을 것 같아 끝까지 확인하고 싶다.", reward: "자료 확인은 오판 위험과 불안을 빠르게 낮춘다.", aftertaste: "확인 횟수가 늘수록 스트레스와 상대 피로가 함께 오른다.", triggers: ["interrogation", "practical"] },
+    dojun: { id: "spotlight", shadowId: "adoration", label: "강렬한 장면 집착", truth: "상대가 자신의 연출에 완전히 빠져든 순간을 사랑의 증거로 느낀다.", reward: "로맨틱·즉흥 선택은 특별 장면과 끌림을 크게 올린다.", aftertaste: "다음 장면도 더 세야 만족해 지출과 약속 과장이 커진다.", triggers: ["affection", "adventure"] },
+    yeonggil: { id: "last_spring", shadowId: "escape", label: "마지막 봄 집착", truth: "젊고 뜨거운 사랑으로 늙어 가는 현실과 남은 시간의 두려움을 지우고 싶다.", reward: "빠른 여행·고백·큰 결단은 삶의 만족과 호감을 크게 올린다.", aftertaste: "나이 차이와 간병·상속·생활 속도를 외면할수록 결혼 거절 위험이 커진다.", triggers: ["adventure", "affection"] },
+    gwangho: { id: "big_provider", shadowId: "control", label: "손 큰 가장 강박", truth: "내가 돈과 살림을 크게 책임진 만큼 집안의 마지막 결정도 내 몫이어야 한다고 느낀다.", reward: "가족·돈 문제를 떠맡으면 즉시 존경과 호감이 오른다.", aftertaste: "‘해줬으니 따라라’가 반복되면 갈등과 사업 현금 압박이 동시에 쌓인다.", triggers: ["care", "extravagant"] },
+    junyeong: { id: "instant_fire", shadowId: "adoration", label: "즉시 몰입 강박", truth: "강하게 끌린 첫 순간이 식기 전에 관계의 모든 단계를 통과하고 싶다.", reward: "즉흥·유머·고백 선택은 끌림과 특별 대사를 빠르게 연다.", aftertaste: "속도가 다른 상대에겐 압박이 되고 돈·시간·수입 안정성을 놓치게 된다.", triggers: ["humor", "adventure", "pressure"] }
   };
 
   players.forEach(player => {
-    player.shadowDesires = (playerShadowProfiles[player.id] || []).map(([id, intensity]) => ({ ...shadowDesires[id], intensity }));
+    player.compulsion = playerCompulsions[player.id];
+    const shadowId = player.compulsion?.shadowId;
+    player.shadowDesires = shadowId ? [{ ...shadowDesires[shadowId], intensity: 4 }] : [];
   });
 
   const countries = [
-    { id: "vn", name: "베트남", flag: "🇻🇳", city: "호찌민·다낭", note: "업체 맞선과 앱 만남이 모두 활발하다" },
-    { id: "cn", name: "중국", flag: "🇨🇳", city: "칭다오·선양", note: "소개·커뮤니티·직접 교류 노선이 섞여 있다" },
-    { id: "th", name: "태국", flag: "🇹🇭", city: "방콕·치앙마이", note: "앱과 현지 장기교류의 비중이 높다" },
-    { id: "jp", name: "일본", flag: "🇯🇵", city: "도쿄·오사카", note: "언어교환과 취미 커뮤니티 노선이 많다" },
-    { id: "ph", name: "필리핀", flag: "🇵🇭", city: "마닐라·세부", note: "영어 대화가 쉽지만 장거리 판단은 남는다" },
-    { id: "kh", name: "캄보디아", flag: "🇰🇭", city: "프놈펜·시엠립", note: "가족·업체·통역사가 관계에 끼기 쉽다" }
+    { id: "vn", name: "베트남", flag: "🇻🇳", city: "호찌민·다낭", note: "업체 맞선과 앱 만남이 모두 활발하다", travel: { airfare: 420000, lodgingNight: 70000, date: 120000, luxury: 650000, translation: 2000 } },
+    { id: "cn", name: "중국", flag: "🇨🇳", city: "칭다오·선양", note: "소개·커뮤니티·직접 교류 노선이 섞여 있다", travel: { airfare: 360000, lodgingNight: 85000, date: 140000, luxury: 720000, translation: 3000 } },
+    { id: "th", name: "태국", flag: "🇹🇭", city: "방콕·치앙마이", note: "앱과 현지 장기교류의 비중이 높다", travel: { airfare: 520000, lodgingNight: 90000, date: 150000, luxury: 780000, translation: 3000 } },
+    { id: "jp", name: "일본", flag: "🇯🇵", city: "도쿄·오사카", note: "언어교환과 취미 커뮤니티 노선이 많다", travel: { airfare: 330000, lodgingNight: 125000, date: 180000, luxury: 980000, translation: 1000 } },
+    { id: "ph", name: "필리핀", flag: "🇵🇭", city: "마닐라·세부", note: "영어 대화가 쉽지만 장거리 판단은 남는다", travel: { airfare: 470000, lodgingNight: 80000, date: 130000, luxury: 700000, translation: 1000 } },
+    { id: "kh", name: "캄보디아", flag: "🇰🇭", city: "프놈펜·시엠립", note: "가족·업체·통역사가 관계에 끼기 쉽다", travel: { airfare: 590000, lodgingNight: 65000, date: 100000, luxury: 620000, translation: 6000 } }
   ];
 
   const routes = [
@@ -379,6 +417,19 @@
   };
 
   behaviorProfiles.forEach(profile => Object.assign(profile, behaviorInnerProfiles[profile.id] || {}));
+
+  const behaviorMindProfiles = {
+    warm_cautious: { mbti: "ISFJ", hiddenReaction: "cautious", hiddenNeed: "속도를 존중받으면 예상보다 깊이 의지한다" },
+    playful_social: { mbti: "ESFP", hiddenReaction: "approval", hiddenNeed: "반응과 칭찬이 끊기면 관심이 사라졌다고 느낀다" },
+    practical_planner: { mbti: "ESTJ", hiddenReaction: "planner", hiddenNeed: "감정보다 실행 날짜와 책임자가 보여야 안심한다" },
+    quiet_observer: { mbti: "INFJ", hiddenReaction: "observer", hiddenNeed: "압박하지 않고 기억해 주는 행동에 오래 마음이 움직인다" },
+    family_centered: { mbti: "ESFJ", hiddenReaction: "family", hiddenNeed: "가족을 존중하는 행동을 자신에 대한 사랑으로 받아들인다" },
+    ambitious_independent: { mbti: "ENTJ", hiddenReaction: "independent", hiddenNeed: "자기 능력을 인정하면서 선택권을 남기는 사람에게 끌린다" },
+    passionate_impulsive: { mbti: "ENFP", hiddenReaction: "impulsive", hiddenNeed: "계획 밖의 강한 표현과 즉흥 제안에 쉽게 몰입한다" },
+    guarded_survivor: { mbti: "ISTP", hiddenReaction: "guarded", hiddenNeed: "말보다 위기 때의 반복 행동으로만 경계를 낮춘다" }
+  };
+
+  behaviorProfiles.forEach(profile => Object.assign(profile, behaviorMindProfiles[profile.id] || {}));
 
   const behaviorVoicePacks = {
     warm_cautious: {
