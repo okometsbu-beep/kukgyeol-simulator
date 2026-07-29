@@ -1207,6 +1207,7 @@
       flags: { originalScam: mystery.culprit !== "none", partnerOriginallyScam: ["partner", "both"].includes(mystery.culprit), faceRevealed: false, metInPerson: false, residenceAgreed: false },
       moneyLog: [],
       pending: null,
+      awaitingAdvance: false,
       pressed: {},
       ending: null
     };
@@ -3509,6 +3510,7 @@
     renderChoices([choice("continue_scene", "다음 장면으로", "이 선택의 결과를 반영하고 이야기를 이어 간다.", `호감 ${state.affection} · 그녀의 신뢰 ${state.trust} · 확인도 ${state.certainty} · 상대 피로 ${state.partnerFatigue}`, 0, "plain")]);
     refreshStatusHud();
     updateSidebar();
+    state.awaitingAdvance = true;
     saveGame(false);
     playResultEffects(result);
   }
@@ -3559,6 +3561,7 @@
     if (event) event.preventDefault();
     if (state.debt >= DEBT_LIMIT) return finishEarly("debt");
     if (!state.married && state.daysLeft < 0) return finishEarly("deadline");
+    state.awaitingAdvance = false;
     state.scene += 1;
     if (state.scene >= scenes.length) return resolveDecision("decide_postpone");
     syncSceneCalendar();
@@ -3909,7 +3912,8 @@
       scenes = (state.campaignIds || []).map(id => SCENE_LIBRARY.find(scene => scene.id === id)).filter(Boolean);
       if (!scenes.length) scenes = buildCampaign(state.routeId, state.partnerSnapshot?.behavior?.id);
       showScreen("game");
-      renderGame();
+      if (state.awaitingAdvance) advanceScene();
+      else renderGame();
     } catch (_) {
       localStorage.removeItem(SAVE_KEY);
       setSavedButton();
