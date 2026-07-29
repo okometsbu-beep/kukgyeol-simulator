@@ -82,6 +82,7 @@ button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); ou
 .title-copy h1 { margin: 0; font-family: Georgia, "Noto Serif KR", serif; font-size: clamp(3.5rem, 8vw, 6.6rem); line-height: .92; letter-spacing: -.08em; }
 .tagline { margin: 2rem 0; color: #ded7df; font-family: Georgia, "Noto Serif KR", serif; font-size: clamp(1.15rem, 2vw, 1.45rem); line-height: 1.8; }
 .title-actions { display: grid; gap: .7rem; max-width: 23rem; }
+.quick-start-note { margin: -.25rem .2rem .1rem; color: #a69dab; font-size: .7rem; line-height: 1.45; text-align: center; }
 .content-note { max-width: 25rem; margin: 2rem 0 0; color: #88808c; font-size: .72rem; }
 
 .primary-button, .ghost-button, .secondary-button, .text-button, .icon-button {
@@ -107,6 +108,7 @@ button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); ou
 .setup-progress { height: .23rem; overflow: hidden; border-radius: 999px; background: #332b3d; }
 .setup-progress span { display: block; width: 25%; height: 100%; border-radius: inherit; background: var(--rose); transition: width .3s ease; }
 .setup-guide { margin: 1.15rem 0; color: #beb6c1; }
+.setup-screen.is-quick-start .step-badge { border-color: rgba(239,111,145,.42); color: #f1afc1; background: rgba(239,111,145,.08); }
 .selection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
 .selection-card {
   position: relative;
@@ -324,7 +326,9 @@ button.chat-bubble { cursor: pointer; appearance: none; }
 .choice-description { margin-top: .35rem; color: #c5bdc8; font-size: .78rem; line-height: 1.55; }
 .choice-chance { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .55rem; padding: .38rem .5rem; border: 1px solid rgba(119,169,239,.26); border-radius: .5rem; background: rgba(119,169,239,.08); color: #b8d4f8; font-size: .7rem; font-weight: 850; }
 .choice-chance[hidden] { display: none; }
-.choice-chance::before { content: "🎲"; }
+.choice-chance[hidden]::before { content: none; }
+.choice-card.is-read-check .choice-chance::before { content: "◉"; }
+.choice-card.is-world-check .choice-chance::before { content: "🎲"; }
 .choice-chance.is-low { border-color: rgba(237,94,102,.35); background: rgba(237,94,102,.08); color: #f3a6ab; }
 .choice-chance.is-high { border-color: rgba(113,213,178,.32); background: rgba(113,213,178,.08); color: #9be5cc; }
 .choice-impact { margin-top: auto; padding-top: .55rem; color: #928a97; font-size: .69rem; }
