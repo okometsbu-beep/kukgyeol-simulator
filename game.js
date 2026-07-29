@@ -178,7 +178,7 @@
     return [...HOUSING_OPTIONS, ...localHousingOptions(), ...DISTANCE_HOUSING_OPTIONS, housingFallback()].find(option => option.id === id);
   }
 
-  const setup = { step: 0, playerId: null, countryId: null, routeId: null, planId: null, partnerId: null, partnerSnapshot: null, candidates: [] };
+  const setup = { step: 0, playerId: null, countryId: null, routeId: null, planId: null, partnerId: null, partnerSnapshot: null, candidates: [], quickStart: false };
   let state = null;
   let rematchCarry = null;
   let moneyFilter = "all";
@@ -402,6 +402,23 @@
     setup.partnerId = null;
     setup.partnerSnapshot = null;
     setup.candidates = [];
+    setup.quickStart = false;
+    renderSetup();
+  }
+
+  function beginQuickStart() {
+    rematchCarry = null;
+    setup.playerId = "junsu";
+    setup.countryId = pick(DATA.countries).id;
+    setup.routeId = pick(["app", "app", "app", "friend", "friend", "community", "community", "broker"]);
+    const plans = DATA.paymentPlans[setup.routeId] || [];
+    setup.planId = [...plans].sort((a, b) => a.price - b.price)[0]?.id || null;
+    setup.partnerId = null;
+    setup.partnerSnapshot = null;
+    setup.step = 4;
+    setup.quickStart = true;
+    setup.candidates = buildCandidates().slice(0, 3);
+    showScreen("setup");
     renderSetup();
   }
 
@@ -420,7 +437,15 @@
           ? ["소개 자리를 선택하세요", "공통 지인 동석 여부와 기본 확인 범위를 정합니다. 앱 멤버십 결제가 아니라 식사·통역·확인 비용입니다."]
           : ["모임 참가 방식을 선택하세요", "공개 모임, 소규모 교류회, 통역 동행 중에서 정합니다. 참가비와 대화 지원 범위가 달라집니다."];
     }
-    if (setup.step === 4 && rematchCarry) {
+    if (setup.step === 4 && setup.quickStart) {
+      const player = DATA.players.find(item => item.id === setup.playerId);
+      const country = DATA.countries.find(item => item.id === setup.countryId);
+      const route = DATA.routes.find(item => item.id === setup.routeId);
+      copy[4] = [
+        "오늘의 사건, 누구에게 답할까?",
+        `${player?.name || "균형형 주인공"} · ${country?.name || "해외"} · ${route?.name || "추천 경로"}가 자동 배정됐습니다. 세 사람 중 마음이 가는 한 명만 고르면 바로 첫 대화가 시작됩니다.`
+      ];
+    } else if (setup.step === 4 && rematchCarry) {
       copy[4] = ["손실을 안고 다시 만날 세 사람", `${rematchCarry.attempt}회차입니다. 이전 관계에서 잃은 돈·21일·스트레스는 돌아오지 않습니다. 새 후보 세 명 중 누구에게 남은 시간과 자금을 쓸지 고르세요.`];
     }
     return copy[setup.step];
@@ -460,10 +485,11 @@
     const [title, guide] = setupCopy();
     $("#setup-title").textContent = title;
     $("#setup-guide").textContent = guide;
-    $("#setup-step").textContent = `${setup.step + 1} / 5`;
-    $("#setup-progress-bar").style.width = `${(setup.step + 1) * 20}%`;
+    $("#setup-step").textContent = setup.quickStart ? "바로 시작" : `${setup.step + 1} / 5`;
+    $("#setup-progress-bar").style.width = `${setup.quickStart ? 100 : (setup.step + 1) * 20}%`;
     screens.setup.classList.toggle("is-player-selection", setup.step === 0);
     screens.setup.classList.toggle("is-match-selection", setup.step >= 3);
+    screens.setup.classList.toggle("is-quick-start", setup.quickStart);
     ["app", "friend", "broker", "community"].forEach(route => screens.setup.classList.toggle(`setup-route-${route}`, setup.step >= 3 && setup.routeId === route));
     const grid = $("#setup-grid");
     grid.innerHTML = "";
@@ -1181,6 +1207,7 @@
       flags: { originalScam: mystery.culprit !== "none", partnerOriginallyScam: ["partner", "both"].includes(mystery.culprit), faceRevealed: false, metInPerson: false, residenceAgreed: false },
       moneyLog: [],
       pending: null,
+      awaitingAdvance: false,
       pressed: {},
       ending: null
     };
@@ -2522,6 +2549,8 @@
       node.querySelector(".choice-title").textContent = item.title;
       node.querySelector(".choice-description").textContent = item.description;
       const worldCheck = isWorldCheck(item);
+      if (worldCheck) node.classList.add("is-world-check");
+      else if (item.check) node.classList.add("is-read-check");
       const impact = !worldCheck && item.check
         ? plainImpact(item.impact).replace(/[가-힣·+]+ 판정/g, "성격·맥락 반응").replace(/성공하면/g, "반응이 맞으면")
         : plainImpact(item.impact);
@@ -2539,7 +2568,7 @@
         } else {
           const mbti = state.knownProfile?.mbti ? ` · MBTI ${getPartner().mbti}` : "";
           const interpreter = state.interpreterOn && translationCost ? ` · 통역 ${formatWon(translationCost)}` : "";
-          chanceNode.textContent = item.check.hardBlocked ? item.check.label : `성격·현재 감정·이전 행동으로 반응${mbti}${interpreter}`;
+          chanceNode.textContent = item.check.hardBlocked ? item.check.label : `상대 읽기 · ${getPartner().name}의 성격과 지금까지의 대화가 결과를 정함${mbti}${interpreter}`;
           chanceNode.classList.remove("is-low", "is-high");
         }
       }
@@ -3135,7 +3164,7 @@
     state.pendingSkillText = "";
     applyDelta(result);
     if (checkSuccess && choiceMeta?.check) {
-      const label = choiceMeta.special ? "제한된 전용 선택 적중" : isWorldCheck(choiceMeta) ? "세계 변수의 좋은 결과" : "상대 읽기 적중";
+      const label = choiceMeta.special ? "제한된 전용 선택 적중" : isWorldCheck(choiceMeta) ? "세계 변수의 좋은 결과" : "대화 맥락을 읽음";
       awardScore(choiceMeta.special ? 55 : 35, label, result, choiceMeta.special ? "special" : "play");
     }
     if (state.pendingInterpreterUsed) {
@@ -3481,6 +3510,7 @@
     renderChoices([choice("continue_scene", "다음 장면으로", "이 선택의 결과를 반영하고 이야기를 이어 간다.", `호감 ${state.affection} · 그녀의 신뢰 ${state.trust} · 확인도 ${state.certainty} · 상대 피로 ${state.partnerFatigue}`, 0, "plain")]);
     refreshStatusHud();
     updateSidebar();
+    state.awaitingAdvance = true;
     saveGame(false);
     playResultEffects(result);
   }
@@ -3531,6 +3561,7 @@
     if (event) event.preventDefault();
     if (state.debt >= DEBT_LIMIT) return finishEarly("debt");
     if (!state.married && state.daysLeft < 0) return finishEarly("deadline");
+    state.awaitingAdvance = false;
     state.scene += 1;
     if (state.scene >= scenes.length) return resolveDecision("decide_postpone");
     syncSceneCalendar();
@@ -3881,7 +3912,8 @@
       scenes = (state.campaignIds || []).map(id => SCENE_LIBRARY.find(scene => scene.id === id)).filter(Boolean);
       if (!scenes.length) scenes = buildCampaign(state.routeId, state.partnerSnapshot?.behavior?.id);
       showScreen("game");
-      renderGame();
+      if (state.awaitingAdvance) advanceScene();
+      else renderGame();
     } catch (_) {
       localStorage.removeItem(SAVE_KEY);
       setSavedButton();
@@ -3935,12 +3967,14 @@
     setup.partnerId = null;
     setup.partnerSnapshot = null;
     setup.step = 4;
+    setup.quickStart = false;
     state = null;
     setup.candidates = buildCandidates().slice(0, 3);
     showScreen("setup");
     renderSetup();
   }
 
+  $("#quick-game").addEventListener("click", beginQuickStart);
   $("#new-game").addEventListener("click", () => { resetSetup(); showScreen("setup"); });
   $("#continue-game").addEventListener("click", continueGame);
   $("#how-to").addEventListener("click", openHowTo);
