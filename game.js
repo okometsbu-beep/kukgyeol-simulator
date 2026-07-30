@@ -1262,6 +1262,20 @@
     return paid;
   }
 
+  function monthlyBudgetSnapshot() {
+    if (!state?.married) return { income: 0, recurring: 0, interest: 0, balance: 0 };
+    const player = getPlayer();
+    const childCost = state.children * 785000;
+    const pregnancyCost = state.pregnancy ? 320000 : 0;
+    const settlingCost = state.monthsMarried <= 6 ? EARLY_SETTLING_MONTHLY : 0;
+    const income = Math.round(player.income * (state.playerIncomeFactor || 1)) + Math.max(0, state.partnerIncome || 0);
+    const recurring = state.monthlyLiving + player.monthlyCommitment + state.monthlyRemittance + childCost + pregnancyCost
+      + (state.monthlySharedPersonal || SHARED_PERSONAL_MONTHLY) + (state.monthlyCrossBorder || CROSS_BORDER_MONTHLY)
+      + settlingCost + (state.monthlyHousing || 0);
+    const interest = state.debt ? Math.max(100000, Math.round(state.debt * .025)) : 0;
+    return { income, recurring, interest, balance: income - recurring - interest };
+  }
+
   function incomeFactorFor(player) {
     const roll = Math.random();
     if (player.incomeRisk === "secure") return roll < .04 ? .55 : .96 + Math.random() * .07;
@@ -1329,7 +1343,15 @@
             state.stress = clamp(state.stress + Math.min(3, Math.abs(state.housingSatisfaction)), 0, 100);
             state.partnerFatigue = clamp(state.partnerFatigue + Math.min(4, Math.abs(state.housingSatisfaction) + 1), 0, 100);
           }
-          state.stress = clamp(state.stress + (state.children ? 3 : 1), 0, 100);
+          const recurringOutgo = livingCost + (state.monthlyHousing || 0);
+          const stableMargin = householdIncome - recurringOutgo;
+          const baseStress = state.children ? 3 : state.pregnancy ? 2 : 1;
+          const stableRecovery = stableMargin >= 1500000 && state.debt === 0 && state.conflict < 40
+            ? 5
+            : stableMargin >= 500000 && state.debt < 3000000 && state.conflict < 55
+              ? 3
+              : 0;
+          state.stress = clamp(state.stress + baseStress - stableRecovery, 0, 100);
           state.partnerFatigue = clamp(state.partnerFatigue + (state.pregnancy ? 5 : 0) + (state.children ? 4 : 0) + (partnerWorkFactor < .4 && state.partnerIncome > 0 ? 4 : 0), 0, 100);
           if (state.partnerFatigue >= 80) {
             state.affection = clamp(state.affection - 2, 0, 100);
@@ -1338,6 +1360,11 @@
         } else {
           spend(player.singleLiving + player.monthlyCommitment, "개인 생활비·고정비");
           if (state.ending) break;
+        }
+        if (state.debt > 0) {
+          const emergencyReserve = state.married ? 3000000 + state.children * 500000 : 2000000;
+          const surplusCash = Math.max(0, state.cash - emergencyReserve);
+          if (surplusCash > 0) repayDebt(Math.round(surplusCash * .65), "월말 급전 자동 상환");
         }
         if (state.debt > 0) {
           const interest = Math.max(100000, Math.round(state.debt * .025));
@@ -1441,6 +1468,7 @@
 
   function applyDelta(result) {
     if (result.cost) spend(result.cost, result.costLabel || result.title);
+    if (result.preSet) Object.assign(state, result.preSet);
     if (result.trust) {
       const change = balancedTrust(result.trust);
       state.trust = change > 0 ? Math.min(trustCeiling(), state.trust + change) : clamp(state.trust + change, 0, 100);
@@ -2346,7 +2374,7 @@
   }
 
   function inferredCheck(item) {
-    const noRoll = ["try_pregnancy", "hire_investigator", "digital_verify", "open_contradiction_board", "open_negotiation", "family_stay", "family_separate", "family_accuse"];
+    const noRoll = ["try_pregnancy", "hire_investigator", "digital_verify", "open_contradiction_board", "open_negotiation", "budget_reset", "family_stay", "family_separate", "family_accuse"];
     if (!item || item.check || /^(continue_|press_|present_|pass_|decide_)/.test(item.id) || noRoll.includes(item.id)) return item?.check || null;
     const category = behaviorCategory(item.id);
     const stat = item.style === "investigate" ? "reason"
@@ -2379,8 +2407,27 @@
     return { ...choice(`special_${player.id}_${scene.id}`, special.title, `${special.description} 이번 캠페인에서 남은 전용 기회 ${3 - (state.specialUses || 0)}회.`, special.impact, 0, "special", { stat: special.stat, base: 50, special: true, label: `${player.name} 전용 · 제한 기회` }), special: true };
   }
 
+  function budgetRescueChoice(choices) {
+    if (!state?.married || !choices?.length || choices.some(item => item.id === "continue_scene")) return null;
+    if ((state.budgetResetCount || 0) >= 2 || state.scene - (state.budgetResetScene ?? -99) < 4) return null;
+    const budget = monthlyBudgetSnapshot();
+    const needsReset = budget.balance <= -300000 || state.debt >= 2500000 || state.stress >= 82;
+    if (!needsReset) return null;
+    const balanceLabel = budget.balance < 0 ? `월 ${formatWon(Math.abs(budget.balance))} 적자` : `월 ${formatWon(budget.balance)} 흑자`;
+    return choice(
+      "budget_reset",
+      `[가계 경보] ${balanceLabel} 구조조정 회의를 연다`,
+      "생활비·개인비·가족지원·왕래비를 다시 합의하고, 비상금 밖의 현금으로 급전을 갚는다. 관계의 체면보다 다음 달 생존을 먼저 고른다.",
+      `생활 고정비 감소 · 스트레스 회복 · 현재 급전 ${formatWon(state.debt)}`,
+      200000,
+      "investigate"
+    );
+  }
+
   function enhanceSceneChoices(choices) {
     const expanded = (choices || []).map(item => ({ ...item, check: item.check || inferredCheck(item) }));
+    const budgetChoice = budgetRescueChoice(expanded);
+    if (budgetChoice) expanded.unshift({ ...budgetChoice, check: inferredCheck(budgetChoice) });
     const special = playerSpecialChoice();
     if (special && !expanded.some(item => item.id.startsWith("special_"))) expanded.push(special);
     return expanded;
@@ -2465,6 +2512,22 @@
     $("#milestone-label").textContent = milestone[0];
     $("#milestone-text").textContent = milestone[1];
     $("#milestone-days").textContent = milestone[2];
+    const budget = monthlyBudgetSnapshot();
+    const budgetAlert = $("#budget-alert");
+    const showBudgetAlert = state.married && (budget.balance < 0 || state.debt > 0 || state.stress >= 75);
+    budgetAlert.hidden = !showBudgetAlert;
+    if (showBudgetAlert) {
+      const balanceLabel = budget.balance < 0
+        ? `월 ${formatWon(Math.abs(budget.balance))} 적자`
+        : `월 ${formatWon(budget.balance)} 흑자`;
+      $("#budget-alert-title").textContent = state.debt
+        ? `${balanceLabel} · 급전 ${formatWon(state.debt)}`
+        : balanceLabel;
+      $("#budget-alert-detail").textContent = budget.balance < 0
+        ? "다음 선택에서 구조조정 회의를 열 수 있습니다."
+        : "흑자를 유지하면 급전이 자동 상환되고 스트레스가 회복됩니다.";
+      budgetAlert.classList.toggle("is-critical", budget.balance <= -800000 || state.debt >= 5000000 || state.stress >= 90);
+    }
     $("#cash-label").textContent = state.debt ? `빚 ${formatWon(state.debt)}` : formatWon(state.cash);
     $("#affection-label").textContent = state.affection;
     $("#conflict-label").textContent = state.conflict;
@@ -3188,6 +3251,42 @@
     const partner = getPartner();
     const player = getPlayer();
     const mystery = getCase();
+    if (id === "budget_reset") {
+      const before = monthlyBudgetSnapshot();
+      const nextLiving = Math.max(1650000, state.monthlyLiving - 450000);
+      const nextPersonal = Math.max(500000, (state.monthlySharedPersonal || SHARED_PERSONAL_MONTHLY) - 250000);
+      const nextRemittance = Math.max(0, (state.monthlyRemittance || 0) - 250000);
+      const nextCrossBorder = state.homeCountry === "distance"
+        ? 0
+        : Math.max(100000, (state.monthlyCrossBorder || CROSS_BORDER_MONTHLY) - 100000);
+      const monthlyCut = (state.monthlyLiving - nextLiving)
+        + ((state.monthlySharedPersonal || SHARED_PERSONAL_MONTHLY) - nextPersonal)
+        + ((state.monthlyRemittance || 0) - nextRemittance)
+        + ((state.monthlyCrossBorder || CROSS_BORDER_MONTHLY) - nextCrossBorder);
+      const debtPayment = Math.max(0, Math.min(state.debt || 0, state.cash - 3200000));
+      return {
+        title: "체면보다 다음 달 생존을 골랐다",
+        text: `고정비를 월 ${formatWon(monthlyCut)} 줄이고 6개월 동안 큰 선물·추가 송금·불필요한 왕래를 멈췄다. ${debtPayment ? `비상금 300만원을 남기고 급전 ${formatWon(debtPayment)}도 바로 갚았다.` : "당장 갚을 현금은 없어도 적자가 더 커지는 속도부터 낮췄다."}\n\n구조조정 전 예상은 월 ${before.balance < 0 ? `${formatWon(Math.abs(before.balance))} 적자` : `${formatWon(before.balance)} 흑자`}였다. 사랑의 증명서를 카드 명세서로 제출하는 짓은 여기서 멈춘다.`,
+        trust: 5,
+        affection: -2,
+        conflict: -6,
+        calm: 3,
+        days: 7,
+        cost: 200000,
+        costLabel: "가계 구조조정 상담·정리비",
+        debtPayment,
+        debtLabel: "구조조정 급전 상환",
+        preSet: {
+          monthlyLiving: nextLiving,
+          monthlySharedPersonal: nextPersonal,
+          monthlyRemittance: nextRemittance,
+          monthlyCrossBorder: nextCrossBorder,
+          budgetResetCount: (state.budgetResetCount || 0) + 1,
+          budgetResetScene: state.scene
+        },
+        flags: { budgetRestructured: true }
+      };
+    }
     if (id.startsWith("special_")) return resolvePlayerSpecial(checkSuccess);
     if (id.startsWith("housing_")) return resolveHousingChoice(id, checkSuccess);
     const partnerScam = partnerScamActive();

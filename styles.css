@@ -262,6 +262,13 @@ button.status-pill { cursor: pointer; }
 .milestone-card span { color: #9fc4f4; font-size: .68rem; font-weight: 900; }
 .milestone-card strong { font-size: .76rem; }
 .milestone-card small { color: #a59dab; font-size: .67rem; white-space: nowrap; }
+.budget-alert { display: grid; grid-template-columns: auto 1fr; gap: .18rem .55rem; align-items: baseline; margin: -.15rem 0 .7rem; padding: .62rem .75rem; border: 1px solid rgba(228,183,93,.38); border-radius: .7rem; background: linear-gradient(135deg, rgba(228,183,93,.13), rgba(237,94,102,.06)); }
+.budget-alert[hidden] { display: none; }
+.budget-alert span { grid-row: 1 / 3; align-self: center; padding: .2rem .42rem; border-radius: 999px; background: rgba(228,183,93,.16); color: #f2d58f; font-size: .62rem; font-weight: 950; white-space: nowrap; }
+.budget-alert strong { color: #f7e5b9; font-size: .76rem; }
+.budget-alert small { color: #b9a98d; font-size: .66rem; line-height: 1.45; }
+.budget-alert.is-critical { border-color: rgba(237,94,102,.48); background: linear-gradient(135deg, rgba(237,94,102,.14), rgba(228,183,93,.07)); }
+.budget-alert.is-critical span { background: rgba(237,94,102,.18); color: #ffc3c8; }
 .dialogue-box { position: relative; min-height: 8.5rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: .5rem 1.1rem 1.1rem 1.1rem; background: rgba(33,28,41,.97); box-shadow: 0 15px 35px rgba(0,0,0,.2); }
 .scene-context { margin: 0 0 .55rem !important; color: #9d94a2; font-family: inherit !important; font-size: .7rem !important; font-weight: 800; letter-spacing: .03em; line-height: 1.4 !important; }
 .speaker-row { display: flex; gap: .55rem; align-items: center; }
@@ -659,6 +666,7 @@ button.evidence-card:hover { border-color: var(--blue); }
   .objective-card { margin: .42rem 0; padding: .42rem .58rem; font-size: .7rem; }
   .objective-card span { display: none; }
   .milestone-card { display: none; }
+  .budget-alert { margin: -.05rem 0 .42rem; padding: .48rem .55rem; }
   .choice-list { grid-template-columns: 1fr; }
   .choice-card { min-height: 0; padding: .72rem .75rem; }
   .choice-description { margin-top: .24rem; font-size: .73rem; line-height: 1.42; }
