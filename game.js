@@ -10,6 +10,18 @@
   const CROSS_BORDER_MONTHLY = 450000;
   const EARLY_SETTLING_MONTHLY = 400000;
   const ROLL_DELAY = window.__KG_FAST_TEST__ ? 0 : 1050;
+  const STORY_MEMORY_DEFINITIONS = {
+    growth_language: { id: "language_effort", label: "서툴러도 직접 말하려고 준비했다", quote: "당신의 언어로 중요한 말을 직접 하려고 배웠어요", triggerScenes: ["arrival", "private_talk"], tone: "kept" },
+    player_honest: { id: "mutual_honesty", label: "재정과 약점을 같은 기준으로 공개했다", quote: "숨기고 싶지 않아요", triggerScenes: ["her_investigation", "household_money"], keptCategories: ["honest", "practical", "care"], brokenCategories: ["brag", "control"] },
+    player_polish: { id: "inflated_income", label: "불확실한 수입을 확정된 미래처럼 말했다", quote: "돈 걱정은 안 해도 돼요", triggerScenes: ["her_investigation"], tone: "broken", repairChoices: ["accept_reverse_check"] },
+    flirt_gift: { id: "money_courtship", label: "힘든 날의 위로를 선물로 시작했다", quote: "오늘 힘들었다니 제가 보낼게요", triggerScenes: ["money_crisis", "household_money"], keptCategories: ["practical", "honest", "care"], brokenCategories: ["extravagant", "brag", "pressure"] },
+    app_gift: { id: "money_courtship", label: "호감을 고가 선물로 먼저 증명했다", quote: "좋아하면 이 정도는 해 줄 수 있어요", triggerScenes: ["money_crisis", "household_money"], keptCategories: ["practical", "honest", "care"], brokenCategories: ["extravagant", "brag", "pressure"] },
+    family_gift: { id: "family_money_first", label: "첫 가족 인사를 현금성 선물로 부드럽게 만들었다", quote: "가족에게 잘 보이는 것도 중요해요", triggerScenes: ["wedding_day", "family_remittance"], keptChoices: ["care_schedule", "visit_budget", "remit_negotiate", "wedding_calm_talk"], brokenChoices: ["remit_generous", "visit_frequent", "wedding_pay_extra"], keptCategories: ["practical", "care", "honest"], brokenCategories: ["extravagant", "pressure", "control"] },
+    mutual_boundaries: { id: "mutual_boundaries", label: "아이·일·돈·몸의 선을 같은 질문으로 합의했다", quote: "싫으면 언제든 다시 말해도 돼요", triggerScenes: ["first_intimacy", "child_plan"], keptChoices: ["intimacy_consent", "intimacy_delay", "child_shared_plan", "child_accept_choice"], brokenChoices: ["push_kiss", "intimacy_pressure", "child_demand"], keptCategories: ["space", "care", "honest", "practical", "affection"], brokenCategories: ["pressure", "control"] },
+    slow_consent: { id: "consent_promise", label: "좋아하는 마음과 동의의 속도를 분리했다", quote: "마음을 바꿔도 화내지 않을게요", triggerScenes: ["first_intimacy", "intimacy_talk"], keptChoices: ["intimacy_consent", "intimacy_delay", "intimacy_counsel", "intimacy_believe"], brokenChoices: ["push_kiss", "intimacy_pressure", "intimacy_accuse"], keptCategories: ["space", "care", "honest", "affection"], brokenCategories: ["pressure", "control", "interrogation"] },
+    private_consent: { id: "consent_promise", label: "직원을 내보내고 결혼과 친밀감의 동의를 따로 확인했다", quote: "좋아하는 것과 오늘 결정하는 건 다르니까요", triggerScenes: ["first_intimacy", "intimacy_talk"], keptChoices: ["intimacy_consent", "intimacy_delay", "intimacy_counsel", "intimacy_believe"], brokenChoices: ["push_kiss", "intimacy_pressure", "intimacy_accuse"], keptCategories: ["space", "care", "honest", "affection"], brokenCategories: ["pressure", "control", "interrogation"] },
+    sign_fast: { id: "rushed_commitment", label: "취소 비용이 걸린 빠른 약속서에 서명했다", quote: "일단 결정하면 마음도 따라올 거예요", triggerScenes: ["decision", "wedding_day"], tone: "broken", repairChoices: ["decide_postpone", "wedding_calm_talk", "wedding_firm_refusal"] }
+  };
   const $ = selector => document.querySelector(selector);
   const $$ = selector => [...document.querySelectorAll(selector)];
 
@@ -1101,6 +1113,117 @@
     }
   }
 
+  function ensureStoryMemoryState() {
+    if (!Array.isArray(state.storyMemories)) state.storyMemories = [];
+    if (!Array.isArray(state.echoedStoryMemories)) state.echoedStoryMemories = [];
+  }
+
+  function storyMemoryReaction(memory, tone) {
+    const quote = `“${memory.quote}”`;
+    const behaviorId = getPartner()?.behavior?.id;
+    const voices = {
+      warm_cautious: {
+        kept: `그때 ${quote}라고 했죠. 저는 큰말보다 지금처럼 이어지는 행동이 더 믿겨요.`,
+        broken: `그때 ${quote}라고 했죠. 저는 서두르지 않았지만, 그 말을 잊지도 않았어요.`,
+        remembered: `그때 ${quote}라고 했던 말, 저는 아직 천천히 지켜보고 있어요.`
+      },
+      playful_social: {
+        kept: `오, 그때 ${quote}라고 한 사람 맞네요. 오늘은 말과 행동이 같은 편이에요.`,
+        broken: `기억 안 나는 척하면 반칙이에요. 그때 ${quote}라고 했잖아요.`,
+        remembered: `그때 ${quote}라고 한 말, 제가 농담처럼 넘겼어도 기억은 해요.`
+      },
+      practical_planner: {
+        kept: `처음 말한 ${quote}와 오늘 선택이 맞아요. 이런 일치는 계산보다 안심이 돼요.`,
+        broken: `처음 합의와 오늘 선택이 맞지 않아요. ${quote}라는 말부터 다시 설명해 줘요.`,
+        remembered: `${quote}라는 말을 오늘 기준표에도 남겨 둘게요. 행동이 이어지는지 봐야 해요.`
+      },
+      quiet_observer: {
+        kept: `저는 그 말을 적어 두진 않았어요. 그래도 기억해요. ${quote}가 오늘 행동으로 보였어요.`,
+        broken: `저는 그 말을 적어 두진 않았어요. 그래도 기억해요. ${quote}와 오늘은 다르네요.`,
+        remembered: `대답하지 않았지만 ${quote}라는 말은 계속 기억하고 있었어요.`
+      },
+      family_centered: {
+        kept: `${quote}라는 말이 오늘 우리 생활과 가족에게도 같은 뜻이라서 안심했어요.`,
+        broken: `${quote}라는 말이 오늘 우리 생활과 가족 앞에서는 왜 달라지는지 알고 싶어요.`,
+        remembered: `${quote}라는 약속이 둘만이 아니라 가족과 생활에도 어떻게 이어질지 보고 있어요.`
+      },
+      ambitious_independent: {
+        kept: `${quote}라는 말 안에 제 선택권도 남아 있었어요. 그래서 오늘 결정은 같이 한 것 같아요.`,
+        broken: `${quote}라는 약속 안에 제 선택권도 있었어요. 오늘 그 부분이 사라졌어요.`,
+        remembered: `${quote}라는 말이 제 삶의 선택권까지 존중한다는 뜻인지 지켜보고 있어요.`
+      },
+      passionate_impulsive: {
+        kept: `그때 ${quote}라고 했을 때 정말 믿었어요. 오늘 다시 믿게 해 줘서 기뻐요.`,
+        broken: `그때 ${quote}라고 했을 때 저는 정말 믿었어요. 그래서 지금 더 화가 나요.`,
+        remembered: `그때 ${quote}라고 한 말, 저는 생각보다 훨씬 크게 받아들였어요.`
+      },
+      guarded_survivor: {
+        kept: `말은 쉽게 바뀌지만 ${quote}가 행동으로 반복됐어요. 이제는 조금 믿을 수 있어요.`,
+        broken: `말은 잊을 수 있어도 반복된 위험은 못 잊어요. ${quote}와 오늘은 다릅니다.`,
+        remembered: `${quote}라는 말보다 다음 행동을 보려고 했어요. 아직 판단은 끝나지 않았어요.`
+      }
+    };
+    return (voices[behaviorId] || voices.warm_cautious)[tone] || voices.warm_cautious.remembered;
+  }
+
+  function recordStoryMemory(choiceId, checkSuccess, result) {
+    const definition = STORY_MEMORY_DEFINITIONS[choiceId];
+    if (!definition || (definition.successOnly && !checkSuccess)) return;
+    ensureStoryMemoryState();
+    if (state.storyMemories.some(memory => memory.id === definition.id)) return;
+    const memory = {
+      id: definition.id,
+      sourceChoice: choiceId,
+      label: definition.label,
+      quote: definition.quote,
+      day: state.elapsedDays,
+      scene: scenes[state.scene]?.id || "unknown"
+    };
+    state.storyMemories.push(memory);
+    result.memoryRecorded = memory;
+  }
+
+  function storyMemoryTone(definition, choiceId, checkSuccess) {
+    if (definition.repairChoices?.includes(choiceId) && checkSuccess) return "kept";
+    if (definition.tone) return definition.tone;
+    if (definition.brokenChoices?.includes(choiceId) || !checkSuccess) return "broken";
+    if (definition.keptChoices?.includes(choiceId)) return "kept";
+    const category = behaviorCategory(choiceId);
+    if (definition.brokenCategories?.includes(category)) return "broken";
+    if (definition.keptCategories?.includes(category)) return "kept";
+    return "remembered";
+  }
+
+  function applyStoryMemoryEcho(sceneId, choiceId, checkSuccess, result) {
+    ensureStoryMemoryState();
+    const pending = state.storyMemories
+      .filter(memory => !state.echoedStoryMemories.includes(memory.id))
+      .filter(memory => STORY_MEMORY_DEFINITIONS[memory.sourceChoice]?.triggerScenes?.includes(sceneId))
+      .slice(0, 2);
+    if (!pending.length) return;
+    result.memoryEchoes = [];
+    pending.forEach(memory => {
+      const definition = STORY_MEMORY_DEFINITIONS[memory.sourceChoice];
+      const tone = storyMemoryTone(definition, choiceId, checkSuccess);
+      const reaction = storyMemoryReaction(memory, tone);
+      state.echoedStoryMemories.push(memory.id);
+      result.memoryEchoes.push({ ...memory, tone, reaction });
+      result.text += `\n\n되돌아온 말 · ${memory.label}\n${reaction}`;
+      if (tone === "kept") {
+        result.trust = Number(result.trust || 0) + 3;
+        result.affection = Number(result.affection || 0) + 2;
+        result.conflict = Number(result.conflict || 0) - 2;
+      } else if (tone === "broken") {
+        result.trust = Number(result.trust || 0) - 5;
+        result.affection = Number(result.affection || 0) - 3;
+        result.conflict = Number(result.conflict || 0) + 5;
+        result.partnerFatigue = Number(result.partnerFatigue || 0) + 2;
+      } else {
+        result.trust = Number(result.trust || 0) + 1;
+      }
+    });
+  }
+
   function startGame() {
     const player = DATA.players.find(x => x.id === setup.playerId);
     const partner = setup.partnerSnapshot || setup.candidates.find(x => x.id === setup.partnerId) || DATA.people.find(x => x.id === setup.partnerId);
@@ -1195,6 +1318,8 @@
       investigationIntensity: 0,
       partnerInitiatives: 0,
       choicesMade: [],
+      storyMemories: [],
+      echoedStoryMemories: [],
       preparation: 0,
       behaviorObservations: {},
       knownProfile: initialKnownProfile(route, partner),
@@ -3216,6 +3341,8 @@
     applyPlayerCompulsion(id, result);
     evaluatePartnerNeeds(id, result, checkSuccess);
     applyShadowDynamics(id, result, checkSuccess);
+    recordStoryMemory(id, checkSuccess, result);
+    applyStoryMemoryEcho(scenes[state.scene]?.id, id, checkSuccess, result);
     personalityReaction(id, result);
     const privateInterpreter = state.pendingInterpreterUsed && isPrivateInterpreterCheck(choiceMeta?.check);
     if (privateInterpreter) {
@@ -3603,7 +3730,9 @@
     const scoreEvents = result.scoreEvents?.length ? `<div class="score-result">${result.scoreEvents.map(item => `<span>+${item.amount.toLocaleString("ko-KR")} · ${escapeHtml(item.label)}</span>`).join("")}</div>` : "";
     const changes = (result.statChanges || []).length ? `<div class="result-stats">${result.statChanges.map(item => `<span class="${item.amount < 0 ? "is-down" : "is-up"}">${escapeHtml(item.label)} ${item.amount > 0 ? "+" : ""}${item.amount}</span>`).join("")}</div>` : "";
     const shadowSummary = result.shadowEvents?.length ? `<div class="shadow-result">${result.shadowEvents.map(item => item.type === "resonance" ? `<span>그림자 공명 · 위험 ${state.shadowRisk || 0}/100</span>` : item.type === "distortion" ? `<span>그림자 왜곡 +${item.risk} · 위험 ${state.shadowRisk || 0}/100</span>` : `<span>이름 붙이지 않은 욕구 · 위험 ${state.shadowRisk || 0}/100</span>`).join("")}</div>` : "";
-    feedback.innerHTML = `<strong>${escapeHtml(result.title)}</strong><div class="result-copy">${escapeHtml(result.text).replace(/\n/g, "<br>")}</div>${changes}${shadowSummary}${scoreEvents}${unlocked}${reaction}${report}`;
+    const memoryRecorded = result.memoryRecorded ? `<div class="story-memory is-recorded"><span>관계가 기억한 말</span><strong>${escapeHtml(result.memoryRecorded.label)}</strong><small>몇 장면 뒤 행동과 비교됩니다.</small></div>` : "";
+    const memoryEchoes = result.memoryEchoes?.length ? `<div class="story-memory-list">${result.memoryEchoes.map(memory => `<div class="story-memory is-${memory.tone}"><span>${memory.tone === "kept" ? "지킨 약속" : memory.tone === "broken" ? "깨진 약속" : "되돌아온 말"}</span><strong>${escapeHtml(memory.label)}</strong><small>${memory.day + 1}일째의 말이 지금 결과를 바꿨습니다.</small></div>`).join("")}</div>` : "";
+    feedback.innerHTML = `<strong>${escapeHtml(result.title)}</strong><div class="result-copy">${escapeHtml(result.text).replace(/\n/g, "<br>")}</div>${changes}${shadowSummary}${memoryRecorded}${memoryEchoes}${scoreEvents}${unlocked}${reaction}${report}`;
     feedback.querySelector("[data-open-partner]")?.addEventListener("click", openPartnerProfile);
     bindTranslationBubbles(feedback, resultMessages, resultKey);
     renderChoices([choice("continue_scene", "다음 장면으로", "이 선택의 결과를 반영하고 이야기를 이어 간다.", `호감 ${state.affection} · 그녀의 신뢰 ${state.trust} · 확인도 ${state.certainty} · 상대 피로 ${state.partnerFatigue}`, 0, "plain")]);
@@ -3806,7 +3935,14 @@
       : "<li><span>아직 획득한 점수가 없습니다.</span><b>0</b></li>";
     const compulsion = player.compulsion || {};
     const compulsionHtml = `<article class="compulsion-card"><span>강박 · 유혹 버튼</span><h3>${escapeHtml(compulsion.label || "이름 붙이지 못한 강박")}</h3><p>${escapeHtml(compulsion.truth || "")}</p><dl><div><dt>즉시 보상</dt><dd>${escapeHtml(compulsion.reward || "")}</dd></div><div><dt>후유증</dt><dd>${escapeHtml(compulsion.aftertaste || "")}</dd></div></dl><footer>이번 판 발동 ${(state.compulsionHistory || []).length}회 · 압력 ${state.compulsionPressure || 0}/100</footer></article>`;
-    openModal("내 프로필", `${player.name} · ${player.age}세`, `<div class="player-profile"><div class="player-profile-head"><div class="player-profile-photo" style="${photoStyle(player.art, "man")}"></div><div><h3>${escapeHtml(player.job)}</h3><p>${escapeHtml(player.hook)}</p><small>약점: ${escapeHtml(player.flaw)}</small></div></div><div class="profile-finance"><span>무한 누적 점수 <b>∞ ${(state.score || 0).toLocaleString("ko-KR")}</b></span><span>강박 발동 <b>${(state.compulsionHistory || []).length}회</b></span><span>강박 압력 <b>${state.compulsionPressure || 0}/100</b></span><span>그녀의 니즈 점수 <b>${(state.partnerMatchScore || 0).toLocaleString("ko-KR")}</b></span><span>월 기준수입 <b>${formatWon(player.income * (state.playerIncomeFactor || 1))}</b></span><span>현금·주거자금 <b>${formatWon(state.cash + (state.housingAsset || 0))}</b></span><span>빚 <b>${formatWon(state.debt)}</b></span><span>스트레스 <b>${state.stress}/100</b></span></div><h3 class="modal-section-title">내가 원하는 상대 · 만점 없음</h3><p class="helper-note">상대의 관련 사실을 실제로 알아낸 뒤에만 달성됩니다. 외형만 보고 결혼 버튼을 두드리면 게임도 인생도 고객센터 연결이 안 됩니다.</p><div class="needs-panel">${needs}</div><h3 class="modal-section-title">나를 흔드는 강박 하나</h3><p class="helper-note">맞는 선택은 강한 즉시 보상을 주지만 반복할수록 후유증이 실제 비용·스트레스·갈등으로 돌아옵니다.</p>${compulsionHtml}<h3 class="modal-section-title">현재 능력</h3><div class="profile-stat-list">${stats.map(([id, label]) => `<div><span>${label}</span><div class="profile-stat-track"><i style="width:${state[id] * 10}%"></i></div><b>${state[id]}</b><small>처음 ${player[id]}</small></div>`).join("")}</div><h3 class="modal-section-title">관계와 소통</h3><dl class="profile-detail-list"><div><dt>만난 경로</dt><dd>${escapeHtml(getRoute().name)} · ${escapeHtml(getPlan()?.name || "기본")}</dd></div><div><dt>대화 방식</dt><dd>${escapeHtml(state.communicationMode || "아직 정하지 않음")}</dd></div><div><dt>소통 점수</dt><dd>${state.communicationClarity >= 0 ? "+" : ""}${state.communicationClarity} · 터치 번역 ${formatWon(state.translationSpend || 0)}</dd></div><div><dt>현재 관계</dt><dd>${escapeHtml(relationshipLabel())}</dd></div></dl><h3 class="modal-section-title">최근 점수</h3><ul class="score-history">${scoreHistory}</ul><h3 class="modal-section-title">최근 성장</h3><ul class="growth-log">${growth}</ul></div>`);
+    ensureStoryMemoryState();
+    const memoryLedger = state.storyMemories.length
+      ? state.storyMemories.map(memory => {
+        const recalled = state.echoedStoryMemories.includes(memory.id);
+        return `<article class="story-memory ledger-memory ${recalled ? "is-recalled" : "is-pending"}"><span>${recalled ? "후유증 회수됨" : "아직 기억 중"}</span><strong>${escapeHtml(memory.label)}</strong><small>${memory.day + 1}일째 · “${escapeHtml(memory.quote)}”</small></article>`;
+      }).join("")
+      : `<p class="preview-empty">아직 훗날 되돌아올 만큼 강한 약속이나 행동이 없습니다.</p>`;
+    openModal("내 프로필", `${player.name} · ${player.age}세`, `<div class="player-profile"><div class="player-profile-head"><div class="player-profile-photo" style="${photoStyle(player.art, "man")}"></div><div><h3>${escapeHtml(player.job)}</h3><p>${escapeHtml(player.hook)}</p><small>약점: ${escapeHtml(player.flaw)}</small></div></div><div class="profile-finance"><span>무한 누적 점수 <b>∞ ${(state.score || 0).toLocaleString("ko-KR")}</b></span><span>강박 발동 <b>${(state.compulsionHistory || []).length}회</b></span><span>강박 압력 <b>${state.compulsionPressure || 0}/100</b></span><span>그녀의 니즈 점수 <b>${(state.partnerMatchScore || 0).toLocaleString("ko-KR")}</b></span><span>월 기준수입 <b>${formatWon(player.income * (state.playerIncomeFactor || 1))}</b></span><span>현금·주거자금 <b>${formatWon(state.cash + (state.housingAsset || 0))}</b></span><span>빚 <b>${formatWon(state.debt)}</b></span><span>스트레스 <b>${state.stress}/100</b></span></div><h3 class="modal-section-title">내가 원하는 상대 · 만점 없음</h3><p class="helper-note">상대의 관련 사실을 실제로 알아낸 뒤에만 달성됩니다. 외형만 보고 결혼 버튼을 두드리면 게임도 인생도 고객센터 연결이 안 됩니다.</p><div class="needs-panel">${needs}</div><h3 class="modal-section-title">나를 흔드는 강박 하나</h3><p class="helper-note">맞는 선택은 강한 즉시 보상을 주지만 반복할수록 후유증이 실제 비용·스트레스·갈등으로 돌아옵니다.</p>${compulsionHtml}<h3 class="modal-section-title">관계가 기억한 말</h3><p class="helper-note">여기에 남은 말과 행동은 후반 장면에서 다시 인용되어 신뢰·갈등·호감을 바꿉니다.</p><div class="story-memory-ledger">${memoryLedger}</div><h3 class="modal-section-title">현재 능력</h3><div class="profile-stat-list">${stats.map(([id, label]) => `<div><span>${label}</span><div class="profile-stat-track"><i style="width:${state[id] * 10}%"></i></div><b>${state[id]}</b><small>처음 ${player[id]}</small></div>`).join("")}</div><h3 class="modal-section-title">관계와 소통</h3><dl class="profile-detail-list"><div><dt>만난 경로</dt><dd>${escapeHtml(getRoute().name)} · ${escapeHtml(getPlan()?.name || "기본")}</dd></div><div><dt>대화 방식</dt><dd>${escapeHtml(state.communicationMode || "아직 정하지 않음")}</dd></div><div><dt>소통 점수</dt><dd>${state.communicationClarity >= 0 ? "+" : ""}${state.communicationClarity} · 터치 번역 ${formatWon(state.translationSpend || 0)}</dd></div><div><dt>현재 관계</dt><dd>${escapeHtml(relationshipLabel())}</dd></div></dl><h3 class="modal-section-title">최근 점수</h3><ul class="score-history">${scoreHistory}</ul><h3 class="modal-section-title">최근 성장</h3><ul class="growth-log">${growth}</ul></div>`);
   }
 
   function partnerProfileValue(key) {
@@ -4008,6 +4144,7 @@
       const saved = JSON.parse(localStorage.getItem(SAVE_KEY));
       if (!saved || saved.version !== SAVE_VERSION) throw new Error("invalid save");
       state = saved;
+      ensureStoryMemoryState();
       scenes = (state.campaignIds || []).map(id => SCENE_LIBRARY.find(scene => scene.id === id)).filter(Boolean);
       if (!scenes.length) scenes = buildCampaign(state.routeId, state.partnerSnapshot?.behavior?.id);
       showScreen("game");

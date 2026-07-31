@@ -303,6 +303,17 @@ button.chat-bubble { cursor: pointer; appearance: none; }
 .result-stats .is-down { background: rgba(237,94,102,.1); color: #f0a3aa; }
 .shadow-result { margin-top: .55rem; padding: .55rem .62rem; border: 1px solid rgba(148,96,211,.32); border-radius: .58rem; background: rgba(108,67,158,.08); color: #cdb5ea; font-size: .68rem; font-weight: 850; }
 .shadow-result span { display: block; }
+.story-memory-list, .story-memory-ledger { display: grid; gap: .42rem; margin-top: .6rem; }
+.story-memory { display: grid; gap: .12rem; margin-top: .6rem; padding: .58rem .65rem; border: 1px solid rgba(119,169,239,.3); border-radius: .62rem; background: rgba(119,169,239,.075); }
+.story-memory-list .story-memory, .story-memory-ledger .story-memory { margin-top: 0; }
+.story-memory span { color: #a8cafa; font-size: .62rem; font-weight: 950; letter-spacing: .04em; }
+.story-memory strong { font-size: .76rem; line-height: 1.45; }
+.story-memory small { color: #948b99; font-size: .63rem; line-height: 1.4; }
+.story-memory.is-kept, .story-memory.is-recalled { border-color: rgba(113,213,178,.34); background: rgba(113,213,178,.075); }
+.story-memory.is-kept span, .story-memory.is-recalled span { color: var(--mint); }
+.story-memory.is-broken { border-color: rgba(237,94,102,.38); background: rgba(237,94,102,.085); }
+.story-memory.is-broken span { color: #f0a3aa; }
+.story-memory.is-recorded, .story-memory.is-pending { border-style: dashed; }
 .reaction-panel { margin-top: .75rem; padding: .68rem .72rem; border: 1px solid rgba(239,111,145,.24); border-radius: .7rem; background: rgba(239,111,145,.075); }
 .reaction-panel span { color: var(--rose-bright); font-size: .67rem; font-weight: 900; }
 .reaction-panel p { margin: .25rem 0 0; color: #eee7ee; font-family: Georgia, "Noto Serif KR", serif; font-size: .86rem; white-space: pre-line; }
