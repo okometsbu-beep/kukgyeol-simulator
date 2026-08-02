@@ -1,10 +1,10 @@
-const CACHE_NAME = "genuine-evidence-v15";
+const CACHE_NAME = "genuine-evidence-v16";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=15",
-  "./game-data.js?v=15",
-  "./game.js?v=15",
+  "./styles.css?v=16",
+  "./game-data.js?v=16",
+  "./game.js?v=16",
   "./manifest.webmanifest",
   "./icon.svg",
   "./assets/men-v2.webp",

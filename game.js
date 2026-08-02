@@ -22,6 +22,120 @@
     private_consent: { id: "consent_promise", label: "직원을 내보내고 결혼과 친밀감의 동의를 따로 확인했다", quote: "좋아하는 것과 오늘 결정하는 건 다르니까요", triggerScenes: ["first_intimacy", "intimacy_talk"], keptChoices: ["intimacy_consent", "intimacy_delay", "intimacy_counsel", "intimacy_believe"], brokenChoices: ["push_kiss", "intimacy_pressure", "intimacy_accuse"], keptCategories: ["space", "care", "honest", "affection"], brokenCategories: ["pressure", "control", "interrogation"] },
     sign_fast: { id: "rushed_commitment", label: "취소 비용이 걸린 빠른 약속서에 서명했다", quote: "일단 결정하면 마음도 따라올 거예요", triggerScenes: ["decision", "wedding_day"], tone: "broken", repairChoices: ["decide_postpone", "wedding_calm_talk", "wedding_firm_refusal"] }
   };
+  const PERSONAL_EPISODES = {
+    warm_cautious: {
+      title: "막차가 끊긴 밤", mood: "젖은 운동화를 내려다봄", context: "현지 시각 밤 11시 42분 · 병원 앞 버스 정류장",
+      text: partner => `퇴근 뒤 연락이 없던 ${partner.name}이 비에 젖은 채 나타났다. 아픈 동료의 보호자가 올 때까지 응급실에 남아 있었고, 마지막 버스는 이미 떠났다.\n\n“착한 사람처럼 보이려고 말 안 한 건 아니에요. 부탁하면 당신 일정까지 망칠까 봐 그랬어요.” 말은 사과였지만, 도움을 청하는 법을 모르는 표정이었다.`,
+      choices: [
+        ["personal_support", "“숙소까지 같이 걸어요. 다음엔 늦기 전에 한 줄만 보내 줘요.”", "오늘은 곁에 있고, 다음에 도움을 청할 최소한의 신호를 둘이 정한다."],
+        ["personal_negotiate", "택시를 부른 뒤 연락이 끊기는 기준부터 정한다", "안전을 챙기되 일방적인 보고 의무가 되지 않도록 서로 같은 규칙을 만든다."],
+        ["personal_override", "왜 나를 못 믿었냐고 따지고 먼저 숙소로 돌아간다", "걱정한 시간을 배신으로 해석하고 즉시 해명을 요구한다."]
+      ],
+      results: {
+        personal_support: ["도움을 청할 문장이 생겼다", "둘은 빗소리를 들으며 편의점 우산 하나를 나눠 썼다. 그 뒤 그녀는 곤란한 일이 생기면 ‘지금 해결책보다 옆에 있어 줘요’라는 한 줄을 먼저 보냈다.", 9, 8, -4],
+        personal_negotiate: ["걱정과 감시의 선을 그었다", "도착 예정이 두 시간 넘게 바뀔 때만 서로 알리기로 했다. 그녀는 규칙이 아니라 같은 기준이라는 점에서 안도했다.", 7, 4, -3],
+        personal_override: ["침묵이 더 안전해졌다", "그녀는 미안하다고 했지만 다음 위기에는 알리지 않는 편을 택했다. 걱정은 풀리지 않았고 부탁할 문장만 사라졌다.", -11, -8, 13]
+      }, echo: "그날 막차가 끊겼을 때 정한 ‘도움을 청하는 한 줄’"
+    },
+    playful_social: {
+      title: "생일 영상 속 빈자리", mood: "웃다가 화면을 끔", context: "토요일 밤 9시 18분 · 친구의 작은 생일 식당",
+      text: partner => `${partner.name}의 친구가 켠 짧은 생일 방송에 웃음소리가 가득했다. 누군가 “한국 가면 우리를 다 잊겠네”라고 놀리자 그녀는 웃었지만, 카메라가 꺼진 뒤 내게 전화를 걸었다.\n\n“당신을 보여 주고 싶기도 하고, 우리 이야기가 구경거리가 되는 건 싫기도 해요. 내가 너무 가벼워 보여요?”`,
+      choices: [
+        ["personal_support", "“카메라는 끄고, 네가 좋아하는 친구 한 명만 소개해 줘요.”", "사교적인 삶을 존중하되 관계를 공연으로 만들지 않는 방식을 제안한다."],
+        ["personal_negotiate", "둘이 공개해도 되는 이야기 세 가지만 정한다", "사진·직업·결혼 계획 중 공개 범위를 서로 똑같이 합의한다."],
+        ["personal_override", "친구들 앞에서 바로 나를 남자친구라고 선언하라고 한다", "공개 확인을 사랑의 증명으로 요구한다."]
+      ],
+      results: {
+        personal_support: ["웃음 뒤의 사람을 만났다", "방송 대신 조용한 영상통화가 이어졌다. 그녀의 오랜 친구는 장난을 멈추고, 한국에 가도 지키고 싶은 토요일 모임 이야기를 들려줬다.", 8, 10, -4],
+        personal_negotiate: ["우리 이야기의 문지기가 둘이 됐다", "공개할 것과 둘만 남길 것을 메모했다. 다음 사진에는 허락을 묻는 짧은 메시지가 먼저 왔다.", 7, 6, -2],
+        personal_override: ["관계가 공연이 됐다", "그녀는 웃으며 소개했지만 통화가 끝난 뒤 ‘내 대답은 언제 물어볼 거예요?’라고 했다. 공개된 관계보다 사적인 신뢰가 먼저 흔들렸다.", -10, -7, 12]
+      }, echo: "생일 영상에서 둘만 남기기로 한 이야기의 경계"
+    },
+    practical_planner: {
+      title: "표에서 빠진 여섯 달", mood: "노트북을 돌려 보여 줌", context: "평일 저녁 7시 06분 · 코인 세탁방 접이식 탁자",
+      text: partner => `건조기가 돌아가는 동안 ${partner.name}이 결혼 뒤 18개월 계획표를 열었다. 체류 서류, 어학 시험, 예상 월급은 촘촘했지만 첫 여섯 달의 자기 수입 칸만 비어 있었다.\n\n“낭만이 없다고 생각할까 봐 이 표를 숨겼어요. 그런데 빈칸을 사랑으로 메우겠다는 말은 계획이 아니잖아요.”`,
+      choices: [
+        ["personal_support", "“빈칸부터 같이 계산해요. 당신 돈을 제 허락으로 만들진 않을게요.”", "초기 생활비와 개인 비상금을 분리해 경력 공백의 선택권을 지킨다."],
+        ["personal_negotiate", "취업 시점·교육비·집 크기를 세 가지 시나리오로 나눈다", "둘의 최악과 최선을 같은 표에서 비교한다."],
+        ["personal_override", "내 수입이면 충분하다며 노트북을 닫는다", "불안을 숫자 집착으로 취급하고 부양 약속으로 대화를 끝낸다."]
+      ],
+      results: {
+        personal_support: ["빈칸이 종속이 아닌 준비 기간이 됐다", "각자 이름의 비상금과 여섯 달 교육비를 먼저 적었다. 그녀는 처음으로 계획표 맨 아래에 ‘주말 산책’도 일정으로 넣었다.", 10, 7, -5],
+        personal_negotiate: ["최악의 달에도 선택지가 남았다", "집을 줄이거나 취업을 앞당기는 조건이 보였다. 사랑을 증명하진 않았지만 함께 버틸 방법은 증명했다.", 8, 4, -4],
+        personal_override: ["빈칸에 내 허락이 들어갔다", "그녀는 노트북을 닫았지만 계획을 버리지 않았다. 다만 다음 표부터는 내게 보여 주지 않았다.", -12, -6, 14]
+      }, echo: "세탁방에서 함께 채운 첫 여섯 달의 빈칸"
+    },
+    quiet_observer: {
+      title: "말하지 않은 사진 열두 장", mood: "휴대폰을 천천히 넘김", context: "일요일 새벽 6시 31분 · 강변 산책로",
+      text: partner => `${partner.name}이 새벽마다 찍은 사진을 처음 보여 줬다. 같은 벤치, 바뀌는 물빛, 출근하는 사람들의 신발. 마지막 사진에는 통화하며 화면 밖을 보는 내 얼굴이 작게 담겨 있었다.\n\n“나는 대답보다 반복되는 걸 봐요. 당신은 불편한 질문이 나오면 꼭 시계를 보더라고요. 오늘은 안 볼 수 있어요?”`,
+      choices: [
+        ["personal_support", "휴대폰을 주머니에 넣고 사진마다 왜 멈췄는지 묻는다", "해석을 서두르지 않고 그녀가 관찰한 세계를 끝까지 듣는다."],
+        ["personal_negotiate", "내가 피한 질문 하나와 그녀가 숨긴 질문 하나를 바꿔 묻는다", "침묵을 성격으로 방치하지 않고 같은 양의 솔직함을 제안한다."],
+        ["personal_override", "몰래 찍은 사진부터 지우라고 요구한다", "불편함만 먼저 처리하고 그녀가 꺼낸 반복의 의미는 듣지 않는다."]
+      ],
+      results: {
+        personal_support: ["침묵 안의 문장을 들었다", "강물 색을 설명하던 그녀는 결국 결혼 뒤 혼자 남겨질까 두렵다고 말했다. 내 시계는 끝까지 주머니 안에 있었다.", 10, 8, -5],
+        personal_negotiate: ["서로 피하던 질문이 같은 자리에 놓였다", "나는 빚 이야기를, 그녀는 귀국 가능성을 꺼냈다. 편안한 아침은 아니었지만 사진보다 정확한 기억이 남았다.", 8, 3, -2],
+        personal_override: ["사진은 지워졌고 관찰은 계속됐다", "그녀는 사과한 뒤 휴대폰을 넣었다. 이후 내 표정 변화를 알아도 말하지 않았고, 나는 침묵을 평온으로 착각했다.", -9, -7, 11]
+      }, echo: "강변에서 시계를 보지 않고 끝까지 들었던 질문"
+    },
+    family_centered: {
+      title: "식탁 끝의 빈 의자", mood: "식은 국을 다시 데움", context: "평일 저녁 8시 53분 · 가족 식당 영업 종료 뒤",
+      text: partner => `손님이 나간 뒤 ${partner.name}은 빈 의자 하나에도 그릇을 놓았다가 다시 치웠다. 그 자리는 야간 근무 중인 동생 몫이었다. 가족 단체방에는 다음 달 병원 동행표가 올라와 있었다.\n\n“돈을 보내 달라는 얘기가 아니에요. 내가 떠나면 누가 시간을 내는지가 궁금한 거예요. 당신 계획에는 그 시간이 있어요?”`,
+      choices: [
+        ["personal_support", "“돈 말고 필요한 시간을 알려 줘요. 우리 달력에 먼저 넣어요.”", "병원 동행과 가족 방문을 실제 휴가·왕래 계획으로 다룬다."],
+        ["personal_negotiate", "양가 돌봄 시간을 연 단위로 같은 기준에서 나눈다", "갑작스러운 희생 대신 두 가족 모두에게 적용할 원칙을 만든다."],
+        ["personal_override", "결혼하면 새 가족이 우선이라고 선을 긋는다", "기존 돌봄 관계를 미련으로 보고 한국 생활에 집중하라고 한다."]
+      ],
+      results: {
+        personal_support: ["송금액 밖의 책임이 보였다", "두 사람은 병원 날짜와 항공편을 달력에 넣었다. 그녀는 처음으로 ‘내 가족’ 대신 ‘우리 일정’이라는 말을 썼다.", 10, 8, -5],
+        personal_negotiate: ["희생 대신 순번을 만들었다", "양가의 큰 진료와 긴급 상황 기준을 함께 적었다. 완벽한 공평은 아니었지만 누구의 가족도 예외로 두지 않았다.", 8, 5, -4],
+        personal_override: ["빈 의자가 둘 사이에 놓였다", "그녀는 더 요구하지 않았지만 가족 소식을 숨겨 처리하기 시작했다. 한국행 계획은 단순해졌고 관계는 복잡해졌다.", -13, -9, 15]
+      }, echo: "식당의 빈 의자를 보고 돈보다 시간을 약속한 일"
+    },
+    ambitious_independent: {
+      title: "합격 메일의 도시", mood: "기쁨을 숨기지 않음", context: "화요일 오전 10시 14분 · 공유 사무실 계단",
+      text: partner => `${partner.name}이 다른 도시의 1년 계약직 합격 메일을 보여 줬다. 결혼 준비와 겹치지만 지금 경력에서 놓치기 어려운 자리였다. 화면 아래에는 이미 기숙사 비용과 주말 이동 시간이 계산돼 있었다.\n\n“축하부터 받고 싶었어요. 그런데 당신이 떠날까 봐 걱정하는 표정도 이해해요. 둘 다 말해도 되죠?”`,
+      choices: [
+        ["personal_support", "“축하해요. 우리가 버틸 방법은 그다음 문장으로 같이 찾죠.”", "성과를 관계의 위협으로 만들기 전에 그녀의 기쁨을 온전히 인정한다."],
+        ["personal_negotiate", "1년 동안의 만남 횟수와 결혼 일정을 다시 설계한다", "경력과 관계 중 하나를 즉시 포기시키지 않는 시험 기간을 제안한다."],
+        ["personal_override", "결혼할 사람이 왜 먼 도시 지원을 했냐고 취소를 요구한다", "지원 전에 허락받지 않은 일을 배신으로 규정한다."]
+      ],
+      results: {
+        personal_support: ["합격이 둘 사이의 패배가 아니게 됐다", "그녀는 계단에서 오래 웃었다. 저녁에는 먼저 이동표를 꺼내 ‘당신 시간도 같이 지키고 싶다’고 말했다.", 9, 10, -4],
+        personal_negotiate: ["거리에도 종료일과 약속이 생겼다", "월 두 번 만남, 분기마다 일정 재검토, 결혼 준비 중단 기준을 합의했다. 쉬운 길은 아니지만 누구의 꿈도 몰수하지 않았다.", 8, 5, -3],
+        personal_override: ["기쁨이 허락 신청서가 됐다", "그녀는 합격을 포기하지 않았다. 대신 다음 지원부터는 결과가 나온 뒤에만 알리겠다고 했다.", -14, -10, 16]
+      }, echo: "다른 도시의 합격을 먼저 축하해 준 계단"
+    },
+    passionate_impulsive: {
+      title: "새벽 기차표 두 장", mood: "숨을 고르며 웃음", context: "금요일 밤 11시 27분 · 역 앞 노점",
+      text: partner => `${partner.name}이 내일 새벽 출발하는 바닷가행 기차표 두 장을 내밀었다. 최근 야근과 결혼 서류 이야기만 반복되자 답답해서 샀다고 했다. 환불 마감은 33분 뒤였다.\n\n“계획 없는 거 알아요. 그래도 우리 요즘 표정이 너무 딱딱해요. 한 번쯤 그냥 가면 안 돼요?”`,
+      choices: [
+        ["personal_support", "“가요. 대신 일요일 저녁에는 돌아와서 서류도 같이 끝내요.”", "충동을 함께 즐기되 미뤄질 책임의 귀환 시간을 분명히 한다."],
+        ["personal_negotiate", "표는 환불하고 다음 주 하루를 둘만의 즉흥 여행으로 비운다", "오늘의 감정은 인정하되 비용과 일정은 다시 고른다."],
+        ["personal_override", "철없는 시험이라며 표를 찢어 버린다", "일정 위반을 인격 문제로 바꾸고 제안을 모욕한다."]
+      ],
+      results: {
+        personal_support: ["도망이 아닌 돌아올 여행이 됐다", "새벽 바다에서 둘은 오랜만에 크게 웃었다. 일요일 저녁, 그녀가 먼저 서류철을 식탁에 올렸다.", 8, 11, -5],
+        personal_negotiate: ["충동이 약속된 숨구멍이 됐다", "환불 수수료는 들었지만 다음 주 달력에는 목적지 없는 하루가 생겼다. 그녀의 실망은 계획에 참여하며 조금 풀렸다.", 7, 5, -2],
+        personal_override: ["찢어진 표가 오래 남았다", "그녀는 새 표를 사지 않았다. 대신 결혼 준비에서 웃을 일이 사라질 때마다 그날의 종이 조각을 떠올렸다.", -12, -13, 17]
+      }, echo: "새벽 기차에서 정한 ‘즐기고 돌아올 시간’"
+    },
+    guarded_survivor: {
+      title: "보증금 영수증", mood: "봉투를 놓지 못함", context: "월요일 오후 4시 38분 · 오래된 임대 사무실 복도",
+      text: partner => `${partner.name}이 집주인과 언성을 높인 뒤 낡은 영수증 봉투를 품에 안고 나왔다. 계약 종료 뒤 돌려받지 못한 보증금이 있었지만, 내게는 해결됐다고 말해 왔다.\n\n“누군가 도와주면 나중에 그 도움을 갚으라고 할까 봐 무서워요. 당신 돈이 필요한 게 아니라, 이 말을 해도 약점이 되지 않는지 알고 싶었어요.”`,
+      choices: [
+        ["personal_support", "“내가 대신 싸우진 않을게요. 원하면 옆에서 서류만 같이 읽어요.”", "주도권을 빼앗지 않고 요청한 범위에서 증거 정리를 돕는다."],
+        ["personal_negotiate", "도움의 범위와 갚을 필요 없는 일을 먼저 적는다", "법률 상담·번역·비용 중 누가 무엇을 맡는지 명확히 합의한다."],
+        ["personal_override", "내가 돈을 줄 테니 더는 숨기지 말라고 한다", "문제를 빠르게 끝내는 대가로 모든 사정을 공개하라고 요구한다."]
+      ],
+      results: {
+        personal_support: ["도움이 빚이 되지 않았다", "그녀가 직접 상담 예약을 했고 나는 계약 날짜만 함께 맞췄다. 며칠 뒤 그녀는 결과보다 먼저 진행 상황을 알려 왔다.", 11, 7, -5],
+        personal_negotiate: ["도움의 출구까지 합의했다", "상담비는 함께 내되 결정은 그녀가 하기로 했다. 모호한 호의가 아니라 끝낼 수 있는 협력이 됐다.", 8, 4, -3],
+        personal_override: ["돈이 침묵의 가격이 됐다", "보증금 문제는 빨리 끝났지만 그녀는 내가 묻지 않은 일까지 증명해야 안전하다고 느끼기 시작했다.", -13, -8, 16]
+      }, echo: "임대 사무실에서 대신 결정하지 않겠다고 한 약속"
+    }
+  };
   const $ = selector => document.querySelector(selector);
   const $$ = selector => [...document.querySelectorAll(selector)];
 
@@ -55,6 +169,7 @@
     { id: "turning_point", title: "지금이라도 말할 수 있다면", objective: "완벽한 사람보다 솔직한 선택을 요구한다", bg: "romance-start" },
     { id: "her_investigation", title: "이번에는 그녀의 확인", objective: "상대가 내 삶을 검증할 권리도 받아들인다", bg: "video-call" },
     { id: "her_crossroads", title: "그녀가 꺼낸 조건", objective: "호감만이 아니라 그녀가 원하는 미래에 답한다", bg: "romance-start" },
+    { id: "personal_priority", title: "그녀가 지키려는 하루", objective: "프로필의 성격이 아니라 실제 삶의 우선순위에 답한다", bg: "first-message" },
     { id: "money_crisis", title: "갑작스러운 돈 이야기", objective: "돕는 것과 확인하는 것을 동시에 해낸다", bg: "broker-suspicion" },
     { id: "investigation", title: "보이지 않는 연결", objective: "소문이 아닌 확인 가능한 자료를 찾는다", bg: "nightlife-secret" },
     { id: "anonymous_tip", title: "익명의 제보", objective: "충격적인 주장보다 원본과 발신자를 확인한다", bg: "nightlife-secret" },
@@ -93,7 +208,7 @@
   function buildCampaign(routeId, behaviorId) {
     const required = new Set([
       "match_event", "contact", "her_daily_message", "chat_why", "route_pressure", "arrival", "private_talk",
-      "her_invitation", "boundaries", "romance", "first_intimacy", "shadow_mirror", "her_crossroads", "money_crisis",
+      "her_invitation", "boundaries", "romance", "first_intimacy", "shadow_mirror", "her_crossroads", "personal_priority", "money_crisis",
       "investigation", "interrogation_one", "breathing_room", "final_check", "move_country", "decision"
     ]);
     const routeScenes = {
@@ -121,7 +236,7 @@
     match_event: 0, contact: 1, her_daily_message: 2, chat_why: 3, chat_flirt: 5, self_growth: 12, her_question: 14,
     first_date_chat: 18, her_invitation: 19, route_pressure: 21, arrival: 30, private_talk: 33, family_call: 36,
     boundaries: 40, speed_pressure: 43, documents: 47, romance: 51, first_intimacy: 54, shadow_mirror: 56,
-    turning_point: 58, her_investigation: 62, her_crossroads: 65, money_crisis: 67, investigation: 73,
+    turning_point: 58, her_investigation: 62, her_crossroads: 65, personal_priority: 68, money_crisis: 72, investigation: 78,
     anonymous_tip: 78, interrogation_one: 82, breathing_room: 86, interrogation_two: 90,
     final_check: 95, move_country: 101, decision: 108
   };
@@ -1905,6 +2020,10 @@
           choice("cross_override", "“결혼하면 현실에 맞춰 생각이 달라질 거예요.”", "그녀가 밝힌 조건을 일시적인 걱정으로 취급하고 내 계획을 밀어붙인다.", "즉시 결정은 쉬움 · 독립형·경계형과 큰 충돌", 0, "plain")
         ] };
       }
+      case "personal_priority": {
+        const episode = PERSONAL_EPISODES[partner.behavior?.id] || PERSONAL_EPISODES.warm_cautious;
+        return { ...common, mood: episode.mood, context: episode.context, portrait: false, eventCard: true, eventTitle: episode.title, eventText: "프로필에는 없던 그녀의 하루가 눈앞에 놓였다. 지금 어떤 사람이 되어 옆에 설지는 결혼 뒤에도 기억으로 남는다.", text: episode.text(partner), choices: episode.choices.map(([id, title, description]) => choice(id, title, description, "오늘의 반응 · 결혼 뒤 일과 독립에 관한 대화에도 남음", 0, id === "personal_override" ? "risky" : "plain")) };
+      }
       case "money_crisis":
         return { ...common, mood: "갑작스러운 위기", text: mystery.event, choices: moneyChoices(mystery) };
       case "investigation":
@@ -1987,7 +2106,7 @@
           choice("money_hide_account", "비상금을 몰래 따로 만든다", "들키지 않게 일부 수입을 다른 계좌로 옮긴다.", "자금 방어 · 들키면 신뢰와 갈등에 큰 타격", 0, "risky", { stat: "courage", base: 52 })
         ] };
       case "partner_work":
-        return { ...common, mood: "일하고 싶은 마음", context: `결혼 ${Math.max(2, state.monthsMarried)}개월째 · 취업 이야기`, text: `“집에만 있으면 제가 없어지는 기분이에요. 제 경력을 살릴 수 있으면 좋겠지만, 당장 돈을 벌 수 있는 일도 알아봤어요. 밤에 끝나는 서비스 일도 있고요.”\n\n일은 수입을 늘리지만 부부가 함께 보내는 시간과 새로운 인간관계도 바꾼다.`, choices: [
+        return { ...common, mood: "일하고 싶은 마음", context: `결혼 ${Math.max(2, state.monthsMarried)}개월째 · 취업 이야기`, text: `“집에만 있으면 제가 없어지는 기분이에요. 제 경력을 살릴 수 있으면 좋겠지만, 당장 돈을 벌 수 있는 일도 알아봤어요. 밤에 끝나는 서비스 일도 있고요.”\n\n일은 수입을 늘리지만 부부가 함께 보내는 시간과 새로운 인간관계도 바꾼다.${personalEpisodeEcho()}`, choices: [
           choice("work_training", "언어·자격 교육부터 지원한다", "6개월 교육비를 쓰고 경력에 가까운 일을 준비한다.", "지금 200만원 · 이후 월수입 240만원, 적응과 신뢰↑", 2000000, "romance"),
           choice("work_immediate", "바로 구할 수 있는 일을 시작한다", "교대근무가 있는 서비스·생산직으로 빠르게 수입을 만든다.", "다음 달부터 월수입 280만원 · 피로와 야간 귀가 증가", 0, "investigate"),
           choice("work_forbid", "집에 적응할 때까지 일을 막는다", "수입은 내가 책임질 테니 외부 일은 하지 말라고 한다.", "통제는 쉬움 · 호감↓, 갈등↑, 숨은 구직 가능", 0, "risky")
@@ -2039,6 +2158,15 @@
         return familyDecisionContent(common);
       default: return common;
     }
+  }
+
+  function personalEpisodeEcho() {
+    const choiceId = state.flags.personalEpisodeChoice;
+    const echo = state.flags.personalEpisodeEcho;
+    if (!choiceId || !echo) return "";
+    if (choiceId === "personal_support") return `\n\n${echo}이 이번에는 말보다 먼저 작동했다. ${getPartner().name}은 채용 공고를 숨기지 않고, 지원하기 전에 내게 함께 읽어 달라고 했다.`;
+    if (choiceId === "personal_negotiate") return `\n\n${echo}을 떠올린 둘은 이번에도 감정만 확인하지 않고 지원 시점과 야간 근무의 한도를 먼저 적었다.`;
+    return `\n\n${echo}은 지켜지지 않은 기억으로 돌아왔다. ${getPartner().name}은 이미 지원서를 낸 뒤 결과가 나오고서야 이 이야기를 꺼냈다.`;
   }
 
   function choice(id, title, description, impact, cost, style, check = null) {
@@ -2476,7 +2604,7 @@
   }
 
   function inferredCheck(item) {
-    const noRoll = ["try_pregnancy", "hire_investigator", "digital_verify", "open_contradiction_board", "open_negotiation", "budget_reset", "family_stay", "family_separate", "family_accuse"];
+    const noRoll = ["try_pregnancy", "hire_investigator", "digital_verify", "open_contradiction_board", "open_negotiation", "budget_reset", "family_stay", "family_separate", "family_accuse", "personal_support", "personal_negotiate", "personal_override"];
     if (!item || item.check || /^(continue_|press_|present_|pass_|decide_)/.test(item.id) || noRoll.includes(item.id)) return item?.check || null;
     const category = behaviorCategory(item.id);
     const stat = item.style === "investigate" ? "reason"
@@ -3322,6 +3450,11 @@
     const partner = getPartner();
     const player = getPlayer();
     const mystery = getCase();
+    if (["personal_support", "personal_negotiate", "personal_override"].includes(id)) {
+      const episode = PERSONAL_EPISODES[partner.behavior?.id] || PERSONAL_EPISODES.warm_cautious;
+      const [title, text, trust, affection, conflict] = episode.results[id];
+      return { title, text, trust, affection, conflict, days: 2, flags: { personalEpisodeChoice: id, personalEpisodeEcho: episode.echo }, bad: id === "personal_override" };
+    }
     if (id === "budget_reset") {
       const before = monthlyBudgetSnapshot();
       const nextLiving = Math.max(1650000, state.monthlyLiving - 450000);
