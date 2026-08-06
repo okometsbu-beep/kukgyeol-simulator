@@ -1,20 +1,18 @@
 {
-  "name": "진심의 증거 · 국제연애 라이프 RPG",
-  "short_name": "진심의 증거",
-  "description": "제한된 시간 안에 관계·생활·언어·진실을 준비하고 첫 만남부터 결혼·신혼·아이까지 이어 가는 국제연애 라이프 RPG",
+  "name": "진실의 번역 · 국제결혼 검증 어드벤처",
+  "short_name": "진실의 번역",
+  "description": "조사하고 묻고 기록을 대조해 결혼 전 서로의 진짜 합의를 찾아가는 관계 추리 어드벤처",
   "lang": "ko-KR",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#100d16",
-  "theme_color": "#17131f",
-  "icons": [
-    {
-      "src": "./icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "orientation": "any",
+  "background_color": "#0b1117",
+  "theme_color": "#101820",
+  "icons": [{
+    "src": "./icon.svg",
+    "sizes": "any",
+    "type": "image/svg+xml",
+    "purpose": "any maskable"
+  }]
 }

@@ -3,260 +3,152 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#17131f">
-  <meta name="description" content="제한된 시간 안에 관계·생활·언어·진실을 준비하고 결혼 이후의 삶까지 이어 가는 국제연애 라이프 RPG">
-  <title>진심의 증거 · 국제연애 라이프 RPG</title>
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=17">
+  <meta name="theme-color" content="#101820">
+  <meta name="description" content="국제결혼을 앞둔 두 사람이 서로 다른 설명을 들었다. 조사하고, 묻고, 기록을 대조해 진짜 합의를 찾아가는 관계 추리 어드벤처.">
+  <title>진실의 번역 — 국제결혼 검증 어드벤처</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=18">
 </head>
 <body>
-  <a class="skip-link" href="#main">게임으로 바로가기</a>
-
-  <main id="main" class="app-shell">
+  <div id="app">
     <section id="title-screen" class="screen title-screen">
-      <div class="title-art" aria-hidden="true">
-        <div class="title-art__shade"></div>
-        <div class="title-art__stamp">LIFE 01</div>
-      </div>
-      <div class="title-copy">
-        <p class="eyebrow">국제연애 라이프 RPG</p>
-        <h1>진심의 증거</h1>
-        <p class="tagline">시간은 부족하다.<br>사랑·생활·언어·진실 중 무엇을 준비할까.</p>
+      <div class="title-noise"></div>
+      <div class="title-shell">
+        <p class="kicker">RELATIONSHIP INVESTIGATION ADVENTURE</p>
+        <h1><span>진실의</span> 번역</h1>
+        <p class="title-copy">결혼을 결정하기 전, 우리는 정말 같은 이야기를 들은 걸까.</p>
+        <div class="episode-ticket">
+          <span class="episode-number">EPISODE 01</span>
+          <div>
+            <strong>같은 말, 다른 뜻</strong>
+            <small>서울 · 호찌민 / 결혼 계약 9일 전</small>
+          </div>
+          <span class="episode-status">PLAYABLE</span>
+        </div>
         <div class="title-actions">
-          <button id="quick-game" class="primary-button" type="button">바로 한 판 시작</button>
-          <small class="quick-start-note">균형형 주인공과 추천 경로로 후보 선택부터 시작합니다.</small>
-          <button id="new-game" class="ghost-button" type="button">직접 설정하고 시작</button>
-          <button id="continue-game" class="ghost-button" type="button" hidden>저장한 이야기 이어하기</button>
-          <button id="how-to" class="text-button" type="button">게임 방법</button>
+          <button id="start-btn" class="btn btn-primary" type="button">처음부터 수사</button>
+          <button id="continue-btn" class="btn btn-ghost" type="button" hidden>이어하기</button>
         </div>
-        <p class="content-note">모든 인물과 상황은 허구이며, 국적·직업·외모는 사기의 증거가 아닙니다.</p>
+        <p class="title-note">사람이 아니라 <b>말과 기록의 차이</b>를 의심해. 근거 없는 지적은 신뢰를 잃는다.</p>
       </div>
-    </section>
-
-    <section id="setup-screen" class="screen setup-screen" hidden>
-      <header class="plain-header">
-        <button class="icon-button" data-action="back-title" type="button" aria-label="처음으로">←</button>
-        <div>
-          <p class="eyebrow">게임 준비</p>
-          <h2 id="setup-title">주인공을 고르세요</h2>
-        </div>
-        <span id="setup-step" class="step-badge">1 / 5</span>
-      </header>
-      <div class="setup-progress" aria-hidden="true"><span id="setup-progress-bar"></span></div>
-      <p id="setup-guide" class="setup-guide"></p>
-      <div id="setup-grid" class="selection-grid"></div>
-      <div id="setup-summary" class="setup-summary" hidden></div>
-      <button id="setup-next" class="primary-button sticky-next" type="button" disabled>다음</button>
     </section>
 
     <section id="game-screen" class="screen game-screen" hidden>
-      <header class="status-bar">
-        <div class="case-progress">
-          <span id="chapter-label">1장</span>
-          <strong id="phase-label">첫 연락</strong>
+      <header class="topbar">
+        <button id="home-btn" class="icon-btn" type="button" aria-label="타이틀로">⌂</button>
+        <div class="case-id">
+          <span>EP.01</span>
+          <strong id="phase-label">프롤로그</strong>
         </div>
-        <div class="status-pills">
-          <button id="money-pill" class="status-pill" type="button" aria-label="재정 상세">💳 <span id="cash-label">0원</span></button>
-          <span class="status-pill score-pill" title="만점 없는 누적 점수">∞ <span id="score-label">0</span></span>
-          <span class="status-pill" title="호감">💗 <span id="affection-label">50</span></span>
-          <span class="status-pill" title="갈등">⚠️ <span id="conflict-label">0</span></span>
+        <div class="objective-wrap">
+          <span>현재 목표</span>
+          <strong id="objective-text">중개인이 건넨 설명을 확인한다.</strong>
         </div>
+        <div class="trust-wrap" aria-label="신뢰">
+          <span>신뢰</span>
+          <div id="trust-pips" class="trust-pips"></div>
+        </div>
+        <button id="save-btn" class="icon-btn save-icon" type="button" aria-label="저장">SAVE</button>
       </header>
 
-      <div class="game-layout">
-        <section class="novel-stage" aria-live="polite">
-          <section class="duo-hud" aria-label="두 사람의 현재 상태">
-            <article class="hud-person hud-player">
-              <div class="hud-heading"><span>주인공</span><strong id="player-hud-name"></strong></div>
-              <div class="ability-grid">
-                <span>말재주 <b id="stat-charm"></b></span>
-                <span>공감 <b id="stat-empathy"></b></span>
-                <span>판단 <b id="stat-reason"></b></span>
-                <span>배짱 <b id="stat-courage"></b></span>
-                <span>외모 <b id="stat-appearance"></b></span>
-              </div>
-            </article>
-            <article class="hud-person hud-partner">
-              <div class="hud-heading"><span>두 사람</span><strong id="relationship-hud"></strong></div>
-              <div class="ability-grid relationship-grid">
-                <span>호감 <b id="hud-affection"></b></span>
-                <span>그녀의 신뢰 <b id="hud-trust"></b></span>
-                <span>확인도 <b id="hud-certainty"></b></span>
-                <span>갈등 <b id="hud-conflict"></b></span>
-                <span title="상대 피로">피로 <b id="hud-partner-fatigue"></b></span>
-                <span>아이 <b id="hud-children"></b></span>
-              </div>
-              <button id="open-partner-profile-hud" class="hud-detail-button" type="button">상대 프로필 <span id="hud-known-count"></span></button>
-            </article>
-          </section>
-
-          <section id="life-track-hud" class="life-track-hud" aria-label="이번 관계의 장기 준비">
-            <span>관계 <b id="track-bond">0</b></span>
-            <span>생활 <b id="track-living">0</b></span>
-            <span>언어 <b id="track-language">0</b></span>
-            <span>통찰 <b id="track-insight">0</b></span>
-            <small id="track-gate">큰 선택까지 준비를 쌓으세요</small>
-          </section>
-
-          <section class="communication-bar" aria-label="소통과 전문 통역 설정">
-            <span>소통 <b id="communication-label">0</b></span>
-            <button id="interpreter-toggle" type="button" aria-pressed="false">🗣️ 전문 통역 OFF<small>선택할 때만 비용 차감</small></button>
-          </section>
-
-          <div id="scene-visual" class="scene-visual">
-            <div class="scene-gradient"></div>
-            <div id="scene-caption" class="scene-caption"></div>
-            <div id="portrait-wrap" class="portrait-wrap" hidden>
-              <div id="partner-portrait" class="portrait-photo"></div>
-            </div>
-            <div id="event-card" class="event-card" hidden>
-              <span>STORY EVENT</span>
-              <h2 id="event-title"></h2>
-              <p id="event-text"></p>
-            </div>
+      <main class="playfield">
+        <section id="stage" class="stage" aria-live="polite">
+          <img id="stage-bg" class="stage-bg" src="assets/reboot/agency-office.webp" alt="">
+          <div class="stage-shade"></div>
+          <div id="hotspots" class="hotspot-layer"></div>
+          <div id="portrait-wrap" class="portrait-wrap" hidden>
+            <img id="portrait" alt="">
           </div>
-
-          <div class="objective-card">
-            <span>이번 장의 목표</span>
-            <strong id="objective-text"></strong>
+          <div id="chapter-card" class="chapter-card" hidden>
+            <span id="chapter-eyebrow">INVESTIGATION</span>
+            <h2 id="chapter-title"></h2>
+            <p id="chapter-subtitle"></p>
           </div>
-
-          <div id="milestone-card" class="milestone-card">
-            <span id="milestone-label">다음 약속</span>
-            <strong id="milestone-text"></strong>
-            <small id="milestone-days"></small>
-          </div>
-
-          <div id="budget-alert" class="budget-alert" hidden>
-            <span>가계 경보</span>
-            <strong id="budget-alert-title"></strong>
-            <small id="budget-alert-detail"></small>
-          </div>
-
-          <div id="dialogue-box" class="dialogue-box">
-            <p id="scene-context" class="scene-context"></p>
-            <div class="speaker-row">
-              <strong id="speaker-name"></strong>
-              <span id="speaker-mood" class="mood-chip"></span>
-            </div>
-            <div id="dialogue-text" class="dialogue-text"></div>
-          </div>
-
-          <div id="statement-box" class="statement-box" hidden>
-            <span class="statement-label">앞뒤를 확인할 설명</span>
-            <blockquote id="statement-text"></blockquote>
-            <p id="statement-note"></p>
-          </div>
-
-          <div id="feedback-box" class="feedback-box" hidden></div>
-          <div id="choices" class="choice-list"></div>
+          <div id="impact-flash" class="impact-flash" hidden></div>
         </section>
 
-        <aside class="case-sidebar">
-          <section class="side-card current-case-card">
-            <div class="partner-mini">
-              <div id="partner-mini-photo" class="partner-mini-photo"></div>
-              <div>
-                <span id="partner-country" class="mini-label"></span>
-                <strong id="partner-name"></strong>
-                <p id="relationship-label"></p>
-              </div>
-            </div>
-          </section>
-
-          <section class="side-card player-menu-card">
-            <div class="side-title"><h3>두 사람의 프로필</h3><span>니즈·발견</span></div>
-            <div class="profile-button-pair">
-              <button id="open-player-profile" class="secondary-button" type="button">내 프로필</button>
-              <button id="open-partner-profile" class="secondary-button" type="button">상대 프로필 <span id="partner-known-count"></span></button>
-            </div>
-          </section>
-
-          <section class="side-card finance-card">
-            <div class="side-title"><h3>지금 상황</h3></div>
-            <dl>
-              <div><dt>남은 현금</dt><dd id="side-cash"></dd></div>
-              <div><dt>빚</dt><dd id="side-debt"></dd></div>
-              <div><dt>누적 지출</dt><dd id="side-spent"></dd></div>
-              <div><dt>남은 일정</dt><dd id="side-days"></dd></div>
-            </dl>
-          </section>
-
-          <div class="utility-buttons">
-            <button id="save-button" class="text-button" type="button">저장</button>
-            <button id="restart-button" class="text-button danger-text" type="button">이야기 다시 시작</button>
+        <section id="dialogue-panel" class="dialogue-panel">
+          <div class="speaker-row">
+            <span id="speaker-name" class="speaker-name">나</span>
+            <span id="speaker-note" class="speaker-note"></span>
           </div>
-        </aside>
-      </div>
+          <p id="dialogue-text" class="dialogue-text"></p>
+          <div id="dialogue-actions" class="dialogue-actions"></div>
+        </section>
 
-      <nav class="mobile-dock" aria-label="게임 메뉴">
-        <button id="mobile-player" type="button"><span>👤</span>내 프로필</button>
-        <button id="mobile-partner" type="button"><span>💗</span>상대 프로필</button>
-        <button id="mobile-interpreter" type="button" aria-pressed="false"><span>🗣️</span>통역 OFF</button>
-        <button id="mobile-status" type="button"><span>💳</span>재정</button>
-        <button id="mobile-save" type="button"><span>💾</span>저장</button>
+        <section id="investigation-panel" class="mode-panel investigation-panel" hidden>
+          <div class="mode-heading">
+            <div><span class="mode-kicker">FREE INVESTIGATION</span><h2 id="location-name">한결 국제매칭 · 상담실</h2></div>
+            <p id="investigation-progress"></p>
+          </div>
+          <div id="investigation-actions" class="action-grid"></div>
+        </section>
+
+        <section id="cross-panel" class="mode-panel cross-panel" hidden>
+          <div class="cross-heading">
+            <div><span class="mode-kicker">STATEMENT CHECK</span><h2 id="cross-title">설명 대조</h2></div>
+            <p id="cross-instruction">문장을 넘겨 읽고, 더 묻거나 기록을 대조해.</p>
+          </div>
+          <div class="statement-shell">
+            <button id="statement-prev" class="statement-nav" type="button" aria-label="이전 진술">‹</button>
+            <article class="statement-card">
+              <div class="statement-meta"><span id="statement-count">1 / 5</span><span id="statement-speaker"></span></div>
+              <blockquote id="statement-text"></blockquote>
+              <p id="statement-pressed" class="statement-pressed" hidden></p>
+            </article>
+            <button id="statement-next" class="statement-nav" type="button" aria-label="다음 진술">›</button>
+          </div>
+          <div class="cross-actions">
+            <button id="press-btn" class="btn btn-ghost" type="button">더 묻기</button>
+            <button id="present-btn" class="btn btn-danger" type="button">기록 대조</button>
+          </div>
+        </section>
+
+        <section id="reconstruct-panel" class="mode-panel reconstruct-panel" hidden>
+          <div class="mode-heading">
+            <div><span class="mode-kicker">RECONSTRUCT</span><h2>세 문장으로 사건을 복원해</h2></div>
+            <p>증거를 순서대로 골라 빈칸을 채운다.</p>
+          </div>
+          <div id="timeline-slots" class="timeline-slots"></div>
+          <button id="timeline-submit" class="btn btn-primary" type="button">이 흐름으로 결론 내리기</button>
+        </section>
+      </main>
+
+      <nav id="dock" class="dock">
+        <button class="dock-btn" data-dock="examine" type="button"><span>◎</span>살펴보기</button>
+        <button class="dock-btn" data-dock="talk" type="button"><span>◌</span>대화</button>
+        <button class="dock-btn" data-dock="record" type="button"><span>▤</span>검증 파일 <em id="evidence-count">0</em></button>
+        <button class="dock-btn" data-dock="notes" type="button"><span>✎</span>수사 메모</button>
       </nav>
     </section>
 
     <section id="ending-screen" class="screen ending-screen" hidden>
-      <div id="ending-visual" class="ending-visual"></div>
-      <div class="ending-copy">
-        <p id="ending-grade" class="eyebrow"></p>
-        <h2 id="ending-title"></h2>
-        <p id="ending-text" class="ending-lead"></p>
-        <div id="ending-stats" class="ending-stats"></div>
-        <details class="truth-report">
-          <summary>이번 이야기의 숨은 진실 보기</summary>
-          <div id="truth-report-body"></div>
-        </details>
+      <div class="ending-shell">
+        <p class="kicker">EPISODE 01 · CLOSED</p>
+        <div id="ending-grade" class="ending-grade">A</div>
+        <h2 id="ending-title">같은 문장을 만드는 일</h2>
+        <p id="ending-copy"></p>
+        <div id="ending-summary" class="ending-summary"></div>
         <div class="ending-actions">
-          <button id="retry-case" class="primary-button" type="button">다른 가능성으로 다시</button>
-          <button id="back-title-end" class="ghost-button" type="button">처음 화면</button>
+          <button id="replay-btn" class="btn btn-primary" type="button">다시 수사</button>
+          <button id="ending-home-btn" class="btn btn-ghost" type="button">타이틀</button>
         </div>
       </div>
     </section>
-  </main>
-
-  <div id="overlay" class="overlay" hidden>
-    <section id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <header class="modal-header">
-        <div><p id="modal-kicker" class="eyebrow"></p><h2 id="modal-title"></h2></div>
-        <button id="close-modal" class="icon-button" type="button" aria-label="닫기">✕</button>
-      </header>
-      <div id="modal-body" class="modal-body"></div>
-    </section>
   </div>
 
-  <div id="roll-overlay" class="roll-overlay" role="status" aria-live="assertive" hidden>
-    <section class="roll-card">
-      <p class="eyebrow">세계 변수</p>
-      <div id="roll-dice" class="roll-dice" aria-hidden="true">🎲</div>
-      <h2 id="roll-title">예측할 수 없는 일이 생기는 중</h2>
-      <p id="roll-rule" class="roll-rule"></p>
-      <strong id="roll-number" class="roll-number">?</strong>
-      <p id="roll-result" class="roll-result"></p>
-    </section>
-  </div>
-
-  <div id="effect-overlay" class="effect-overlay" role="status" aria-live="polite" hidden>
-    <div id="effect-card" class="effect-card">
-      <span id="effect-kicker"></span>
-      <strong id="effect-title"></strong>
-      <p id="effect-detail"></p>
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <button id="drawer-backdrop" class="drawer-backdrop" type="button" aria-label="닫기"></button>
+    <div class="drawer-sheet">
+      <header><div><span id="drawer-kicker">CASE FILE</span><h2 id="drawer-title">검증 파일</h2></div><button id="drawer-close" class="icon-btn" type="button">×</button></header>
+      <div id="drawer-body" class="drawer-body"></div>
     </div>
-  </div>
+  </aside>
 
-  <template id="choice-template">
-    <button class="choice-card" type="button">
-      <span class="choice-top"><strong class="choice-title"></strong><span class="choice-cost"></span></span>
-      <span class="choice-description"></span>
-      <span class="choice-chance" hidden></span>
-      <span class="choice-impact"></span>
-    </button>
-  </template>
+  <div id="toast" class="toast" role="status" hidden></div>
 
-  <script src="./game-data.js?v=17"></script>
-  <script src="./game.js?v=17"></script>
+  <script src="game-data.js?v=18"></script>
+  <script src="game.js?v=18"></script>
 </body>
 </html>
