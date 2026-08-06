@@ -227,6 +227,22 @@ button.status-pill { cursor: pointer; }
 .ability-grid span { display: grid; gap: .08rem; padding: .3rem .25rem; border-radius: .45rem; background: rgba(255,255,255,.045); color: #a69eaa; font-size: .61rem; text-align: center; }
 .ability-grid b { color: #f5edf3; font-size: .78rem; }
 .relationship-grid b { color: var(--rose-bright); }
+.life-track-hud {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .35rem;
+  margin: 0 0 .45rem;
+  padding: .5rem .58rem;
+  border: 1px solid rgba(228,183,93,.24);
+  border-radius: .72rem;
+  background: linear-gradient(110deg, rgba(228,183,93,.08), rgba(239,111,145,.045));
+}
+.life-track-hud > span { padding: .2rem .35rem; border-right: 1px solid var(--line); color: #bdb5bf; font-size: .67rem; text-align: center; }
+.life-track-hud > span:nth-child(4) { border-right: 0; }
+.life-track-hud b { margin-left: .18rem; color: var(--gold); font-size: .84rem; }
+.life-track-hud small { grid-column: 1 / -1; color: #938996; font-size: .6rem; text-align: center; }
+.life-track-hud.is-ready { border-color: rgba(113,213,178,.36); background: linear-gradient(110deg, rgba(113,213,178,.08), rgba(228,183,93,.05)); }
+.life-track-hud.is-ready small { color: var(--mint); }
 .communication-bar { display: flex; align-items: center; justify-content: space-between; gap: .65rem; margin: -.15rem 0 .7rem; padding: .48rem .6rem; border: 1px solid rgba(119,169,239,.22); border-radius: .7rem; background: rgba(119,169,239,.06); }
 .communication-bar > span { color: #b8cdec; font-size: .7rem; font-weight: 800; }
 .communication-bar > span b { margin-left: .2rem; color: white; }
